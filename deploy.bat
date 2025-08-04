@@ -1,18 +1,6 @@
 @echo off
-cd /d "%~dp0"
-echo.
-echo -------------------------------------
-echo  Starting Auto Git Deploy for bposnewmexico.com
-echo -------------------------------------
-echo.
-
+cd /d %~dp0
 git add .
-git commit -m "Auto deploy on %date% %time%"
+git commit -m "Deploy latest site update"
 git push origin main
-
-echo.
-echo -------------------------------------
-echo  Deploy complete! Netlify will rebuild shortly.
-echo  Opening live site in browser...
-echo -------------------------------------
-start https://bposnewmexico.com
+pause
