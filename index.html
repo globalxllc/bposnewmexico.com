@@ -3,43 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BPO Site Expanded</title>
-  <link rel="stylesheet" href="style.css">
+  <title>BPOs New Mexico</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Fullscreen video 1 */
+    #video1 {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Container for video 2 + data form */
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      height: 100vh;
+    }
+
+    #video2 {
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .data-section {
+      width: 50%;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      border-left: 3px solid #00ff00; /* DayGlo green */
+      overflow-y: auto;
+    }
+
+    .data-section h2 {
+      margin-top: 0;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form input, form textarea, form button {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    form button {
+      background: #00ff00;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #00cc00;
+    }
+  </style>
 </head>
 <body>
-  <!-- First video full screen -->
-  <section id="video1-section" class="video-section">
-    <div class="video-full">
-      <iframe id="video1" 
-        src="https://www.youtube.com/embed/-vCL7oznJQc?autoplay=1&mute=1&rel=0" 
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-      </iframe>
-    </div>
-    <div id="clickOverlay">Click anywhere to unmute</div>
-  </section>
 
-  <!-- Second video with data beside it -->
-  <section id="video2-section" class="video-section">
-    <div class="video-data-layout">
-      <div class="video-left">
-        <iframe id="video2" 
-          src="https://www.youtube.com/embed/KE6rjRl9XLA?rel=0" 
-          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-        </iframe>
-      </div>
-      <div class="data-right">
-        <h2>Market Data</h2>
-        <p>This section will hold property and comparable data.</p>
-        <ul>
-          <li>Active Comp 1</li>
-          <li>Active Comp 2</li>
-          <li>Sold Comp 1</li>
-          <li>Sold Comp 2</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+  <!-- Video 1 (fullscreen intro) -->
+  <video id="video1" autoplay muted playsinline>
+    <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-  <script src="script.js"></script>
+  <!-- Video 2 with Market Data form -->
+  <div class="container">
+    <video id="video2" muted playsinline>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="data-section">
+      <h2>Market Data / BPO Intake</h2>
+      <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
+
+      <form action="https://formspree.io/f/manbdzgp" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="_replyto" placeholder="Your Email" required>
+        <input type="text" name="property" placeholder="Subject Property Address" required>
+        <textarea name="details" placeholder="Additional Details" rows="5"></textarea>
+        <button type="submit">Submit BPO Request</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // When video1 ends, immediately scroll to video2 section
+    const video1 = document.getElementById('video1');
+    video1.addEventListener('ended', () => {
+      window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
+    });
+  </script>
+
 </body>
 </html>
