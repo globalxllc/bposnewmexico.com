@@ -31,16 +31,15 @@
     }
 
     #video2 {
-      width: 50%;
+      width: 40%;     /* Reduced size */
       height: 100%;
       object-fit: cover;
     }
 
     .data-section {
-      width: 50%;
+      width: 60%;
       padding: 2rem;
       background: rgba(0, 0, 0, 0.9);
-      border-left: 3px solid #00ff00; /* DayGlo green */
       overflow-y: auto;
     }
 
@@ -100,10 +99,21 @@
   </div>
 
   <script>
-    // When video1 ends, immediately scroll to video2 section
     const video1 = document.getElementById('video1');
-    video1.addEventListener('ended', () => {
-      window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
+    const video2 = document.getElementById('video2');
+
+    // Enable sound on first click
+    document.addEventListener("click", () => {
+      if (video1.muted) {
+        video1.muted = false;
+        video1.play();
+      }
+    });
+
+    // After video1 ends, scroll to section & play video2
+    video1.addEventListener("ended", () => {
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+      video2.play();
     });
   </script>
 
