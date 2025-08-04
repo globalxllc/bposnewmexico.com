@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPOs New Mexico</title>
   <style>
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
+      font-family: Arial, sans-serif;
       background: black;
       color: white;
-      font-family: Arial, sans-serif;
     }
 
     /* Fullscreen video 1 */
@@ -20,102 +18,149 @@
       height: 100vh;
       object-fit: cover;
       display: block;
+      background: black;
     }
 
-    /* Container for video 2 + data form */
+    .audio-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    /* Split layout for video2 + form */
     .container {
       display: flex;
-      flex-direction: row;
-      align-items: stretch;
       height: 100vh;
+      background: black;
+    }
+
+    .video-section {
+      flex: 0 0 60%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
     }
 
     #video2 {
-      width: 40%;     /* Reduced size */
-      height: 100%;
-      object-fit: cover;
+      width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
     }
 
-    .data-section {
-      width: 60%;
-      padding: 2rem;
-      background: rgba(0, 0, 0, 0.9);
-      overflow-y: auto;
-    }
-
-    .data-section h2 {
-      margin-top: 0;
-    }
-
-    form {
+    .form-section {
+      flex: 0 0 40%;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
     }
 
-    form input, form textarea, form button {
-      margin: 10px 0;
+    .form-container {
+      width: 85%;
+      max-width: 400px;
+      background: black;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .form-container h2 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+
+    .form-container p {
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .form-container input,
+    .form-container textarea {
+      width: 100%;
       padding: 10px;
-      font-size: 1rem;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
     }
 
-    form button {
-      background: #00ff00;
+    .form-container button {
+      width: 100%;
+      padding: 12px;
       border: none;
+      border-radius: 6px;
+      background: #00cc00;
+      color: black;
+      font-weight: bold;
+      font-size: 1rem;
       cursor: pointer;
     }
 
-    form button:hover {
-      background: #00cc00;
+    .form-container button:hover {
+      background: #00aa00;
     }
   </style>
 </head>
 <body>
-
-  <!-- Video 1 (fullscreen intro) -->
-  <video id="video1" autoplay muted playsinline>
-    <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
-  <!-- Video 2 with Market Data form -->
-  <div class="container">
-    <video id="video2" muted playsinline>
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
+  <!-- Video 1 (fullscreen intro with audio hint) -->
+  <div style="position: relative;">
+    <video id="video1" autoplay muted playsinline>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+    <div class="audio-hint" id="audioHint">🔊 Click anywhere to enable audio</div>
+  </div>
 
-    <div class="data-section">
-      <h2>Market Data / BPO Intake</h2>
-      <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
+  <!-- Split: Video 2 + Form -->
+  <div class="container">
+    <div class="video-section">
+      <video id="video2" muted playsinline>
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
 
-      <form action="https://formspree.io/f/manbdzgp" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="_replyto" placeholder="Your Email" required>
-        <input type="text" name="property" placeholder="Subject Property Address" required>
-        <textarea name="details" placeholder="Additional Details" rows="5"></textarea>
-        <button type="submit">Submit BPO Request</button>
-      </form>
+    <div class="form-section">
+      <div class="form-container">
+        <h2>Market Data / BPO Intake</h2>
+        <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
+        <form action="https://formspree.io/f/manbdzgp" method="POST">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <input type="text" name="address" placeholder="Subject Property Address" required>
+          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
+          <button type="submit">Submit BPO Request</button>
+        </form>
+      </div>
     </div>
   </div>
 
   <script>
     const video1 = document.getElementById('video1');
     const video2 = document.getElementById('video2');
+    const audioHint = document.getElementById('audioHint');
 
-    // Enable sound on first click
-    document.addEventListener("click", () => {
-      if (video1.muted) {
-        video1.muted = false;
-        video1.play();
-      }
-    });
+    // Unmute video1 on first click
+    document.body.addEventListener('click', () => {
+      video1.muted = false;
+      video1.play();
+      audioHint.style.display = 'none';
+    }, { once: true });
 
-    // After video1 ends, scroll to section & play video2
-    video1.addEventListener("ended", () => {
-      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    // When video1 ends, scroll to section & play video2
+    video1.addEventListener('ended', () => {
+      document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
       video2.play();
+      setTimeout(() => { video2.muted = false; }, 2000); // auto-unmute after 2s
     });
   </script>
-
 </body>
 </html>
