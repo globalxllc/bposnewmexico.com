@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,12 +20,14 @@
   </style>
 </head>
 <body>
-  <!-- muted ensures autoplay works, loop keeps replaying, playsinline prevents full-screen takeover -->
-  <video autoplay muted loop playsinline>
+  <!-- preload ensures the video loads fully before playing -->
+  <video autoplay muted loop playsinline preload="auto">
     <source src="assets/video1_fixed.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 </body>
 </html>
+
+
 
 
