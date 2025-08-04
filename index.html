@@ -107,7 +107,7 @@
 </head>
 <body>
 
-  <!-- Video 1 -->
+  <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <video id="video1" class="video-js vjs-default-skin" controls autoplay muted playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1/video1_fixed_kjltks.m3u8" type="application/x-mpegURL">
@@ -117,7 +117,7 @@
   </div>
 
   <!-- Split: Video 2 + Form -->
-  <div class="container">
+  <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper" style="width:90%;">
         <video id="video2" class="video-js vjs-default-skin" controls muted playsinline preload="auto">
@@ -149,17 +149,9 @@
   <script>
     function setupVideoControls(player, hintId) {
       const hint = document.getElementById(hintId);
-
-      // Fade in when video is ready
-      player.on("loadeddata", () => {
-        hint.classList.add("show");
-      });
-
-      // Fade out on first click
+      player.on("loadeddata", () => { hint.classList.add("show"); });
       player.on("click", () => {
-        if (player.muted()) {
-          player.muted(false);
-        }
+        if (player.muted()) player.muted(false);
         hint.classList.remove("show");
         hint.classList.add("fade");
         setTimeout(() => { hint.style.display = "none"; }, 1000);
@@ -172,9 +164,10 @@
     setupVideoControls(player1, "hint1");
     setupVideoControls(player2, "hint2");
 
-    // Auto-play video2 after video1 ends
+    // When video1 ends, reveal split layout and autoplay video2
     player1.on("ended", () => {
-      document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("splitLayout").style.display = "flex";
+      document.getElementById("splitLayout").scrollIntoView({ behavior: "smooth" });
       player2.play();
       setTimeout(() => { player2.muted(false); }, 2000);
     });
