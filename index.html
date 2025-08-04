@@ -9,10 +9,12 @@
 <body>
   <!-- First video full screen -->
   <section id="video1-section" class="video-section">
-    <video id="video1" autoplay muted playsinline>
-      <source src="https://www.youtube.com/embed/-vCL7oznJQc?autoplay=1&mute=0&rel=0" type="video/mp4">
-      Your browser does not support video.
-    </video>
+    <div class="video-full">
+      <iframe id="video1" 
+        src="https://www.youtube.com/embed/-vCL7oznJQc?autoplay=1&mute=1&rel=0" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+      </iframe>
+    </div>
     <div id="clickOverlay">Click anywhere to unmute</div>
   </section>
 
@@ -20,8 +22,10 @@
   <section id="video2-section" class="video-section">
     <div class="video-data-layout">
       <div class="video-left">
-        <iframe id="video2" src="https://www.youtube.com/embed/KE6rjRl9XLA?rel=0" 
-          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <iframe id="video2" 
+          src="https://www.youtube.com/embed/KE6rjRl9XLA?rel=0" 
+          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+        </iframe>
       </div>
       <div class="data-right">
         <h2>Market Data</h2>
