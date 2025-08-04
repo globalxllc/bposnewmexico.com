@@ -24,6 +24,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      margin-bottom: 20px;
     }
 
     .video-js {
@@ -44,20 +45,21 @@
 
     .container {
       display: flex;
-      height: 100vh;
+      min-height: 100vh;
       background: black;
       gap: 20px;
     }
 
     .video-section {
-      flex: 0 0 55%;
+      flex: 0 0 60%;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
 
     .form-section {
-      flex: 0 0 30%;
+      flex: 0 0 35%;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -112,27 +114,29 @@
 </head>
 <body>
 
-  <!-- Video 1 (HLS with Video.js) -->
-  <div class="video-wrapper">
-    <video id="video1" class="video-js vjs-default-skin" controls autoplay muted playsinline>
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/video1_fixed_kjltks.m3u8" type="application/x-mpegURL">
-      Your browser does not support the video tag.
-    </video>
-    <div class="video-hint" id="hint1">🔊 Click video to play / pause or unmute</div>
-  </div>
-
-  <!-- Split: Video 2 + Form -->
+  <!-- Split layout: Video 1 (left) + Form (right) -->
   <div class="container">
     <div class="video-section">
+      <!-- Video 1 -->
+      <div class="video-wrapper">
+        <video id="video1" class="video-js vjs-default-skin" controls autoplay muted playsinline preload="auto">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="video-hint" id="hint1">🔊 Click video to play / pause or unmute</div>
+      </div>
+
+      <!-- Video 2 under Video 1 -->
       <div class="video-wrapper" style="width:90%;">
-        <video id="video2" class="video-js vjs-default-skin" muted playsinline>
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/video2_fixed_sa43uj.m3u8" type="application/x-mpegURL">
+        <video id="video2" class="video-js vjs-default-skin" muted playsinline preload="auto">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
         <div class="video-hint" id="hint2">🔊 Click video to play / pause or unmute</div>
       </div>
     </div>
 
+    <!-- Form -->
     <div class="form-section">
       <div class="form-container">
         <h2>Market Data / BPO Intake</h2>
@@ -177,7 +181,6 @@
     const player2 = videojs("video2");
 
     player1.on("ended", () => {
-      document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
       player2.play();
       setTimeout(() => { player2.muted(false); }, 2000);
     });
