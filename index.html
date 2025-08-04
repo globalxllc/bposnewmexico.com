@@ -58,7 +58,7 @@
   </div>
   <div class="second-section">
     <div class="second-video">
-      <iframe id="video2" src="https://www.youtube.com/embed/KE6rjRl9XLA?autoplay=1&mute=1&rel=0&controls=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <iframe id="video2" src="https://www.youtube.com/embed/KE6rjRl9XLA?autoplay=1&mute=1&rel=0&controls=0&modestbranding=1&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
     <div class="property-data">
       <h2>Property Data</h2>
@@ -69,5 +69,27 @@
       <p><strong>Lot Size:</strong> 0.25 acres</p>
     </div>
   </div>
+  <script>
+    // Load YouTube API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player2;
+    function onYouTubeIframeAPIReady() {
+      player2 = new YT.Player('video2', {
+        events: {
+          'onReady': onPlayerReady2
+        }
+      });
+    }
+
+    function onPlayerReady2(event) {
+      setTimeout(function(){
+        event.target.unMute();
+      }, 5000); // unmute after 5 seconds
+    }
+  </script>
 </body>
 </html>
