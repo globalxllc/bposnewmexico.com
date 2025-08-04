@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPOs New Mexico</title>
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/7.21.0/video-js.css" rel="stylesheet" />
   <style>
     body {
       margin: 0;
@@ -21,7 +23,7 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-    video {
+    .video-js {
       width: 100%;
       height: auto;
       max-height: 80vh;
@@ -107,8 +109,8 @@
 
   <!-- Video 1 -->
   <div class="video-wrapper">
-    <video id="video1" autoplay muted playsinline preload="metadata">
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
+    <video id="video1" class="video-js vjs-default-skin" controls autoplay muted playsinline preload="auto">
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1/video1_fixed_kjltks.m3u8" type="application/x-mpegURL">
       Your browser does not support the video tag.
     </video>
     <div class="video-hint" id="hint1">🔊 Click video to play / pause or unmute</div>
@@ -118,8 +120,8 @@
   <div class="container">
     <div class="video-section">
       <div class="video-wrapper" style="width:90%;">
-        <video id="video2" muted playsinline preload="metadata">
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
+        <video id="video2" class="video-js vjs-default-skin" controls muted playsinline preload="auto">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1/video2_fixed_sa43uj.m3u8" type="application/x-mpegURL">
           Your browser does not support the video tag.
         </video>
         <div class="video-hint" id="hint2">🔊 Click video to play / pause or unmute</div>
@@ -141,25 +143,22 @@
     </div>
   </div>
 
+  <!-- Video.js JS -->
+  <script src="https://vjs.zencdn.net/7.21.0/video.min.js"></script>
+
   <script>
-    function setupVideoControls(videoId, hintId) {
-      const video = document.getElementById(videoId);
+    function setupVideoControls(player, hintId) {
       const hint = document.getElementById(hintId);
 
-      // Fade in hint when video is ready
-      video.addEventListener("loadeddata", () => {
+      // Fade in when video is ready
+      player.on("loadeddata", () => {
         hint.classList.add("show");
       });
 
-      // Fade out on click
-      video.addEventListener("click", () => {
-        if (video.paused) {
-          video.play();
-        } else {
-          video.pause();
-        }
-        if (video.muted) {
-          video.muted = false;
+      // Fade out on first click
+      player.on("click", () => {
+        if (player.muted()) {
+          player.muted(false);
         }
         hint.classList.remove("show");
         hint.classList.add("fade");
@@ -167,17 +166,17 @@
       });
     }
 
-    setupVideoControls("video1", "hint1");
-    setupVideoControls("video2", "hint2");
+    const player1 = videojs("video1");
+    const player2 = videojs("video2");
 
-    // When video1 ends, scroll to section & play video2
-    const video1 = document.getElementById("video1");
-    const video2 = document.getElementById("video2");
+    setupVideoControls(player1, "hint1");
+    setupVideoControls(player2, "hint2");
 
-    video1.addEventListener("ended", () => {
+    // Auto-play video2 after video1 ends
+    player1.on("ended", () => {
       document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
-      video2.play();
-      setTimeout(() => { video2.muted = false; }, 2000);
+      player2.play();
+      setTimeout(() => { player2.muted(false); }, 2000);
     });
   </script>
 </body>
