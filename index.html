@@ -107,7 +107,7 @@
 
   <!-- Video 1 -->
   <div class="video-wrapper">
-    <video id="video1" autoplay muted playsinline preload="auto">
+    <video id="video1" autoplay muted playsinline preload="metadata">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -118,7 +118,7 @@
   <div class="container">
     <div class="video-section">
       <div class="video-wrapper" style="width:90%;">
-        <video id="video2" muted playsinline preload="auto">
+        <video id="video2" muted playsinline preload="metadata">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -146,12 +146,12 @@
       const video = document.getElementById(videoId);
       const hint = document.getElementById(hintId);
 
-      // Fade in when video is ready
+      // Fade in hint when video is ready
       video.addEventListener("loadeddata", () => {
         hint.classList.add("show");
       });
 
-      // Fade out on first click
+      // Fade out on click
       video.addEventListener("click", () => {
         if (video.paused) {
           video.play();
