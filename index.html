@@ -2,28 +2,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPO New Mexico - Simplified</title>
-    <style>
-        body {
-            background-color: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        video {
-            width: 75%;
-            height: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPO New Mexico - Video</title>
+  <style>
+    body {
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    video {
+      width: 75%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-    <video controls autoplay>
-        <source src="assets/video1_fixed.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+  <!-- muted ensures autoplay works, loop keeps replaying, playsinline prevents full-screen takeover -->
+  <video autoplay muted loop playsinline>
+    <source src="assets/video1_fixed.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </body>
 </html>
+
+
