@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BPO Site</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPO Site Expanded</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <video id="video1" autoplay muted playsinline>
-    <source src="https://www.youtube.com/embed/-vCL7oznJQc" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
-  <div class="data-section">
-    <h2>Property Data</h2>
-    <p>Example info will appear here.</p>
-  </div>
+  <!-- First video full screen -->
+  <section id="video1-section" class="video-section">
+    <video id="video1" autoplay muted playsinline>
+      <source src="https://www.youtube.com/embed/-vCL7oznJQc?autoplay=1&mute=0&rel=0" type="video/mp4">
+      Your browser does not support video.
+    </video>
+    <div id="clickOverlay">Click anywhere to unmute</div>
+  </section>
+
+  <!-- Second video with data beside it -->
+  <section id="video2-section" class="video-section">
+    <div class="video-data-layout">
+      <div class="video-left">
+        <iframe id="video2" src="https://www.youtube.com/embed/KE6rjRl9XLA?rel=0" 
+          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <div class="data-right">
+        <h2>Market Data</h2>
+        <p>This section will hold property and comparable data.</p>
+        <ul>
+          <li>Active Comp 1</li>
+          <li>Active Comp 2</li>
+          <li>Sold Comp 1</li>
+          <li>Sold Comp 2</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <script src="script.js"></script>
 </body>
 </html>
