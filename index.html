@@ -1,175 +1,94 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPOs New Mexico</title>
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/7.21.0/video-js.css" rel="stylesheet" />
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: black;
+      background-color: black;
       color: white;
-    }
-    .video-wrapper {
-      background: black;
-      padding: 50px;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .video-js {
-      width: 100%;
-      height: auto;
-      max-height: 80vh;
-      border-radius: 15px;
-      cursor: pointer;
-    }
-    .video-hint {
-      margin-top: 10px;
-      color: white;
-      font-size: 1rem;
-      font-weight: bold;
-      text-align: center;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .video-hint.show {
-      opacity: 1;
-    }
-    .video-hint.fade {
-      opacity: 0;
     }
     .container {
       display: flex;
+      flex-direction: row;
       height: 100vh;
-      background: black;
-      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
     }
-    .video-section {
-      flex: 0 0 55%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .form-section {
-      flex: 0 0 35%;
+    .video-container {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: black;
+      margin-right: 20px;
+    }
+    video {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 12px;
+      background-color: black;
     }
     .form-container {
-      width: 90%;
-      max-width: 350px;
+      flex: 1;
       background: black;
       padding: 20px;
-      border-radius: 15px;
+      border-radius: 12px;
     }
-    .form-container h2 {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input, textarea {
       margin-bottom: 10px;
-      font-size: 1.5rem;
-    }
-    .form-container p {
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    .form-container input,
-    .form-container textarea {
-      width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
       border: none;
       border-radius: 8px;
-      font-size: 0.9rem;
     }
-    .form-container button {
-      width: 100%;
+    button {
       padding: 12px;
+      background: limegreen;
       border: none;
       border-radius: 8px;
-      background: #00cc00;
       color: black;
-      font-weight: bold;
-      font-size: 1rem;
+      font-size: 16px;
       cursor: pointer;
-    }
-    .form-container button:hover {
-      background: #00aa00;
     }
   </style>
 </head>
 <body>
-
-  <!-- Video 1 full screen -->
-  <div class="video-wrapper">
-    <video id="video1" class="video-js vjs-default-skin" controls autoplay muted playsinline preload="auto">
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1/video1_fixed_kjltks.m3u8" type="application/x-mpegURL">
-      Your browser does not support the video tag.
-    </video>
-    <div class="video-hint" id="hint1">🔊 Click video to play / pause or unmute</div>
-  </div>
-
-  <!-- Split: Video 2 + Form -->
-  <div class="container" id="splitLayout" style="display:none;">
-    <div class="video-section">
-      <div class="video-wrapper" style="width:90%;">
-        <video id="video2" class="video-js vjs-default-skin" controls muted playsinline preload="auto">
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1/video2_fixed_sa43uj.m3u8" type="application/x-mpegURL">
-          Your browser does not support the video tag.
-        </video>
-        <div class="video-hint" id="hint2">🔊 Click video to play / pause or unmute</div>
-      </div>
+  <div class="container">
+    <div class="video-container">
+      <video id="video1" controls preload="auto" poster="video-poster.jpg">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-
-    <div class="form-section">
-      <div class="form-container">
-        <h2>Market Data / BPO Intake</h2>
-        <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
-        <form action="https://formspree.io/f/manbdzgp" method="POST">
-          <input type="text" name="name" placeholder="Your Name" required>
-          <input type="email" name="email" placeholder="Your Email" required>
-          <input type="text" name="address" placeholder="Subject Property Address" required>
-          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
-          <button type="submit">Submit BPO Request</button>
-        </form>
-      </div>
+    <div class="form-container">
+      <h2>Market Data / BPO Intake</h2>
+      <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
+      <form action="https://formspree.io/f/manbdzgp" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="text" name="address" placeholder="Subject Property Address" required>
+        <textarea name="details" placeholder="Additional Details"></textarea>
+        <button type="submit">Submit BPO Request</button>
+      </form>
     </div>
   </div>
-
-  <!-- Video.js JS -->
-  <script src="https://vjs.zencdn.net/7.21.0/video.min.js"></script>
 
   <script>
-    function setupVideoControls(player, hintId) {
-      const hint = document.getElementById(hintId);
-      player.on("loadeddata", () => { hint.classList.add("show"); });
-      player.on("click", () => {
-        if (player.muted()) player.muted(false);
-        hint.classList.remove("show");
-        hint.classList.add("fade");
-        setTimeout(() => { hint.style.display = "none"; }, 1000);
-      });
-    }
-
-    const player1 = videojs("video1");
-    const player2 = videojs("video2");
-
-    setupVideoControls(player1, "hint1");
-    setupVideoControls(player2, "hint2");
-
-    // When video1 ends, reveal split layout and autoplay video2
-    player1.on("ended", () => {
-      document.getElementById("splitLayout").style.display = "flex";
-      document.getElementById("splitLayout").scrollIntoView({ behavior: "smooth" });
-      player2.play();
-      setTimeout(() => { player2.muted(false); }, 2000);
+    const video1 = document.getElementById('video1');
+    video1.addEventListener('ended', () => {
+      video1.outerHTML = `
+        <video id="video2" controls autoplay preload="auto" poster="video-poster.jpg">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      `;
     });
   </script>
 </body>
