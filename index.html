@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BPOs New Mexico</title>
+  <title>Broker Price Opinion (BPO) Intake</title>
   <style>
     body {
       margin: 0;
@@ -12,41 +11,77 @@
       background-color: black;
       color: white;
     }
+    .video-wrapper {
+      background: black;
+      padding: 40px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    video, img {
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 15px;
+      background: black;
+    }
     .container {
       display: flex;
       flex-direction: row;
       height: 100vh;
+      gap: 20px;
       padding: 20px;
       box-sizing: border-box;
     }
-    .video-container {
-      flex: 1;
+    .video-section {
+      flex: 0 0 55%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .form-section {
+      flex: 0 0 40%;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-right: 20px;
-    }
-    video {
-      width: 100%;
-      max-width: 640px;
-      border-radius: 12px;
-      background-color: black;
     }
     .form-container {
-      flex: 1;
+      width: 100%;
+      max-width: 450px;
       background: black;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 15px;
+    }
+    .form-container h2 {
+      margin-bottom: 10px;
+      font-size: 1.6rem;
+    }
+    .form-container p {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: #ccc;
     }
     form {
       display: flex;
       flex-direction: column;
+    }
+    .address-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.6fr;
+      gap: 10px;
+      margin-bottom: 10px;
     }
     input, textarea {
       margin-bottom: 10px;
       padding: 10px;
       border: none;
       border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    textarea {
+      resize: vertical;
     }
     button {
       padding: 12px;
@@ -55,41 +90,90 @@
       border-radius: 8px;
       color: black;
       font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
+    }
+    button:hover {
+      background: #00aa00;
+    }
+    .note {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+    .fade {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .show {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="video-container">
-      <video id="video1" controls preload="auto" poster="video-poster.jpg">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+
+  <!-- Video 1 full screen -->
+  <div class="video-wrapper">
+    <video id="video1" autoplay muted playsinline preload="auto" poster="video-poster.jpg" controls>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- Split Layout -->
+  <div class="container" id="splitLayout" style="display:none;">
+    <div class="video-section">
+      <div class="video-wrapper" style="width:95%;">
+        <video id="video2" autoplay muted playsinline preload="auto" poster="video-poster.jpg" controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <img id="nmMap" src="video-poster.jpg" alt="NM Counties Map" class="fade" style="position:absolute; width:90%; border-radius:15px; display:none;">
+      </div>
     </div>
-    <div class="form-container">
-      <h2>Market Data / BPO Intake</h2>
-      <p>Please fill out the details below to request a Broker Price Opinion (BPO):</p>
-      <form action="https://formspree.io/f/manbdzgp" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Your Email" required>
-        <input type="text" name="address" placeholder="Subject Property Address" required>
-        <textarea name="details" placeholder="Additional Details"></textarea>
-        <button type="submit">Submit BPO Request</button>
-      </form>
+
+    <div class="form-section">
+      <div class="form-container">
+        <h2>Broker Price Opinion (BPO) Intake</h2>
+        <p>Please fill out the details below to request your BPO or Broker Price Opinion (BPO):</p>
+        <form action="https://formspree.io/f/manbdzgp" method="POST">
+          <label>Subject Property Address</label>
+          <div class="address-row">
+            <input type="text" name="street" placeholder="Street Address" required>
+            <input type="text" name="city" placeholder="City/Town" required>
+            <input type="text" name="zip" placeholder="NM Zip" required>
+          </div>
+          <input type="text" name="owner" placeholder="County Assessor’s Owner Name" required>
+          <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
+          <input type="email" name="email" placeholder="Your Contact Email" required>
+          <input type="tel" name="phone" placeholder="Your Contact Phone" required>
+          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
+          <button type="submit">Submit BPO Request</button>
+        </form>
+        <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const video1 = document.getElementById('video1');
-    video1.addEventListener('ended', () => {
-      video1.outerHTML = `
-        <video id="video2" controls autoplay preload="auto" poster="video-poster.jpg">
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      `;
+    const video1 = document.getElementById("video1");
+    const splitLayout = document.getElementById("splitLayout");
+    const video2 = document.getElementById("video2");
+    const nmMap = document.getElementById("nmMap");
+
+    // After Video1 ends, reveal split layout
+    video1.addEventListener("ended", () => {
+      splitLayout.style.display = "flex";
+      splitLayout.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // After Video2 ends, fade out video2 and fade in map
+    video2.addEventListener("ended", () => {
+      video2.style.display = "none";
+      nmMap.style.display = "block";
+      setTimeout(() => { nmMap.classList.add("show"); }, 100);
     });
   </script>
+
 </body>
 </html>
