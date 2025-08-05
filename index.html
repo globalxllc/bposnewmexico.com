@@ -2,178 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Broker Price Opinion (BPO) Intake</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-    }
-    .video-wrapper {
-      background: black;
-      padding: 40px;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    video, img {
-      width: 100%;
-      max-height: 80vh;
-      border-radius: 15px;
-      background: black;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-      gap: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .video-section {
-      flex: 0 0 55%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .form-section {
-      flex: 0 0 40%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .form-container {
-      width: 100%;
-      max-width: 450px;
-      background: black;
-      padding: 20px;
-      border-radius: 15px;
-    }
-    .form-container h2 {
-      margin-bottom: 10px;
-      font-size: 1.6rem;
-    }
-    .form-container p {
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    .address-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 0.6fr;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    input, textarea {
-      margin-bottom: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button {
-      padding: 12px;
-      background: limegreen;
-      border: none;
-      border-radius: 8px;
-      color: black;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #00aa00;
-    }
-    .note {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .show {
-      opacity: 1;
-    }
-  </style>
+  <title>BPO + Video</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Full-width first video -->
+  <section class="video-full">
+    <video id="video1" controls src="assets/video1.mp4"></video>
+  </section>
 
-  <!-- Video 1 full screen -->
-  <div class="video-wrapper">
-    <video id="video1" autoplay muted playsinline preload="auto" poster="video-poster.jpg" controls>
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-
-  <!-- Split Layout -->
-  <div class="container" id="splitLayout" style="display:none;">
-    <div class="video-section">
-      <div class="video-wrapper" style="width:95%;">
-        <video id="video2" autoplay muted playsinline preload="auto" poster="video-poster.jpg" controls>
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-        <img id="nmMap" src="video-poster.jpg" alt="NM Counties Map" class="fade" style="position:absolute; width:90%; border-radius:15px; display:none;">
-      </div>
+  <!-- Split section: second video (or map) on left, form on right -->
+  <section class="split-section">
+    <div class="video-left">
+      <video id="video2" controls src="assets/video2.mp4"></video>
+      <img id="nm-county-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Counties Map">
     </div>
-
-    <div class="form-section">
-      <div class="form-container">
-        <h2>Broker Price Opinion (BPO) Intake</h2>
-        <p>Please fill out the details below to request your BPO or Broker Price Opinion (BPO):</p>
-        <form action="https://formspree.io/f/manbdzgp" method="POST">
-          <label>Subject Property Address</label>
-          <div class="address-row">
-            <input type="text" name="street" placeholder="Street Address" required>
-            <input type="text" name="city" placeholder="City/Town" required>
-            <input type="text" name="zip" placeholder="NM Zip" required>
-          </div>
-          <input type="text" name="owner" placeholder="County Assessor’s Owner Name" required>
-          <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
-          <input type="email" name="email" placeholder="Your Contact Email" required>
-          <input type="tel" name="phone" placeholder="Your Contact Phone" required>
-          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
-          <button type="submit">Submit BPO Request</button>
-        </form>
-        <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
-      </div>
+    <div class="bpo-intake">
+      <h2>Broker Price Opinion BPO Intake</h2>
+      <p>Please fill out the details below to request your BPO or Broker Price Opinion BPO:</p>
+      <form id="bpo-form" name="bpoForm">
+        <div class="form-group">
+          <label for="streetAddress">Street Address:</label>
+          <input type="text" id="streetAddress" name="streetAddress" placeholder="Street Address" required/>
+        </div>
+        <div class="form-group">
+          <label for="cityTown">City/Town:</label>
+          <input type="text" id="cityTown" name="cityTown" placeholder="City/Town" required/>
+        </div>
+        <div class="form-group">
+          <label for="zip">NM Zip:</label>
+          <input type="text" id="zip" name="zip" placeholder="Zip Code" required pattern="\d{5}"/>
+        </div>
+        <div class="form-group">
+          <label for="ownerName">County Assessor’s Owner Name:</label>
+          <input type="text" id="ownerName" name="ownerName" placeholder="Owner Name" required/>
+        </div>
+        <div class="form-group">
+          <label for="orderingName">Company or Person Ordering Name:</label>
+          <input type="text" id="orderingName" name="orderingName" placeholder="Ordering Name" required/>
+        </div>
+        <div class="form-group">
+          <label for="email">Your Contact Email:</label>
+          <input type="email" id="email" name="email" placeholder="Email Address" required/>
+        </div>
+        <div class="form-group">
+          <label for="phone">Your Contact Phone:</label>
+          <input type="tel" id="phone" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}"/>
+        </div>
+        <div class="form-group">
+          <label for="details">Additional Details:</label>
+          <textarea id="details" name="details" placeholder="Additional Details" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Submit BPO Request</button>
+        <p class="optional">Optional: BPOsNewMexico.com direct phone: 505 453 0444</p>
+      </form>
     </div>
-  </div>
+  </section>
 
-  <script>
-    const video1 = document.getElementById("video1");
-    const splitLayout = document.getElementById("splitLayout");
-    const video2 = document.getElementById("video2");
-    const nmMap = document.getElementById("nmMap");
-
-    // After Video1 ends, reveal split layout
-    video1.addEventListener("ended", () => {
-      splitLayout.style.display = "flex";
-      splitLayout.scrollIntoView({ behavior: "smooth" });
-    });
-
-    // After Video2 ends, fade out video2 and fade in map
-    video2.addEventListener("ended", () => {
-      video2.style.display = "none";
-      nmMap.style.display = "block";
-      setTimeout(() => { nmMap.classList.add("show"); }, 100);
-    });
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
