@@ -1,13 +1,24 @@
 body {
+  margin: 0;
+  padding: 0;
   background: #000;
   font-family: sans-serif;
 }
-.container {
+.video-full {
+  width: 100%;
+  padding: 1em;
+}
+.video-full video {
+  width: 100%;
+  height: auto;
+  border-radius: 1em;
+}
+.split-section {
   display: flex;
   gap: 2em;
-  padding: 2em;
+  padding: 1em;
 }
-.video-left, .bpo-intake {
+.video-left {
   flex: 1;
 }
 .video-left video,
@@ -21,6 +32,7 @@ body {
   display: none;
 }
 .bpo-intake {
+  flex: 1;
   max-width: 400px;
   color: #fff;
 }

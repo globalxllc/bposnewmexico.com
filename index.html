@@ -2,13 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BPO Intake + Video Preview</title>
+  <title>BPO + Video</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
+  <!-- Full-width first video -->
+  <section class="video-full">
+    <video id="video1" controls src="assets/video1.mp4"></video>
+  </section>
+
+  <!-- Split section: second video (or map) on left, form on right -->
+  <section class="split-section">
     <div class="video-left">
-      <video id="video1" controls src="assets/video1.mp4"></video>
       <video id="video2" controls src="assets/video2.mp4"></video>
       <img id="nm-county-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Counties Map">
     </div>
@@ -52,7 +57,8 @@
         <p class="optional">Optional: BPOsNewMexico.com direct phone: 505 453 0444</p>
       </form>
     </div>
-  </div>
+  </section>
+
   <script src="script.js"></script>
 </body>
 </html>
