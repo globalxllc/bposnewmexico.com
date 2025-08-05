@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BPO Intake Sequence v9</title>
+  <title>BPO Intake Sequence v10</title>
   <style>
     body {
       margin: 0;
@@ -13,82 +13,54 @@
     }
     .video-wrapper {
       background: black;
-      padding: 20px; /* reduced padding */
+      padding: 10px;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 10px; /* minimal space */
-      position: relative;
+      margin-bottom: 5px;
     }
     video, img {
       width: 100%;
-      max-height: 80vh;
+      max-height: 50vh;
       border-radius: 15px;
       background: black;
       cursor: pointer;
     }
     button.unmute-btn {
-      margin-top: 8px;
-      padding: 6px 10px;
+      margin-top: 4px;
+      padding: 4px 8px;
       background: rgba(255,255,255,0.8);
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
       color: #000;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
     }
     .container {
       display: flex;
-      flex-direction: row;
-      gap: 10px; /* reduced gap */
-      padding: 10px; /* reduced padding */
-      box-sizing: border-box;
+      gap: 5px;
+      padding: 5px;
       align-items: flex-start;
     }
     .video-section {
-      flex: 0 0 45%; /* divider left */
-      display: flex;
-      justify-content: center;
+      flex: 0 0 45%;
     }
     .form-section {
       flex: 0 0 55%;
-      display: flex;
-      justify-content: center;
-    }
-    .video-section .video-wrapper {
-      padding: 0;
-      margin: 0;
-      width: 100%;
-      max-height: 50vh; /* limit height */
-    }
-    .video-section video {
-      max-height: 50vh;
-      width: 100%;
-    }
-    .video-section img {
-      max-width: 80%;
-      max-height: 50vh;
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: none;
     }
     .form-container {
-      width: 100%;
-      max-width: 500px;
+      max-width: 480px;
+      padding: 5px;
       background: black;
-      padding: 10px; /* reduced padding */
       border-radius: 15px;
-      /* remove internal scroll to fit all fields */
     }
     .form-container h2 {
-      margin-bottom: 8px;
-      font-size: 1.5rem;
+      margin: 0 0 4px 0;
+      font-size: 1.4rem;
     }
     .form-container p {
-      margin-bottom: 10px;
+      margin: 0 0 6px 0;
       font-size: 0.9rem;
       color: #ccc;
     }
@@ -99,52 +71,47 @@
     .address-row {
       display: grid;
       grid-template-columns: 1fr 1fr 0.5fr;
-      gap: 8px;
-      margin-bottom: 8px;
+      gap: 5px;
+      margin-bottom: 5px;
     }
     input, textarea {
-      margin-bottom: 6px;
-      padding: 6px;
+      margin-bottom: 4px;
+      padding: 4px;
       border: none;
       border-radius: 4px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      background: #ccc;
+      color: #000;
     }
     textarea {
+      height: 50px;
       resize: vertical;
-      height: 60px;
     }
     button.submit-btn {
-      margin-top: 6px;
-      padding: 8px;
+      padding: 6px;
       background: limegreen;
       border: none;
       border-radius: 4px;
       color: black;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 4px;
     }
     .note {
-      margin-top: 6px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #aaa;
+      margin-top: 4px;
     }
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .show {
-      opacity: 1;
-    }
+    #nmMap { display: none; }
   </style>
 </head>
 <body>
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls>
+    <video id="video1" autoplay muted playsinline preload="auto" controls>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
-      Your browser does not support the video tag.
     </video>
     <button id="unmute1" class="unmute-btn">Unmute</button>
   </div>
@@ -153,12 +120,11 @@
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2" autoplay playsinline preload="auto" controls>
+        <video id="video2" autoplay muted playsinline preload="auto" controls>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
-          Your browser does not support the video tag.
         </video>
         <button id="unmute2" class="unmute-btn">Unmute</button>
-        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
+        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map">
       </div>
     </div>
 
@@ -186,43 +152,33 @@
   </div>
 
   <script>
-    const video1 = document.getElementById('video1');
-    const unmute1 = document.getElementById('unmute1');
-    const video2 = document.getElementById('video2');
-    const unmute2 = document.getElementById('unmute2');
-    const splitLayout = document.getElementById('splitLayout');
-    const nmMap = document.getElementById('nmMap');
+    const video1 = document.getElementById('video1'),
+          unmute1 = document.getElementById('unmute1'),
+          video2 = document.getElementById('video2'),
+          unmute2 = document.getElementById('unmute2'),
+          splitLayout = document.getElementById('splitLayout'),
+          nmMap = document.getElementById('nmMap');
 
-    // Toggle mute/unmute
-    function toggleMute(video, button) {
-      video.muted = !video.muted;
-      button.textContent = video.muted ? 'Unmute' : 'Mute';
-      if (!video.muted) video.play();
-    }
-    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
-    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
+    // Unmute and hide button
+    unmute1.onclick = () => { video1.muted = false; unmute1.style.display='none'; };
+    unmute2.onclick = () => { video2.muted = false; unmute2.style.display='none'; };
 
-    // Click video toggles play/pause
-    video1.addEventListener('click', () => {
-      if (video1.paused) video1.play(); else video1.pause();
-    });
-    video2.addEventListener('click', () => {
-      if (video2.paused) video2.play(); else video2.pause();
-    });
+    // Click to pause/play
+    video1.onclick = () => video1.paused ? video1.play() : video1.pause();
+    video2.onclick = () => video2.paused ? video2.play() : video2.pause();
 
     // After video1 ends
-    video1.addEventListener('ended', () => {
+    video1.onended = () => {
       splitLayout.style.display = 'flex';
-      splitLayout.scrollIntoView({ behavior: 'smooth' });
-    });
+      splitLayout.scrollIntoView({behavior:'smooth'});
+    };
 
-    // After video2 ends, show map
-    video2.addEventListener('ended', () => {
-      video2.style.display = 'none';
-      unmute2.style.display = 'none';
-      nmMap.style.display = 'block';
-      setTimeout(() => nmMap.classList.add('show'), 100);
-    });
+    // After video2 ends: show map
+    video2.onended = () => {
+      video2.style.display='none';
+      unmute2.style.display='none';
+      nmMap.style.display='block';
+    };
   </script>
 
 </body>
