@@ -1,6 +1,71 @@
-body, html { margin:0; padding:0; }
-#hero { height:60vh; background:#000; overflow:hidden; }
-#hero-video { width:100%; height:100%; object-fit:cover; }
-#map-section { position:relative; width:100%; height:400px; }
-#map-preloader { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:sans-serif; }
-#map { width:100%; height:100%; visibility:hidden; }
+body {
+  background: #000;
+  font-family: sans-serif;
+}
+.container {
+  display: flex;
+  gap: 2em;
+  padding: 2em;
+}
+.video-left, .bpo-intake {
+  flex: 1;
+}
+.video-left video,
+.video-left img {
+  width: 100%;
+  height: auto;
+  border-radius: 1em;
+  margin-bottom: 1em;
+}
+#nm-county-map {
+  display: none;
+}
+.bpo-intake {
+  max-width: 400px;
+  color: #fff;
+}
+.bpo-intake h2 {
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+.bpo-intake p {
+  text-align: center;
+  margin-bottom: 1em;
+}
+.form-group {
+  margin-bottom: 1em;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.25em;
+  font-size: 0.9em;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75em;
+  border: none;
+  border-radius: 1em;
+  background: #ccc;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+.btn-submit {
+  width: 100%;
+  padding: 0.75em;
+  border: none;
+  border-radius: 1em;
+  background: #0f0;
+  color: #000;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.btn-submit:hover {
+  opacity: 0.9;
+}
+.optional {
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 0.5em;
+  opacity: 0.8;
+}
