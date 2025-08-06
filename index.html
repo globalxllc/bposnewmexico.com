@@ -128,22 +128,38 @@
       opacity: 1;
     }
   </style>
+
+<style>
+.video-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; }
+.video-container video { width: 100%; height: auto; display: block; }
+#unmuteBtn {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  z-index: 10; padding: 0.6em 1.2em; font-size: 1.1em;
+  background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;
+}
+#unmuteBtn:hover { background: #0056b3; }
+</style>
+
 </head>
 <body>
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls>
+    <div class="video-container">
+<video id="video1" autoplay playsinline preload="auto" muted autoplay playsinline preload="auto">
+
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+<button id="unmuteBtn">Unmute</button>
+</div>
   </div>
 
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2" autoplay playsinline preload="auto" controls>
+        <video id="video2" autoplay playsinline preload="auto" muted playsinline preload="auto">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -167,39 +183,34 @@
           <input type="email" name="email" placeholder="Your Contact Email" required>
           <input type="tel" name="phone" placeholder="Your Contact Phone" required>
           <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
-          <button type="submit" class="submit-btn">Submit BPO Request</button>
+          
         </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
     </div>
   </div>
 
-  <script>
-    const v1 = document.getElementById("video1");
-    const v2 = document.getElementById("video2");
-    const split = document.getElementById("splitLayout");
-    const map = document.getElementById("nmMap");
+  
 
-    // After v1 ends, reveal split
-    v1.addEventListener("ended", () => {
-      split.style.display = "flex";
-      split.scrollIntoView({behavior:"smooth"});
-    });
 
-    // toggle play/pause on click
-    [v1, v2].forEach(v => {
-      v.addEventListener("click", () => {
-        v.paused ? v.play() : v.pause();
-      });
-    });
-
-    // After v2 ends, hide v2, show map
-    v2.addEventListener("ended", () => {
-      v2.style.display = "none";
-      map.style.display = "block";
-      setTimeout(()=>map.classList.add("show"),100);
-    });
-  </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var v1 = document.getElementById('video1');
+  var v2 = document.getElementById('video2');
+  var btn = document.getElementById('unmuteBtn');
+  v2.pause();
+  btn.addEventListener('click', function() {
+    v1.currentTime = 0;
+    v1.muted = false;
+    v2.muted = false;
+    v1.play();
+    btn.style.display = 'none';
+  });
+  v1.addEventListener('ended', function() {
+    v2.play();
+  });
+});
+</script>
 
 </body>
 </html>
