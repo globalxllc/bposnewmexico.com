@@ -227,6 +227,7 @@
   });
   // Unmute button logic
   btn.addEventListener('click', function(){
+    document.getElementById('splitLayout').style.display = 'flex';
     v1.currentTime = 0;
     v1.muted = false;
     v2.muted = false;
@@ -234,7 +235,8 @@
     v1.play();
   });
   // When v1 ends, unmute/play v2 and scroll into view
-  v1.addEventListener('ended', function() {
+  v1.addEventListener('ended', function(){
+    document.getElementById('splitLayout').style.display = 'flex';
     v2.muted = false;
     v2.play();
     document.getElementById('video2Container').scrollIntoView({behavior:'smooth', block:'start'});
