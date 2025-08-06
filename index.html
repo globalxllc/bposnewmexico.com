@@ -130,14 +130,33 @@
   </style>
 
 <style>
-.video-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; }
+.video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
 .video-container video { width: 100%; height: auto; display: block; }
+
 #unmuteBtn {
-  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-  z-index: 10; padding: 0.6em 1.2em; font-size: 1.1em;
-  background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 0.8em 1.5em;
+  font-size: 1.1em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, transform 0.2s;
 }
-#unmuteBtn:hover { background: #0056b3; }
+#unmuteBtn:hover {
+  background-color: #0056b3;
+  transform: translateX(-50%) scale(1.05);
+}
+
+#unmuteBtn:hover {
+  background: #E64A19;
+}
 </style>
 
 </head>
@@ -146,11 +165,12 @@
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" muted autoplay playsinline preload="auto">
+<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto" muted autoplay playsinline preload="auto">
 
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
-    </video>
+    
+</video>
 <button id="unmuteBtn">Unmute</button>
 </div>
   </div>
@@ -159,7 +179,7 @@
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2" autoplay playsinline preload="auto" muted playsinline preload="auto">
+        <video id="video2" autoplay playsinline preload="auto" controls muted playsinline preload="auto">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -183,7 +203,7 @@
           <input type="email" name="email" placeholder="Your Contact Email" required>
           <input type="tel" name="phone" placeholder="Your Contact Phone" required>
           <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
-          
+          <button type="submit" class="submit-btn">Submit BPO Request</button>
         </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
@@ -194,22 +214,28 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+(function(){
   var v1 = document.getElementById('video1');
   var v2 = document.getElementById('video2');
   var btn = document.getElementById('unmuteBtn');
+  // Pause video2 until v1 ends
   v2.pause();
+  // On Unmute click: restart v1, unmute both, hide button
   btn.addEventListener('click', function() {
-    v1.currentTime = 0;
     v1.muted = false;
     v2.muted = false;
+    v1.currentTime = 0;
     v1.play();
     btn.style.display = 'none';
   });
+  // When v1 ends: scroll to v2 and play unmuted
   v1.addEventListener('ended', function() {
+    v2.muted = false;
     v2.play();
+    var el = document.getElementById('video2');
+    if(el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
   });
-});
+})();
 </script>
 
 </body>
