@@ -137,16 +137,34 @@
       opacity: 1;
     }
   </style>
+
+<style>
+.video-container { position: relative; display: inline-block; }
+.unmute-button {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+}
+</style>
+
 </head>
 <body>
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline>
+    <div class="video-container">
+<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline muted autoplay playsinline>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    
+<button id="unmuteButton" class="unmute-button">Click to Unmute</button>
+</div>
+    <button id="unmute1" class="unmute-btn">Unmute</button>
   </div>
 
   <!-- Split Layout -->
@@ -157,7 +175,7 @@
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        
+        <button id="unmute2" class="unmute-btn">Unmute</button>
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
@@ -187,12 +205,21 @@
 
   <script>
     const video1 = document.getElementById('video1');
-        const video2 = document.getElementById('video2');
-        const splitLayout = document.getElementById('splitLayout');
+    const unmute1 = document.getElementById('unmute1');
+    const video2 = document.getElementById('video2');
+    const unmute2 = document.getElementById('unmute2');
+    const splitLayout = document.getElementById('splitLayout');
     const nmMap = document.getElementById('nmMap');
 
     // Toggle mute/unmute
-        
+    function toggleMute(video, button) {
+      video.muted = !video.muted;
+      button.textContent = video.muted ? 'Unmute' : 'Mute';
+      if (!video.muted) video.play();
+    }
+    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
+    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
+
     // Click video toggles play/pause
     video1.addEventListener('click', () => {
       if (video1.paused) video1.play(); else video1.pause();
@@ -218,12 +245,12 @@
 
 
 <script>
-document.addEventListener('click', function initAudio() {
+document.getElementById('unmuteButton').addEventListener('click', function() {
   var v1 = document.getElementById('video1');
   var v2 = document.getElementById('video2');
   if (v1) { v1.muted = false; v1.play(); }
   if (v2) { v2.muted = false; v2.play(); }
-  document.removeEventListener('click', initAudio);
+  this.style.display = 'none';
 });
 </script>
 
