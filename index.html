@@ -142,22 +142,22 @@
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls>
+    <video id="video1" autoplay playsinline preload="auto" controls muted>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <button id="unmute1" class="unmute-btn">Unmute</button>
+    
   </div>
 
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2" autoplay playsinline preload="auto" controls>
+        <video id="video2" autoplay playsinline preload="auto" controls muted>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <button id="unmute2" class="unmute-btn">Unmute</button>
+        
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
@@ -187,25 +187,12 @@
 
   <script>
     const video1 = document.getElementById('video1');
-    const unmute1 = document.getElementById('unmute1');
-    const video2 = document.getElementById('video2');
-    const unmute2 = document.getElementById('unmute2');
-    // Auto-unmute first video when possible
-    video1.muted = false;
-
-    const splitLayout = document.getElementById('splitLayout');
+        const video2 = document.getElementById('video2');
+        const splitLayout = document.getElementById('splitLayout');
     const nmMap = document.getElementById('nmMap');
 
     // Toggle mute/unmute
-    function toggleMute(video, button) {
-      // Always unmute on click
-      video.muted = false;
-      button.textContent = 'Unmute';
-      video.play();
-    }
-    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
-    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
-
+        
     // Click video toggles play/pause
     video1.addEventListener('click', () => {
       if (video1.paused) video1.play(); else video1.pause();
@@ -222,9 +209,7 @@
 
     // After video2 ends, show map
     video2.addEventListener('ended', () => {
-      video2.style.display = 'none';
-      unmute2.style.display = 'none';
-      nmMap.style.display = 'block';
+      video2.style.display = 'none';      nmMap.style.display = 'block';
       setTimeout(() => nmMap.classList.add('show'), 100);
     });
   </script>
