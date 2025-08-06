@@ -130,27 +130,25 @@
   </style>
 
 <style>
-/* Narrow the divider gap */
+/* Narrow the divider (gap) and adjust container padding */
 .container {
   gap: 5px !important;
+  padding: 10px !important;
 }
-/* Align sections at top */
+/* Align video section and form section at the top */
 #splitLayout .video-section, 
 #splitLayout .form-section {
   align-self: flex-start !important;
 }
-/* Set map (video2 replacement) to fixed narrow width with no rounding */
-.video-wrapper img {
-  width: 300px;
-  max-width: 300px;
+/* Ensure map width matches video width */
+.video-wrapper img#nmMap {
+  width: 100%;
+  max-width: 100%;
   height: auto;
-  border-radius: 0 !important;
-  display: block;
-  margin: 0;
 }
-/* Remove any rounding on video2 container */
-.video-wrapper, .video-wrapper video {
-  border-radius: 0 !important;
+/* Optionally reduce video-wrapper padding */
+.video-wrapper {
+  padding: 20px !important;
 }
 </style>
 
