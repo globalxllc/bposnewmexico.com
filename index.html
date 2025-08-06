@@ -170,6 +170,12 @@
           Your browser does not support the video tag.
         </video>
 </div>
+
+<div class="map-bubble" id="mapBubbleContainer">
+  <img id="mapImg" class="fade-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Map" />
+  <video id="bubbleVideo" class="bubble-video" controls playsinline preload="auto" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4"></video>
+</div>
+
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
@@ -228,7 +234,7 @@
     v1.play();
   });
   // When v1 ends, unmute/play v2 and scroll into view
-  v1.addEventListener('ended', function(){
+  v1.addEventListener('ended', function() {
     v2.muted = false;
     v2.play();
     document.getElementById('video2Container').scrollIntoView({behavior:'smooth', block:'start'});
