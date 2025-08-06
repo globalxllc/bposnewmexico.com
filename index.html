@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Broker Price Opinion (BPO) Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BPO Intake Sequence v9</title>
   <style>
     body {
       margin: 0;
@@ -13,13 +13,14 @@
     }
     .video-wrapper {
       background: black;
-      padding: 40px;
+      padding: 20px; /* reduced padding */
       border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 10px; /* minimal space */
+      position: relative;
     }
     video, img {
       width: 100%;
@@ -28,16 +29,26 @@
       background: black;
       cursor: pointer;
     }
+    button.unmute-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
     .container {
       display: flex;
       flex-direction: row;
-      gap: 20px;
-      padding: 20px;
+      gap: 10px; /* reduced gap */
+      padding: 10px; /* reduced padding */
       box-sizing: border-box;
       align-items: flex-start;
     }
     .video-section {
-      flex: 0 0 45%;
+      flex: 0 0 45%; /* divider left */
       display: flex;
       justify-content: center;
     }
@@ -49,35 +60,35 @@
     .video-section .video-wrapper {
       padding: 0;
       margin: 0;
-      width: 95%;
-      max-height: 60vh;
-      position: relative;
+      width: 100%;
+      max-height: 50vh; /* limit height */
     }
     .video-section video {
-      max-height: 60vh;
+      max-height: 50vh;
       width: 100%;
     }
     .video-section img {
       max-width: 80%;
-      max-height: 60vh;
-      position: absolute; top: 0; left: 0;
+      max-height: 50vh;
+      position: absolute;
+      top: 0;
+      left: 0;
       display: none;
     }
     .form-container {
       width: 100%;
-      max-width: 550px;
+      max-width: 500px;
       background: black;
-      padding: 15px;
+      padding: 10px; /* reduced padding */
       border-radius: 15px;
-      max-height: 60vh;
-      overflow-y: auto;
+      /* remove internal scroll to fit all fields */
     }
     .form-container h2 {
-      margin-bottom: 10px;
-      font-size: 1.6rem;
+      margin-bottom: 8px;
+      font-size: 1.5rem;
     }
     .form-container p {
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       font-size: 0.9rem;
       color: #ccc;
     }
@@ -87,7 +98,7 @@
     }
     .address-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 0.6fr;
+      grid-template-columns: 1fr 1fr 0.5fr;
       gap: 8px;
       margin-bottom: 8px;
     }
@@ -95,29 +106,27 @@
       margin-bottom: 6px;
       padding: 6px;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: 0.85rem;
     }
     textarea {
       resize: vertical;
+      height: 60px;
     }
     button.submit-btn {
       margin-top: 6px;
       padding: 8px;
       background: limegreen;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       color: black;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
     }
-    button.submit-btn:hover {
-      background: #00aa00;
-    }
     .note {
-      margin-top: 10px;
-      font-size: 0.85rem;
+      margin-top: 6px;
+      font-size: 0.8rem;
       color: #aaa;
     }
     .fade {
@@ -128,70 +137,27 @@
       opacity: 1;
     }
   </style>
-
-<style>
-.video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
-.video-container video { width: 100%; height: auto; display: block; }
-#unmuteBtn {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 0.8em 1.2em;
-  font-size: 1.1em;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: background-color 0.3s, transform 0.2s;
-}
-#unmuteBtn:hover {
-  background-color: #0056b3;
-  transform: translateX(-50%) scale(1.05);
-}
-</style>
-
-
-<style>
-#splitLayout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-.form-section input,
-.form-section textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
-</style>
-
 </head>
 <body>
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
-
+    <video id="video1" autoplay playsinline preload="auto" controls>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
-    
-</video>
-<button id="unmuteBtn">Unmute</button>
-</div>
+    </video>
+    <button id="unmute1" class="unmute-btn">Unmute</button>
   </div>
 
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto">
+        <video id="video2" autoplay playsinline preload="auto" controls>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
+        <button id="unmute2" class="unmute-btn">Unmute</button>
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
@@ -211,7 +177,7 @@
           <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
           <input type="email" name="email" placeholder="Your Contact Email" required>
           <input type="tel" name="phone" placeholder="Your Contact Phone" required>
-          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
+          <textarea name="details" placeholder="Additional Details"></textarea>
           <button type="submit" class="submit-btn">Submit BPO Request</button>
         </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
@@ -220,60 +186,44 @@
   </div>
 
   <script>
-    const v1 = document.getElementById("video1");
-    const v2 = document.getElementById("video2");
-    const split = document.getElementById("splitLayout");
-    const map = document.getElementById("nmMap");
+    const video1 = document.getElementById('video1');
+    const unmute1 = document.getElementById('unmute1');
+    const video2 = document.getElementById('video2');
+    const unmute2 = document.getElementById('unmute2');
+    const splitLayout = document.getElementById('splitLayout');
+    const nmMap = document.getElementById('nmMap');
 
-    // After v1 ends, reveal split
-    v1.addEventListener("ended", () => {
-      split.style.display = "flex";
-      split.scrollIntoView({behavior:"smooth"});
+    // Toggle mute/unmute
+    function toggleMute(video, button) {
+      video.muted = !video.muted;
+      button.textContent = video.muted ? 'Unmute' : 'Mute';
+      if (!video.muted) video.play();
+    }
+    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
+    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
+
+    // Click video toggles play/pause
+    video1.addEventListener('click', () => {
+      if (video1.paused) video1.play(); else video1.pause();
+    });
+    video2.addEventListener('click', () => {
+      if (video2.paused) video2.play(); else video2.pause();
     });
 
-    // toggle play/pause on click
-    [v1, v2].forEach(v => {
-      v.addEventListener("click", () => {
-        v.paused ? v.play() : v.pause();
-      });
+    // After video1 ends
+    video1.addEventListener('ended', () => {
+      splitLayout.style.display = 'flex';
+      splitLayout.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // After v2 ends, hide v2, show map
-    v2.addEventListener("ended", () => {
-      v2.style.display = "none";
-      map.style.display = "block";
-      setTimeout(()=>map.classList.add("show"),100);
+    // After video2 ends, show map
+    video2.addEventListener('ended', () => {
+      video2.style.display = 'none';
+      unmute2.style.display = 'none';
+      nmMap.style.display = 'block';
+      setTimeout(() => nmMap.classList.add('show'), 100);
     });
   </script>
-
-
-<script>
-(function(){
-  const v1 = document.getElementById('video1');
-  const v2 = document.getElementById('video2');
-  const split = document.getElementById('splitLayout');
-  const btn = document.getElementById('unmuteBtn');
-  // Pause video2 until triggered
-  v2.pause();
-  // On Unmute click: restart v1, unmute both, hide button
-  btn.addEventListener('click', function() {
-    v1.currentTime = 0;
-    v1.muted = false;
-    v2.muted = false;
-    btn.style.display = 'none';
-    v1.play();
-  });
-  // When video1 ends: reveal split layout, scroll to it, play v2 unmuted
-  v1.addEventListener('ended', function() {
-    if (split) {
-      split.style.display = 'flex';
-      split.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-    v2.muted = false;
-    v2.play();
-  });
-})();
-</script>
 
 </body>
 </html>
