@@ -190,14 +190,18 @@
     const unmute1 = document.getElementById('unmute1');
     const video2 = document.getElementById('video2');
     const unmute2 = document.getElementById('unmute2');
+    // Auto-unmute first video when possible
+    video1.muted = false;
+
     const splitLayout = document.getElementById('splitLayout');
     const nmMap = document.getElementById('nmMap');
 
     // Toggle mute/unmute
     function toggleMute(video, button) {
-      video.muted = !video.muted;
-      button.textContent = video.muted ? 'Unmute' : 'Mute';
-      if (!video.muted) video.play();
+      // Always unmute on click
+      video.muted = false;
+      button.textContent = 'Unmute';
+      video.play();
     }
     unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
     unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
