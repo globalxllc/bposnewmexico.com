@@ -4,140 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Broker Price Opinion (BPO) Intake</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-    }
-    .video-wrapper {
-      background: black;
-      padding: 40px;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    video, img {
-      width: 100%;
-      max-height: 80vh;
-      border-radius: 15px;
-      background: black;
-      cursor: pointer;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-      align-items: flex-start;
-    }
-    .video-section {
-      flex: 0 0 45%;
-      display: flex;
-      justify-content: center;
-    }
-    .form-section {
-      flex: 0 0 55%;
-      display: flex;
-      justify-content: center;
-    }
-    .video-section .video-wrapper {
-      padding: 0;
-      margin: 0;
-      width: 95%;
-      max-height: 60vh;
-      position: relative;
-    }
-    .video-section video {
-      max-height: 60vh;
-      width: 100%;
-    }
-    .video-section img {
-      max-width: 80%;
-      max-height: 60vh;
-      position: absolute; top: 0; left: 0;
-      display: none;
-    }
-    .form-container {
-      width: 100%;
-      max-width: 550px;
-      background: black;
-      padding: 15px;
-      border-radius: 15px;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    .form-container h2 {
-      margin-bottom: 10px;
-      font-size: 1.6rem;
-    }
-    .form-container p {
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    .address-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 0.6fr;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    input, textarea {
-      margin-bottom: 6px;
-      padding: 6px;
-      border: none;
-      border-radius: 5px;
-      font-size: 0.85rem;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button.submit-btn {
-      margin-top: 6px;
-      padding: 8px;
-      background: limegreen;
-      border: none;
-      border-radius: 5px;
-      color: black;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.submit-btn:hover {
-      background: #00aa00;
-    }
-    .note {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .show {
-      opacity: 1;
-    }
-  </style>
+  
+
 
 <style>
-#splitLayout {
-  display: flex;
-  gap: 10px !important;
-}
-#splitLayout .form-section {
-  flex: 1 1 280px !important;
-  max-width: 280px !important;
-}
+.fade-map { opacity: 0; transition: opacity 1s ease-in-out; display: block; margin: 20px auto; max-width: 400px; }
+.fade-map.show { opacity: 1; }
 </style>
 
 </head>
@@ -147,11 +19,11 @@
   <div class="video-wrapper">
     
 <div class="video-container" id="video1Container">
-  <video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto" muted autoplay playsinline preload="auto">
+  <video id="video1" autoplay playsinline preload="auto" controls autoplay playsinline preload="auto" autoplay playsinline preload="auto" controls autoplay playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-  <button id="unmuteBtn" class="unmute-button">Unmute</button>
+  
 </div>
 
   </div>
@@ -162,12 +34,12 @@
       <div class="video-wrapper">
         
 <div class="video-container" id="video2Container">
-  <video id="video2" autoplay playsinline preload="auto" controls muted playsinline preload="auto" muted playsinline preload="auto">
+  <video id="video2" autoplay playsinline preload="auto" controls playsinline preload="auto" playsinline preload="auto" controls playsinline preload="auto">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
 </div>
-<img id="mapImg" src="assets/map_with_border.png" class="fade-map" style="display:none; margin:20px auto; width:300px; height:auto;" />
+
 
         </div>
     </div>
@@ -195,69 +67,40 @@
     </div>
   </div>
 
-  <script>
-    const v1 = document.getElementById("video1");
-    const v2 = document.getElementById("video2");
-    const split = document.getElementById("splitLayout");
-    const map = document.getElementById("nmMap");
-
-    // After v1 ends, reveal split
-    v1.addEventListener("ended", () => {
-      split.style.display = "flex";
-      split.scrollIntoView({behavior:"smooth"});
-    });
-
-    // toggle play/pause on click
-    [v1, v2].forEach(v => {
-      v.addEventListener("click", () => {
-        v.paused ? v.play() : v.pause();
-      });
-    });
-
-    // After v2 ends, hide v2, show map
-    v2.addEventListener("ended", () => {
-      v2.style.display = "none";
-      map.style.display = "block";
-      setTimeout(()=>map.classList.add("show"),100);
-    });
-  </script>
+  
 
 
-<style>
-.video-container { position: relative; display: flex; justify-content: center; align-items: top; margin:20px 0; }
-.unmute-button { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); padding: 0.6em 1.2em; font-size: 1.1em; background: #007bff; color: #fff; border: none; border-radius: 999px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.3s, transform 0.2s; }
-.unmute-button:hover { background: #0056b3; transform: translateX(-50%) scale(1.05); }
-.fade-map { opacity: 0; transition: opacity 1s ease-in-out; }
-.fade-map.show { opacity: 1; }
-</style>
+
+
+
 <script>
-// custom video logic
+// Toggle play/pause on click; auto-play v2 after v1 ends
 (function(){
   var v1 = document.getElementById('video1');
   var v2 = document.getElementById('video2');
-  var btn = document.getElementById('unmuteBtn');
-  var mapImg = document.getElementById('mapImg');
-  // Pause v2 initially
-  v2.pause();
-  // On Unmute: reset v1, unmute both, hide button, play v1
-  btn.addEventListener('click', function(){
-    v1.currentTime = 0;
-    v1.muted = false;
-    v2.muted = false;
-    btn.style.display = 'none';
-    v1.play();
+  [v1, v2].forEach(function(v){
+    v.addEventListener('click', function(){
+      if(v.paused) v.play();
+      else v.pause();
+    });
   });
-  // On v1 end: scroll to v2, play v2
   v1.addEventListener('ended', function(){
-    var container2 = document.getElementById('video2Container');
-    container2.scrollIntoView({behavior:'smooth', block:'start'});
     v2.play();
   });
-  // On v2 end: fade out v2 and fade in map
+})();
+</script>
+
+
+<script>
+// Fade in map image after video2 ends
+(function(){
+  var v2 = document.getElementById('video2');
+  var mapImg = document.getElementById('mapImg');
   v2.addEventListener('ended', function(){
-    mapImg.style.display = 'block';
-    mapImg.classList.add('show');
-    mapImg.scrollIntoView({behavior:'smooth', block:'start'});
+    if(mapImg){
+      mapImg.classList.add('show');
+      mapImg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   });
 })();
 </script>
