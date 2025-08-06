@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BPO Intake Sequence v9</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broker Price Opinion (BPO) Intake</title>
   <style>
     body {
       margin: 0;
@@ -13,14 +13,13 @@
     }
     .video-wrapper {
       background: black;
-      padding: 20px; /* reduced padding */
+      padding: 40px;
       border-radius: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 10px; /* minimal space */
-      position: relative;
+      margin-bottom: 20px;
     }
     video, img {
       width: 100%;
@@ -29,26 +28,16 @@
       background: black;
       cursor: pointer;
     }
-    button.unmute-btn {
-      margin-top: 8px;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.8);
-      border: none;
-      border-radius: 6px;
-      color: #000;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
     .container {
       display: flex;
       flex-direction: row;
-      gap: 10px; /* reduced gap */
-      padding: 10px; /* reduced padding */
+      gap: 20px;
+      padding: 20px;
       box-sizing: border-box;
       align-items: flex-start;
     }
     .video-section {
-      flex: 0 0 45%; /* divider left */
+      flex: 0 0 45%;
       display: flex;
       justify-content: center;
     }
@@ -60,35 +49,35 @@
     .video-section .video-wrapper {
       padding: 0;
       margin: 0;
-      width: 100%;
-      max-height: 50vh; /* limit height */
+      width: 95%;
+      max-height: 60vh;
+      position: relative;
     }
     .video-section video {
-      max-height: 50vh;
+      max-height: 60vh;
       width: 100%;
     }
     .video-section img {
       max-width: 80%;
-      max-height: 50vh;
-      position: absolute;
-      top: 0;
-      left: 0;
+      max-height: 60vh;
+      position: absolute; top: 0; left: 0;
       display: none;
     }
     .form-container {
       width: 100%;
-      max-width: 500px;
+      max-width: 550px;
       background: black;
-      padding: 10px; /* reduced padding */
+      padding: 15px;
       border-radius: 15px;
-      /* remove internal scroll to fit all fields */
+      max-height: 60vh;
+      overflow-y: auto;
     }
     .form-container h2 {
-      margin-bottom: 8px;
-      font-size: 1.5rem;
+      margin-bottom: 10px;
+      font-size: 1.6rem;
     }
     .form-container p {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       font-size: 0.9rem;
       color: #ccc;
     }
@@ -98,7 +87,7 @@
     }
     .address-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 0.5fr;
+      grid-template-columns: 1fr 1fr 0.6fr;
       gap: 8px;
       margin-bottom: 8px;
     }
@@ -106,27 +95,29 @@
       margin-bottom: 6px;
       padding: 6px;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       font-size: 0.85rem;
     }
     textarea {
       resize: vertical;
-      height: 60px;
     }
     button.submit-btn {
       margin-top: 6px;
       padding: 8px;
       background: limegreen;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       color: black;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
       cursor: pointer;
     }
+    button.submit-btn:hover {
+      background: #00aa00;
+    }
     .note {
-      margin-top: 6px;
-      font-size: 0.8rem;
+      margin-top: 10px;
+      font-size: 0.85rem;
       color: #aaa;
     }
     .fade {
@@ -139,9 +130,20 @@
   </style>
 
 <style>
+.video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
+.video-container video { width: 100%; height: auto; display: block; }
+.unmute-button {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  padding: 0.8em 1.5em; font-size: 1.1em;
+  background-color: #007bff; color: #fff; border: none; border-radius: 999px;
+  cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, transform 0.2s;
+}
+.unmute-button:hover { background-color: #0056b3; transform: translateX(-50%) scale(1.05); }
+.fade-map { opacity: 0; transition: opacity 1s ease-in-out; width: 200px; height: auto; margin: 20px; }
+.fade-map.show { opacity: 1; }
 .map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
-.map-bubble img { width: 200px; height: auto; }
-.map-bubble video.bubble-video { width: 200px; height: auto; }
+.bubble-video { display: none; width: 200px; height: auto; }
 </style>
 
 </head>
@@ -149,27 +151,33 @@
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls>
+    <div class="video-container" id="video1Container">
+<video id="video1" autoplay playsinline preload="auto" controls controls muted autoplay playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <button id="unmute1" class="unmute-btn">Unmute</button>
+<button id="unmuteBtn" class="unmute-button">Unmute</button>
+</div>
   </div>
 
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2" autoplay playsinline preload="auto" controls>
+        <div class="video-container" id="video2Container">
+<video id="video2" autoplay playsinline preload="auto" controls controls muted playsinline preload="auto">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <button id="unmute2" class="unmute-btn">Unmute</button>
+</div>
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
 
-    <div class="form-section">
+    <div class="map-bubble" id="mapBubbleContainer">
+  <img id="mapImg" class="fade-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Map" />
+  <video id="bubbleVideo" class="bubble-video" controls playsinline preload="auto" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4"></video>
+</div><div class="form-section">
       <div class="form-container">
         <h2>Broker Price Opinion (BPO) Intake</h2>
         <p>Please insert details below to submit:</p>
@@ -184,7 +192,7 @@
           <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
           <input type="email" name="email" placeholder="Your Contact Email" required>
           <input type="tel" name="phone" placeholder="Your Contact Phone" required>
-          <textarea name="details" placeholder="Additional Details"></textarea>
+          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
           <button type="submit" class="submit-btn">Submit BPO Request</button>
         </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
@@ -192,45 +200,50 @@
     </div>
   </div>
 
-  <script>
-    const video1 = document.getElementById('video1');
-    const unmute1 = document.getElementById('unmute1');
-    const video2 = document.getElementById('video2');
-    const unmute2 = document.getElementById('unmute2');
-    const splitLayout = document.getElementById('splitLayout');
-    const nmMap = document.getElementById('nmMap');
+  
 
-    // Toggle mute/unmute
-    function toggleMute(video, button) {
-      video.muted = !video.muted;
-      button.textContent = video.muted ? 'Unmute' : 'Mute';
-      if (!video.muted) video.play();
+
+<script>
+(function(){
+  var v1 = document.getElementById('video1');
+  var v2 = document.getElementById('video2');
+  var btn = document.getElementById('unmuteBtn');
+  var mapImg = document.getElementById('mapImg');
+  var bubble = document.getElementById('bubbleVideo');
+  // Pause v2 initially
+  v2.pause();
+  // Toggle play/pause on click for videos
+  [v1, v2, bubble].forEach(function(v){
+    v.addEventListener('click', function(){
+      if (v.paused) v.play();
+      else v.pause();
+    });
+  });
+  // Unmute button logic
+  btn.addEventListener('click', function(){
+    v1.currentTime = 0;
+    v1.muted = false;
+    v2.muted = false;
+    btn.style.display = 'none';
+    v1.play();
+  });
+  // When v1 ends, unmute/play v2 and scroll into view
+  v1.addEventListener('ended', function(){
+    v2.muted = false;
+    v2.play();
+    document.getElementById('video2Container').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  // When v2 ends, fade in map and play bubble, scroll into view
+  v2.addEventListener('ended', function(){
+    if (mapImg) {
+      mapImg.classList.add('show');
+      bubble.style.display = 'block';
+      bubble.play();
+      document.getElementById('mapBubbleContainer').scrollIntoView({behavior:'smooth', block:'start'});
     }
-    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
-    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
-
-    // Click video toggles play/pause
-    video1.addEventListener('click', () => {
-      if (video1.paused) video1.play(); else video1.pause();
-    });
-    video2.addEventListener('click', () => {
-      if (video2.paused) video2.play(); else video2.pause();
-    });
-
-    // After video1 ends
-    video1.addEventListener('ended', () => {
-      splitLayout.style.display = 'flex';
-      splitLayout.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // After video2 ends, show map
-    video2.addEventListener('ended', () => {
-      video2.style.display = 'none';
-      unmute2.style.display = 'none';
-      nmMap.style.display = 'block';
-      setTimeout(() => nmMap.classList.add('show'), 100);
-    });
-  </script>
+  });
+})();
+</script>
 
 </body>
 </html>
