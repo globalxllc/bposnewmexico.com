@@ -130,27 +130,27 @@
   </style>
 
 <style>
-.video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
-.video-container video { width: 100%; height: auto; display: block; }
-#unmuteBtn {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 0.8em 1.2em;
-  font-size: 1.1em;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: background-color 0.3s, transform 0.2s;
+/* Narrow the divider gap */
+.container {
+  gap: 5px !important;
 }
-#unmuteBtn:hover {
-  background-color: #0056b3;
-  transform: translateX(-50%) scale(1.05);
+/* Align sections at top */
+#splitLayout .video-section, 
+#splitLayout .form-section {
+  align-self: flex-start !important;
+}
+/* Set map (video2 replacement) to fixed narrow width with no rounding */
+.video-wrapper img {
+  width: 300px;
+  max-width: 300px;
+  height: auto;
+  border-radius: 0 !important;
+  display: block;
+  margin: 0;
+}
+/* Remove any rounding on video2 container */
+.video-wrapper, .video-wrapper video {
+  border-radius: 0 !important;
 }
 </style>
 
@@ -159,22 +159,17 @@
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
-
+    <video id="video1" autoplay playsinline preload="auto" controls>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
-    
-</video>
-<button id="unmuteBtn">Unmute</button>
-</div>
+    </video>
   </div>
 
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto">
+        <video id="video2" autoplay playsinline preload="auto" controls>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -231,35 +226,6 @@
       setTimeout(()=>map.classList.add("show"),100);
     });
   </script>
-
-
-<script>
-(function(){
-  const v1 = document.getElementById('video1');
-  const v2 = document.getElementById('video2');
-  const split = document.getElementById('splitLayout');
-  const btn = document.getElementById('unmuteBtn');
-  // Pause video2 until triggered
-  v2.pause();
-  // On Unmute click: restart v1, unmute both, hide button
-  btn.addEventListener('click', function() {
-    v1.currentTime = 0;
-    v1.muted = false;
-    v2.muted = false;
-    btn.style.display = 'none';
-    v1.play();
-  });
-  // When video1 ends: reveal split layout, scroll to it, play v2 unmuted
-  v1.addEventListener('ended', function() {
-    if (split) {
-      split.style.display = 'flex';
-      split.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-    v2.muted = false;
-    v2.play();
-  });
-})();
-</script>
 
 </body>
 </html>
