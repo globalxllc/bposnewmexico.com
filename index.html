@@ -1,222 +1,236 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BPOs New Mexico & Arizona — Broker Price Opinions</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BPO Intake Sequence v9</title>
   <style>
-    :root {
-      --brand-blue: #1e90ff;
-      --ink: #14213d;
-      --bg: #f7f7fb;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --radius: 14px;
-      --shadow: 0 8px 30px rgba(2, 8, 20, 0.08);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
     body {
-      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: var(--ink); background: var(--bg);
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
     }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
-
-    /* HERO */
-    .hero {
-      position: relative; border-radius: var(--radius); overflow: hidden;
-      background: #000; box-shadow: var(--shadow);
+    .video-wrapper {
+      background: black;
+      padding: 20px; /* reduced padding */
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px; /* minimal space */
+      position: relative;
     }
-    .hero video { width: 100%; height: auto; display: block; }
-    .hero .overlay {
-      position: absolute; inset: 0; display: grid; place-items: center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.35));
-      color: white; text-align: center; padding: 24px;
+    video, img {
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 15px;
+      background: black;
+      cursor: pointer;
     }
-    .hero h1 { margin: 0; font-size: clamp(22px, 3vw, 42px); font-weight: 800; }
-    .hero p { margin: 10px 0 0; font-size: clamp(14px, 2vw, 18px); color: #e5e7eb; }
-
-    /* Unmute button (sole audio control) */
-    #unmuteBtn {
-      position: fixed; z-index: 40; right: 16px; top: 16px; padding: 12px 18px;
-      border: none; border-radius: 999px; background: var(--brand-blue); color: #fff;
-      font-weight: 700; cursor: pointer; box-shadow: var(--shadow);
+    button.unmute-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
-    #unmuteBtn:active { transform: translateY(1px); }
-    #unmuteBtn[hidden] { display: none !important; }
-
-    /* MAIN GRID: Map (left), Bubble video (middle), Intake (right) */
-    .tri-grid { display: grid; grid-template-columns: 320px 1fr 420px; gap: 18px; margin-top: 22px; }
-    @media (max-width: 1100px) { .tri-grid { grid-template-columns: 280px 1fr 380px; } }
-    @media (max-width: 960px) { .tri-grid { grid-template-columns: 1fr; } }
-
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .pad { padding: 18px; }
-
-    /* Map card */
-    .map-box { display: grid; place-items: center; }
-    .map-box img { width: 100%; max-width: 320px; height: auto; display: block; }
-    .map-note { color: var(--muted); font-size: 12px; text-align: center; margin-top: 8px; }
-
-    /* Bubble video area */
-    .bubble-wrap { position: relative; min-height: 340px; display: grid; place-items: center; }
-    .bubble {
-      width: clamp(220px, 40vw, 360px); aspect-ratio: 1 / 1; border-radius: 999px; overflow: hidden;
-      box-shadow: 0 10px 35px rgba(0,0,0,.18);
+    .container {
+      display: flex;
+      flex-direction: row;
+      gap: 10px; /* reduced gap */
+      padding: 10px; /* reduced padding */
+      box-sizing: border-box;
+      align-items: flex-start;
     }
-    .bubble video { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    /* Intake form */
-    .form h2 { margin: 0 0 8px; font-size: 22px; }
-    .form p { margin: 0 0 16px; color: var(--muted); }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 540px) { .row { grid-template-columns: 1fr; } }
-    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-    input, select, textarea {
-      width: 100%; padding: 12px 12px; border: 1px solid #e5e7eb; border-radius: 10px; font: inherit;
-      background: #fff; outline: none;
+    .video-section {
+      flex: 0 0 45%; /* divider left */
+      display: flex;
+      justify-content: center;
     }
-    textarea { min-height: 110px; resize: vertical; }
-    .submit {
-      margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px;
-      background: var(--ink); color: #fff; border: 0; border-radius: 12px; cursor: pointer; font-weight: 700;
+    .form-section {
+      flex: 0 0 55%;
+      display: flex;
+      justify-content: center;
     }
-
-    /* Second video section (scroll target) */
-    .section { margin-top: 32px; }
-    .section h3 { margin: 0 0 8px; }
-    .vframe { border-radius: var(--radius); overflow: hidden; background: #000; box-shadow: var(--shadow); }
-    .vframe video { width: 100%; display: block; }
-
-    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 32px 0 20px; }
+    .video-section .video-wrapper {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      max-height: 50vh; /* limit height */
+    }
+    .video-section video {
+      max-height: 50vh;
+      width: 100%;
+    }
+    .video-section img {
+      max-width: 80%;
+      max-height: 50vh;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+    }
+    .form-container {
+      width: 100%;
+      max-width: 500px;
+      background: black;
+      padding: 10px; /* reduced padding */
+      border-radius: 15px;
+      /* remove internal scroll to fit all fields */
+    }
+    .form-container h2 {
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+    .form-container p {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    .address-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.5fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    input, textarea {
+      margin-bottom: 6px;
+      padding: 6px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    textarea {
+      resize: vertical;
+      height: 60px;
+    }
+    button.submit-btn {
+      margin-top: 6px;
+      padding: 8px;
+      background: limegreen;
+      border: none;
+      border-radius: 4px;
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .note {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+    .fade {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .show {
+      opacity: 1;
+    }
   </style>
+
+<style>
+.map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
+.map-bubble img { width: 200px; height: auto; }
+.map-bubble video.bubble-video { width: 200px; height: auto; }
+</style>
+
 </head>
 <body>
-  <!-- Sole audio control -->
-  <button id="unmuteBtn" aria-label="Unmute site audio">Unmute</button>
 
-  <div class="wrap">
-    <!-- HERO with video #1 -->
-    <section class="hero" id="hero">
-      <video id="video1" preload="metadata" playsinline muted autoplay>
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4" type="video/mp4" />
-      </video>
-      <div class="overlay">
-        <div>
-          <h1>Order a Broker Price Opinion (BPO)</h1>
-          <p>New Mexico • Arizona — PMI removal, FMV checks, exterior/interior BPOs</p>
-        </div>
-      </div>
-    </section>
+  <!-- Video 1 full screen -->
+  <div class="video-wrapper">
+    <video id="video1" autoplay playsinline preload="auto" controls>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <button id="unmute1" class="unmute-btn">Unmute</button>
+  </div>
 
-    <!-- Main grid: Map • Bubble video • Intake form -->
-    <section class="tri-grid" aria-label="Order area">
-      <!-- NM map, kept smaller & pinned to the left -->
-      <aside class="card pad map-box">
-        <img id="nmMap" src="assets/nm-map.png" alt="New Mexico map" />
-        <div class="map-note">Map pinned left to leave room for bubble video & form</div>
-      </aside>
-
-      <!-- Bubble video centered between map & intake -->
-      <div class="card pad bubble-wrap">
-        <div class="bubble" aria-label="Intro bubble video">
-          <video id="bubbleVideo" playsinline muted autoplay loop preload="metadata">
-            <source src="assets/Order_Quote_Process_Elisabetta_Cropped.mp4?v=1" type="video/mp4" />
-          </video>
-        </div>
-      </div>
-
-      <!-- Intake form -->
-      <aside class="card pad form" id="intake">
-        <h2>Start Your BPO</h2>
-        <p>We’ll email you a custom quote (fee depends on access, distance, and complexity).</p>
-        <form id="bpoForm" action="#" method="post">
-          <div class="row">
-            <div>
-              <label for="name">Full name</label>
-              <input id="name" name="name" required />
-            </div>
-            <div>
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" required />
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="phone">Phone</label>
-              <input id="phone" name="phone" />
-            </div>
-            <div>
-              <label for="service">Service type</label>
-              <select id="service" name="service">
-                <option>Exterior BPO</option>
-                <option>Interior BPO</option>
-                <option>PMI removal analysis</option>
-                <option>FMV / Desk Review</option>
-              </select>
-            </div>
-          </div>
-          <label for="address" style="margin-top:12px; display:block;">Property address</label>
-          <input id="address" name="address" placeholder="Street, City, State" />
-
-          <label for="notes" style="margin-top:12px; display:block;">Notes</label>
-          <textarea id="notes" name="notes" placeholder="Access, timelines, special instructions…"></textarea>
-
-          <button class="submit" type="submit">Request Quote</button>
-        </form>
-      </aside>
-    </section>
-
-    <!-- Second video (scroll target when the first ends) -->
-    <section class="section" id="video2Section" aria-label="More info video">
-      <h3>How Your BPO Is Completed</h3>
-      <div class="vframe">
-        <video id="video2" playsinline muted controls preload="metadata">
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4" type="video/mp4" />
+  <!-- Split Layout -->
+  <div class="container" id="splitLayout" style="display:none;">
+    <div class="video-section">
+      <div class="video-wrapper">
+        <video id="video2" autoplay playsinline preload="auto" controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
+          Your browser does not support the video tag.
         </video>
+        <button id="unmute2" class="unmute-btn">Unmute</button>
+        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
-    </section>
+    </div>
 
-    <footer>
-      © <span id="yr"></span> BPOS New Mexico • Arizona — Licensed Real Estate Broker
-    </footer>
+    <div class="form-section">
+      <div class="form-container">
+        <h2>Broker Price Opinion (BPO) Intake</h2>
+        <p>Please insert details below to submit:</p>
+        <form action="https://formspree.io/f/manbdzgp" method="POST">
+          <label>Subject Property Address</label>
+          <div class="address-row">
+            <input type="text" name="street" placeholder="Street Address" required>
+            <input type="text" name="city" placeholder="City/Town" required>
+            <input type="text" name="zip" placeholder="NM Zip" required>
+          </div>
+          <input type="text" name="owner" placeholder="County Assessor’s Owner Name" required>
+          <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
+          <input type="email" name="email" placeholder="Your Contact Email" required>
+          <input type="tel" name="phone" placeholder="Your Contact Phone" required>
+          <textarea name="details" placeholder="Additional Details"></textarea>
+          <button type="submit" class="submit-btn">Submit BPO Request</button>
+        </form>
+        <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Footer year
-    document.getElementById('yr').textContent = new Date().getFullYear();
+    const video1 = document.getElementById('video1');
+    const unmute1 = document.getElementById('unmute1');
+    const video2 = document.getElementById('video2');
+    const unmute2 = document.getElementById('unmute2');
+    const splitLayout = document.getElementById('splitLayout');
+    const nmMap = document.getElementById('nmMap');
 
-    // Make sure all videos start muted (policy-friendly), and reveal Unmute button once media is ready
-    const unmuteBtn = document.getElementById('unmuteBtn');
-    const videos = Array.from(document.querySelectorAll('video'));
-    videos.forEach(v => { v.muted = true; v.volume = 0; });
-
-    // Only show the Unmute control if at least one video has audio tracks
-    Promise.allSettled(videos.map(v => v.play?.())).finally(() => {
-      unmuteBtn.hidden = false;
-    });
-
-    unmuteBtn.addEventListener('click', () => {
-      videos.forEach(v => { v.muted = false; v.volume = 1; });
-      unmuteBtn.hidden = true; // Sole control: hide after unmuting
-    });
-
-    // Smooth-scroll to the second video the moment the first finishes
-    const v1 = document.getElementById('video1');
-    const v2Section = document.getElementById('video2Section');
-    if (v1 && v2Section) {
-      v1.addEventListener('ended', () => {
-        v2Section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    // Toggle mute/unmute
+    function toggleMute(video, button) {
+      video.muted = !video.muted;
+      button.textContent = video.muted ? 'Unmute' : 'Mute';
+      if (!video.muted) video.play();
     }
+    unmute1.addEventListener('click', () => toggleMute(video1, unmute1));
+    unmute2.addEventListener('click', () => toggleMute(video2, unmute2));
 
-    // Basic (front-end) submit handler — replace with your emailer / Netlify form / serverless
-    const form = document.getElementById('bpoForm');
-    form?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Thanks! We\'ll email a custom quote shortly.');
-      form.reset();
+    // Click video toggles play/pause
+    video1.addEventListener('click', () => {
+      if (video1.paused) video1.play(); else video1.pause();
+    });
+    video2.addEventListener('click', () => {
+      if (video2.paused) video2.play(); else video2.pause();
+    });
+
+    // After video1 ends
+    video1.addEventListener('ended', () => {
+      splitLayout.style.display = 'flex';
+      splitLayout.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // After video2 ends, show map
+    video2.addEventListener('ended', () => {
+      video2.style.display = 'none';
+      unmute2.style.display = 'none';
+      nmMap.style.display = 'block';
+      setTimeout(() => nmMap.classList.add('show'), 100);
     });
   </script>
+
 </body>
 </html>
