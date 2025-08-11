@@ -152,7 +152,7 @@
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <div class="video-container" id="video1Container">
-<video id="video1" autoplay playsinline preload="auto" controls controls muted autoplay playsinline preload="auto">
+<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -267,5 +267,48 @@
   if(!v2||!sec||!ov) return;
   v2.addEventListener('ended', ()=>{sec.scrollIntoView({behavior:'smooth',block:'start'});});
   new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>{ov.style.opacity='0';},5000);}})},{threshold:.6}).observe(sec);
-})();</script></body>
+})();</script><!-- BLUE_UNMUTE_FIX_START --><script>
+(function(){
+  const v1=document.getElementById('video1');
+  const v2=document.getElementById('video2');
+  const b=document.getElementById('unmuteBtn');
+  if(!v1||!v2||!b) return;
+
+  // Ensure both videos start muted per autoplay policies
+  [v1,v2].forEach(v=>{ try{ v.muted = true; v.volume = 0; }catch(e){} });
+
+  // Make sure the blue button is visible initially
+  b.style.display = 'inline-block';
+
+  function unmuteAll(){
+    [v1,v2].forEach(v=>{ try{ v.muted=false; v.volume=1.0; }catch(e){} });
+    b.style.display = 'none';
+  }
+  b.addEventListener('click', unmuteAll);
+
+  // When video1 ends, scroll to video2 and try to play with audio ON
+  v1.addEventListener('ended', async ()=>{
+    const sec2 = v2.closest('section') || v2;
+    if(sec2 && sec2.scrollIntoView) sec2.scrollIntoView({behavior:'smooth', block:'start'});
+    try{
+      v2.muted = false; v2.volume = 1.0;
+      await v2.play();
+      b.style.display = 'none';
+    }catch(e){
+      // If blocked, play muted and keep button visible for user to enable audio
+      try{ v2.muted = true; await v2.play(); }catch(_){}
+      b.style.display = 'inline-block';
+    }
+  });
+
+  // If user scrolls early, at least get v2 playing (muted) so click can instantly unmute
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(async en=>{
+      if(en.isIntersecting){
+        try{ await v2.play(); }catch(_){}
+      }
+    });
+  }, {threshold:.5});
+  io.observe(v2);
+})();</script><!-- BLUE_UNMUTE_FIX_END --></body>
 </html>
