@@ -136,7 +136,14 @@
     .show {
       opacity: 1;
     }
-  </style>
+  
+/* Map → Video crossfade block */
+.map-fade{position:relative;border-radius:var(--radius);overflow:hidden;background:#000;box-shadow:var(--shadow);}
+.map-fade video{width:100%;display:block;}
+.map-fade .map-overlay{position:absolute;inset:0;display:block;transition:opacity 1.2s ease;background:#000;}
+.map-fade .map-overlay img{width:100%;height:auto;display:block;opacity:.95;}
+.map-fade.playing .map-overlay{opacity:0;pointer-events:none;}
+</style>
 
 <style>
 .map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
@@ -230,7 +237,23 @@
       nmMap.style.display = 'block';
       setTimeout(() => nmMap.classList.add('show'), 100);
     });
-  </script>
+  
+// Map-to-video fade trigger
+(function(){
+  const v = document.getElementById('elisabettaTalk');
+  if(!v) return;
+  const wrap = v.closest('.map-fade');
+  const playHandler = () => wrap && wrap.classList.add('playing');
+  v.addEventListener('play', playHandler, {once:true});
+  // Fallback: in case autoplay is blocked, trigger fade after 1200ms of intersection
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ setTimeout(()=>wrap && wrap.classList.add('playing'), 1200); }
+    });
+  }, {threshold: .4});
+  observer.observe(wrap);
+})();    
+</script>
 
 </body>
 </html>
