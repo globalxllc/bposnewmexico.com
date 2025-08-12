@@ -1,5 +1,5 @@
 
-<section class="section" id="mapSection"><div class="card pad" style="max-width:640px;"><img src="assets/nm-map.png" alt="New Mexico counties map" style="width:100%;height:auto;display:block"/></div></section>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,6 +220,30 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 @media (min-width: 960px){
   .tri-grid { grid-template-columns: 1.0fr 2.0fr !important; align-items:start !important; gap: 12px !important; }
 }
+
+/* === bpo_v15: fix intake width & sizes === */
+@media (min-width: 960px){
+  .tri-grid { grid-template-columns: 1.2fr 1.4fr !important; align-items:start !important; gap:14px !important; }
+  .form { max-width: 680px; }
+}
+.form input, .form textarea, .form select { font-size: 15px; padding: 10px 12px; }
+.vframe, #video3Section .vframe { max-width: 980px; margin: 0 auto; }
+
+/* === bpo_v16: intake sizing, no inner scrollbar, video centering === */
+.form, .form * { max-height: none !important; }
+.form { overflow: visible !important; height: auto !important; }
+.form .fields, .form form { overflow: visible !important; height: auto !important; max-height: none !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
+
+@media (min-width: 960px){
+  .tri-grid { grid-template-columns: 1.25fr 1.35fr !important; align-items:start !important; gap: 16px !important; }
+  .form { max-width: 620px !important; }
+}
+.form input, .form select, .form textarea { font-size: 14px !important; padding: 9px 10px !important; }
+
+/* Center the third video and keep a nice max width */
+#video3Section .vframe { max-width: 960px; margin: 0 auto; }
+#video3 { display:block; width:100%; height:auto; }
 </style>
 
 <style>
@@ -445,26 +469,30 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
-<section class="section" id="video3Section">
-  <div class="vframe"><video id="video3" playsinline preload="metadata" controls style="width:100%;display:block;">
-    <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/></video></div>
-</section>
+
+
+
+
+
 
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
-  var map = document.getElementById('mapSection') || document.querySelector('img[alt*="New Mexico counties map"]')?.closest('section');
+  var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
-  if(!map || !v3) return;
+  if(!mapSec || !v3) return;
+
+  // Ensure video3 does NOT start until we scroll down
+  try { v3.pause(); } catch(e){}
 
   function smoothScrollTo(targetY, duration){
-    var startY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var startTime = null;
     function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
     function step(ts){
       if(!startTime) startTime = ts;
       var p = Math.min((ts - startTime) / duration, 1);
-      var y = startY + (targetY - startY) * easeInOutQuad(p);
-      window.scrollTo(0, y);
+      var eased = easeInOutQuad(p);
+      window.scrollTo(0, startY + (targetY - startY) * eased);
       if(p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -473,11 +501,10 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   function go(){
     var sec = v3.closest('section') || v3;
     var rect = sec.getBoundingClientRect();
-    var targetY = (window.pageYOffset||0) + rect.top;
-    smoothScrollTo(targetY, 1500);
-    // Autoplay once with sound if allowed
+    var targetY = (window.pageYOffset || 0) + rect.top;
+    smoothScrollTo(targetY, 1500); // 1.5s
     (async function(){
-      try { v3.loop = false; v3.muted = false; v3.volume = 1.0; await v3.play(); }
+      try { v3.muted = false; v3.volume = 1.0; await v3.play(); }
       catch(e){ try { v3.muted = true; await v3.play(); } catch(_){ } }
     })();
   }
@@ -486,11 +513,12 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
       if(en.isIntersecting && !fired){
-        fired = true; go();
+        fired = true;
+        setTimeout(go, 300); // brief settle then scroll
       }
     });
-  }, {threshold: 0.5});
-  io.observe(map);
+  }, {threshold: 0.55});
+  io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
 </body>
