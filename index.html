@@ -245,5 +245,22 @@
 })();
 </script>
 
+
+<!-- SCROLL_TO_VIDEO2_START -->
+<script>
+(function(){
+  var v1=document.getElementById('video1');
+  var v2=document.getElementById('video2');
+  if(!v1||!v2) return;
+  v1.addEventListener('ended', function(){
+    var target = v2.closest('section') || v2;
+    if (target && target.scrollIntoView) {
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+})();
+</script>
+<!-- SCROLL_TO_VIDEO2_END -->
+
 </body>
 </html>
