@@ -1,310 +1,182 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Broker Price Opinion (BPO) Intake
-  </title>
-  <style>
-   body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-    }
-    .video-wrapper {
-      background: black;
-      padding: 40px;
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    video, img {
-      width: 100%;
-      max-height: 80vh;
-      border-radius: 15px;
-      background: black;
-      cursor: pointer;
-    }
-    .container {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-      align-items: flex-start;
-    }
-    .video-section {
-      flex: 0 0 45%;
-      display: flex;
-      justify-content: center;
-    }
-    .form-section {
-      flex: 0 0 55%;
-      display: flex;
-      justify-content: center;
-    }
-    .video-section .video-wrapper {
-      padding: 0;
-      margin: 0;
-      width: 95%;
-      max-height: 60vh;
-      position: relative;
-    }
-    .video-section video {
-      max-height: 60vh;
-      width: 100%;
-    }
-    .video-section img {
-      max-width: 80%;
-      max-height: 60vh;
-      position: absolute; top: 0; left: 0;
-      display: none;
-    }
-    .form-container {
-      width: 100%;
-      max-width: 550px;
-      background: black;
-      padding: 15px;
-      border-radius: 15px;
-      max-height: 60vh;
-      overflow-y: auto;
-    }
-    .form-container h2 {
-      margin-bottom: 10px;
-      font-size: 1.6rem;
-    }
-    .form-container p {
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    .address-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 0.6fr;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    input, textarea {
-      margin-bottom: 6px;
-      padding: 6px;
-      border: none;
-      border-radius: 5px;
-      font-size: 0.85rem;
-    }
-    textarea {
-      resize: vertical;
-    }
-    button.submit-btn {
-      margin-top: 6px;
-      padding: 8px;
-      background: limegreen;
-      border: none;
-      border-radius: 5px;
-      color: black;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.submit-btn:hover {
-      background: #00aa00;
-    }
-    .note {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .show {
-      opacity: 1;
-    }
-  
-/* V22 Layout Fix */
-html, body { overflow-x: hidden; box-sizing: border-box; }
-*, *::before, *::after { box-sizing: inherit; }
-#pageWrap { width: 100%; max-width: 1400px; margin: 0 auto; }
-#splitLayout { display: none; width: 100%; gap: 28px; align-items: flex-start; }
-#splitLayout .left-col { flex: 1 1 auto; min-width: 0; }
-#splitLayout .right-col { flex: 0 0 540px; width: 540px; max-width: 540px; position: sticky; top: 16px; align-self: flex-start; }
-#splitLayout .right-col .form-container { max-height: calc(100vh - 32px); overflow-y: auto; overflow-x: hidden; }
-.left-col .media-block { width: 100%; margin: 0 0 20px 0; }
-.left-col .media-block video, .left-col .media-block img { display:block; width: 100%; height:auto; border:0; outline:0; }
-.video-container { position: relative; }
-#unmuteBtn { position:absolute; left:50%; transform:translateX(-50%); bottom:16px; z-index:1000; font-size:26px; padding:14px 34px; border-radius:34px; background:#0D6EFD; color:#fff; border:none; box-shadow:0 4px 14px rgba(0,0,0,0.45); cursor:pointer; }
-#unmuteBtn:hover{ filter:brightness(1.06); }
-
-
-/* v23 fixes */
-html, body { overflow-x: hidden; }
-#pageWrap { width:100%; max-width:1400px; margin:0 auto; }
-#splitLayout { width:100%; display:none; gap:28px; align-items:flex-start; }
-#splitLayout .left-col { flex:1 1 auto; min-width:0; }
-#splitLayout .right-col { flex:0 0 540px; width:540px; max-width:540px; position:sticky; top:16px; align-self:flex-start; }
-#splitLayout .right-col .form-container { max-height:calc(100vh - 32px); overflow-y:auto; overflow-x:hidden; }
-.left-col .media-block { width:100%; margin:0 0 20px 0; }
-.left-col .media-block video, .left-col .media-block img { width:100% !important; height:auto; display:block; }
-.video-wrapper:first-of-type, #video1Container { padding:0; margin:0; border-radius:0; }
-#video1 { width:100% !important; max-width:100% !important; height:auto; display:block; }
-
-
-/* v24: multi-file upload styling */
-.form-container input[type="file"].file-input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 4px;
-  background: #ffffff;
-  color: #111;
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broker Price Opinion (BPO) Intake</title>
+<style>
+:root{
+  --bg:#000;
+  --text:#fff;
+  --muted:#9aa0a6;
+  --accent:#16a34a;
+}
+*{box-sizing:border-box}
+html,body{height:100%;background:var(--bg);color:var(--text);margin:0;overflow-x:hidden;}
+/* Page container for all content except hero */
+#pageWrap{width:100%;max-width:1400px;margin:0 auto;padding:0 16px 48px;}
+/* Full-bleed hero wrapper */
+.hero-bleed{width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;background:#000;}
+.hero-bleed video{display:block;width:100%;height:auto;max-height:86vh;object-fit:cover;}
+/* Unmute button */
+.unmute-btn{
+  position:absolute;left:50%;bottom:12px;transform:translateX(-50%);
+  background:#1d4ed8;color:#fff;border:none;border-radius:999px;
+  padding:12px 22px;font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.35);
+}
+.unmute-btn:focus{outline:2px solid rgba(255,255,255,.6);outline-offset:2px}
+/* Split layout after hero: left media + right intake */
+#splitLayout{display:none;gap:28px;align-items:flex-start;margin-top:24px;}
+.left-col{flex:1 1 auto;min-width:0;}
+.right-col{flex:0 0 540px;width:540px;max-width:540px;position:sticky;top:16px;align-self:flex-start;}
+@media (max-width:1100px){
+  .right-col{position:static;width:100%;max-width:100%;}
+  #splitLayout{flex-direction:column;}
+}
+/* Media blocks on the left */
+.media-block{width:100%;margin:0 0 22px 0;}
+.media-block video,.media-block img{width:100%;height:auto;display:block;border-radius:8px}
+/* Intake form styling (kept like white boxes) */
+.form-container{background:transparent;padding:0;}
+.form-container h2{margin:0 0 10px 0;font-size:24px}
+.form-container p.helper{margin:0 0 10px 0;color:rgba(255,255,255,.7);font-size:12px}
+.form-row{margin:8px 0}
+label{display:block;margin:0 0 6px 2px;font-size:13px;color:rgba(255,255,255,.75)}
+.text-input, .form-container input[type="text"], .form-container input[type="email"], .form-container input[type="tel"], .form-container textarea{
+  width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.25);border-radius:4px;background:#fff;color:#111;font-size:14px;
+}
+.form-container textarea{min-height:110px;resize:vertical}
+/* File upload matches other inputs */
+.form-container input[type="file"].file-input{
+  width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,.25);
+  border-radius:4px;background:#fff;color:#111;
 }
 .form-container input[type="file"].file-input::-webkit-file-upload-button,
-.form-container input[type="file"].file-input::file-selector-button {
-  background: #e9ecef;
-  border: 1px solid rgba(0,0,0,0.2);
-  border-radius: 4px;
-  padding: 8px 12px;
-  margin-right: 10px;
-  cursor: pointer;
+.form-container input[type="file"].file-input::file-selector-button{
+  background:#e9ecef;border:1px solid rgba(0,0,0,.2);border-radius:4px;padding:8px 12px;margin-right:10px;cursor:pointer;
 }
-  </style>
-  <style>
-   .video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
-.video-container video { width: 100%; height: auto; display: block; }
-.unmute-button {
-  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-  padding: 0.8em 1.5em; font-size: 1.1em;
-  background-color: #007bff; color: #fff; border: none; border-radius: 999px;
-  cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: background-color 0.3s, transform 0.2s;
+.submit-btn{
+  display:inline-block;width:100%;padding:10px 14px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;
+  font-weight:600;
 }
-.unmute-button:hover { background-color: #0056b3; transform: translateX(-50%) scale(1.05); }
-.fade-map { opacity: 0; transition: opacity 1s ease-in-out; width: 200px; height: auto; margin: 20px; }
-.fade-map.show { opacity: 1; }
-.map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
-.bubble-video { display: none; width: 200px; height: auto; }
-  </style>
- </head>
- <body>
-  <div id="pageWrap">
-   <!-- Video 1 full screen -->
-   <div class="video-wrapper">
-    <div class="video-container" id="video1Container">
-     <video autoplay="" controls="" id="video1" muted="" playsinline="" style="width:100%;max-width:100%;height:auto;display:block;margin:0;padding:0;">
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4"/>
-      Your browser does not support the video tag.
-     </video>
-     <button class="unmute-button" id="unmuteBtn">
-      Unmute
-     </button>
-    </div>
-   </div>
-   <!-- Split Layout -->
-   <div class="container" id="splitLayout" style="display:none;">
+.small-note{margin-top:8px;color:rgba(255,255,255,.7);font-size:12px}
+/* Utility */
+.stack{display:flex;flex-direction:column}
+.flex{display:flex}
+.center{display:flex;justify-content:center;align-items:center}
+/* Prevent any inner horizontal scrollbars */
+.form-container{overflow-x:hidden}
+</style>
+</head>
+<body>
+
+<!-- HERO (full-bleed) -->
+<section class="hero-bleed" id="hero">
+  <video id="video1" playsinline muted autoplay controls>
+    <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
+  </video>
+  <button id="unmute1" class="unmute-btn">Unmute</button>
+</section>
+
+<div id="pageWrap">
+
+  <!-- Split layout -->
+  <div id="splitLayout" class="flex">
+    <!-- Left column: Video 2 -> Map -> Video 3 -->
     <div class="left-col">
-     <div class="media-block">
-      <video autoplay="" controls="" id="video2" muted="" playsinline="" preload="auto">
-       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
-       Your browser does not support the video tag.
-      </video>
-     </div>
-     <section class="media-block" id="mapSection" style="display:none;">
-      <img alt="NM Counties Map" id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" style="width:100%;height:auto;display:block;"/>
-     </section>
-     <section class="media-block" id="video3Section" style="display:none;">
-      <div class="media-block">
-       <video controls="" id="video3" playsinline="" preload="auto">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/>
-        Your browser does not support the video tag.
-       </video>
-      </div>
-     </section>
+      <section id="video2Section" class="media-block">
+        <video id="video2" playsinline muted autoplay controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
+        </video>
+      </section>
+
+      <section id="mapSection" class="media-block" style="display:none;">
+        <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map">
+      </section>
+
+      <section id="video3Section" class="media-block" style="display:none;">
+        <video id="video3" playsinline muted autoplay controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
+        </video>
+      </section>
     </div>
-    <div class="right-col">
-     <div class="form-section">
+
+    <!-- Right column: intake form -->
+    <aside class="right-col">
       <div class="form-container">
-       <h2>
-        Broker Price Opinion (BPO) Intake
-       </h2>
-       <p>
-        Please insert details below to submit:
-       </p>
-       <form action="https://formspree.io/f/manbdzgp" enctype="multipart/form-data" method="POST">
-        <label>
-         Subject Property Address
-        </label>
-        <div class="address-row">
-         <input name="street" placeholder="Street Address" required="" type="text"/>
-         <input name="city" placeholder="City/Town" required="" type="text"/>
-         <input name="zip" placeholder="NM Zip" required="" type="text"/>
-        </div>
-        <div class="form-row">
-         <label>
-          Attach file(s) (.jpg or .pdf)
-         </label>
-         <input accept=".jpg,.jpeg,application/pdf" class="text-input file-input" multiple="True" name="attachments" type="file"/>
-        </div>
-       </form>
+        <h2>Broker Price Opinion (BPO) Intake</h2>
+        <p class="helper">Please insert details below to submit.</p>
+        <form action="https://formspree.io/f/manbdzgp" method="POST" enctype="multipart/form-data">
+          <div class="form-row">
+            <label>Subject Property Address</label>
+            <div class="flex" style="gap:8px;">
+              <input class="text-input" type="text" name="Street Address" placeholder="Street Address" required>
+              <input class="text-input" type="text" name="City/Town" placeholder="City/Town" required style="max-width:200px">
+              <input class="text-input" type="text" name="NM Zip" placeholder="NM Zip" required style="max-width:120px">
+            </div>
+          </div>
+
+          <div class="form-row"><input class="text-input" type="text" name="County Assessor Owner" placeholder="County Assessor’s Owner Name"></div>
+          <div class="form-row"><input class="text-input" type="text" name="Ordering Company or Person" placeholder="Company or Person Ordering Name"></div>
+          <div class="form-row"><input class="text-input" type="email" name="Contact Email" placeholder="Your Contact Email" required></div>
+          <div class="form-row"><input class="text-input" type="tel" name="Contact Phone" placeholder="Your Contact Phone" required></div>
+          <div class="form-row"><textarea class="text-input" name="Additional Details" placeholder="Additional Details"></textarea></div>
+
+          <div class="form-row">
+            <label>Attach file(s) (.jpg or .pdf)</label>
+            <input type="file" name="attachments" accept=".jpg,.jpeg,application/pdf" multiple class="text-input file-input">
+          </div>
+
+          <button type="submit" class="submit-btn">Submit BPO Request</button>
+          <div class="small-note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
+        </form>
       </div>
-      &gt;
-      <script>
-       (function(){
-  var btn = document.getElementById('unmuteBtn');
-  if (btn) {
-    btn.addEventListener('click', function(){
-      var v1=document.getElementById('video1'), v2=document.getElementById('video2'), v3=document.getElementById('video3');
-      try{ if(v1){ v1.currentTime=0; v1.muted=false; v1.play(); } }catch(e){}
-      try{ if(v2){ v2.muted=false; } }catch(e){}
-      try{ if(v3){ v3.muted=false; } }catch(e){}
-      window.userInteracted = true;
-      btn.style.display='none';
-    });
-  }
+    </aside>
+  </div><!-- /splitLayout -->
 
-  var v1 = document.getElementById('video1');
-  var split = document.getElementById('splitLayout');
-  var v2 = document.getElementById('video2');
-  var mapSec = document.getElementById('mapSection');
-  var v3 = document.getElementById('video3');
-  var v3Sec = document.getElementById('video3Section');
+</div><!-- /pageWrap -->
 
-  if (v1 && split) {
-    v1.addEventListener('ended', async function(){
-      try{ split.style.display='flex'; }catch(e){}
-      try{ split.scrollIntoView({behavior:'smooth', block:'start'}); }catch(e){}
-      if (v2) {
-        try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(e){}
-      }
-    }, {once:true});
-  }
+<script>
+// --- Hero unmute and reveal split layout after v1 ends
+const v1 = document.getElementById('video1');
+const unmute1 = document.getElementById('unmute1');
+const split = document.getElementById('splitLayout');
 
-  if (v2 && mapSec) {
-    v2.addEventListener('ended', function(){
-      try { mapSec.style.display='block'; } catch(e){}
-      try { mapSec.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
-      setTimeout(async function(){
-        try { if (v3Sec) v3Sec.style.display='block'; } catch(e){}
-        try { if (v3Sec && v3Sec.scrollIntoView) v3Sec.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
-        if (v3) {
-          try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(e){}
-        }
-      }, 2500);
-    }, {once:true});
-  }
-})();
-      </script>
-     </div>
-    </div>
-   </div>
-  </div>
- </body>
+function revealSplit(){ split.style.display='flex'; }
+v1.addEventListener('ended', revealSplit);
+
+// Unmute + ensure playback (Edge/Safari gesture-friendly)
+unmute1.addEventListener('click', async () => {
+  try { v1.muted = false; await v1.play(); } catch(e){ /* ignore */ }
+  unmute1.style.display='none';
+});
+
+// --- V2 -> Map (2.5s) -> V3 sequence
+const v2 = document.getElementById('video2');
+const map = document.getElementById('mapSection');
+const v3s = document.getElementById('video3Section');
+const v3 = document.getElementById('video3');
+
+v2.addEventListener('ended', () => {
+  // show map
+  map.style.display = 'block';
+  // wait 2500ms then show v3
+  setTimeout(() => {
+    map.style.display = 'none';
+    v3s.style.display = 'block';
+    v3.play().catch(()=>{});
+  }, 2500);
+});
+
+// Start v2 only once split is visible (in case of fast network)
+const onReveal = () => { if (split.style.display === 'flex') v2.play().catch(()=>{}); };
+document.addEventListener('DOMContentLoaded', onReveal);
+
+// Defensive: ensure no duplicate map
+document.addEventListener('DOMContentLoaded', () => {
+  const bubbles = document.querySelectorAll('.map-bubble, #mapBubbleContainer');
+  bubbles.forEach(b => b.remove());
+});
+</script>
+</body>
 </html>
