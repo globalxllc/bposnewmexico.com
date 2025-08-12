@@ -138,6 +138,15 @@
 video::-webkit-media-controls-mute-button{ display:none !important; }
 video::-webkit-media-controls-volume-slider{ display:none !important; }
 video::-webkit-media-controls-volume-control-container{ display:none !important; }
+
+/* === Intake visibility (bpo_v7) === */
+.form{ max-height:none !important; overflow:visible !important; }
+.form .fields, .form form{ max-height:none !important; overflow:visible !important; }
+.tri-grid{ align-items:start; gap:12px; }
+@media (min-width: 960px){
+  /* Keep video width, widen the right column to avoid internal scrolling */
+  .tri-grid{ grid-template-columns: 1.1fr 1.6fr !important; }
+}
 </style>
 
 <style>
@@ -328,5 +337,44 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   io2.observe(v3);
 })();
 </script>
+
+<!-- MAP_TO_V3_SCROLL_START --><script>
+(function(){
+  const mapSec = document.getElementById('mapSection');
+  const v3 = document.getElementById('video3');
+  if(!mapSec || !v3) return;
+
+  // Scroll to video3 after the map has been visible for 3 seconds
+  let scrolled = false;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach((en)=>{
+      if(en.isIntersecting && !scrolled){
+        scrolled = true;
+        setTimeout(()=>{
+          const target = v3.closest('section') || v3;
+          try { target.scrollIntoView({behavior:'smooth', block:'start'}); }
+          catch(e){ target.scrollIntoView(); }
+        }, 3000);
+      }
+    });
+  }, {threshold: 0.6});
+  io.observe(mapSec);
+
+  // When video3 enters view, try to autoplay with sound ON (fallback muted if blocked)
+  const io2 = new IntersectionObserver((entries)=>{
+    entries.forEach(async (en)=>{
+      if(en.isIntersecting){
+        try{
+          v3.muted = false; v3.volume = 1.0;
+          await v3.play();
+        }catch(e){
+          try{ v3.muted = true; await v3.play(); }catch(_){}
+        }
+      }
+    });
+  }, {threshold: 0.5});
+  io2.observe(v3);
+})();
+</script><!-- MAP_TO_V3_SCROLL_END -->
 </body>
 </html>
