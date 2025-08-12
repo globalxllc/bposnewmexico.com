@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Broker Price Opinion (BPO) Intake</title>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Broker Price Opinion (BPO) Intake
+  </title>
   <style>
-    body {
+   body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: black;
@@ -142,10 +144,41 @@ html, body { overflow-x: hidden; box-sizing: border-box; }
 #unmuteBtn { position:absolute; left:50%; transform:translateX(-50%); bottom:16px; z-index:1000; font-size:26px; padding:14px 34px; border-radius:34px; background:#0D6EFD; color:#fff; border:none; box-shadow:0 4px 14px rgba(0,0,0,0.45); cursor:pointer; }
 #unmuteBtn:hover{ filter:brightness(1.06); }
 
-</style>
 
-<style>
-.video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
+/* v23 fixes */
+html, body { overflow-x: hidden; }
+#pageWrap { width:100%; max-width:1400px; margin:0 auto; }
+#splitLayout { width:100%; display:none; gap:28px; align-items:flex-start; }
+#splitLayout .left-col { flex:1 1 auto; min-width:0; }
+#splitLayout .right-col { flex:0 0 540px; width:540px; max-width:540px; position:sticky; top:16px; align-self:flex-start; }
+#splitLayout .right-col .form-container { max-height:calc(100vh - 32px); overflow-y:auto; overflow-x:hidden; }
+.left-col .media-block { width:100%; margin:0 0 20px 0; }
+.left-col .media-block video, .left-col .media-block img { width:100% !important; height:auto; display:block; }
+.video-wrapper:first-of-type, #video1Container { padding:0; margin:0; border-radius:0; }
+#video1 { width:100% !important; max-width:100% !important; height:auto; display:block; }
+
+
+/* v24: multi-file upload styling */
+.form-container input[type="file"].file-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 4px;
+  background: #ffffff;
+  color: #111;
+}
+.form-container input[type="file"].file-input::-webkit-file-upload-button,
+.form-container input[type="file"].file-input::file-selector-button {
+  background: #e9ecef;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+  </style>
+  <style>
+   .video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
 .video-container video { width: 100%; height: auto; display: block; }
 .unmute-button {
   position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
@@ -159,87 +192,72 @@ html, body { overflow-x: hidden; box-sizing: border-box; }
 .fade-map.show { opacity: 1; }
 .map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
 .bubble-video { display: none; width: 200px; height: auto; }
-</style>
-
-</head>
-<body><div id="pageWrap">
-
-  <!-- Video 1 full screen -->
-  <div class="video-wrapper">
+  </style>
+ </head>
+ <body>
+  <div id="pageWrap">
+   <!-- Video 1 full screen -->
+   <div class="video-wrapper">
     <div class="video-container" id="video1Container">
-<video id="video1" autoplay muted playsinline controls style="width:100%;max-width:100%;height:auto;display:block;margin:0;padding:0;">
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
+     <video autoplay="" controls="" id="video1" muted="" playsinline="" style="width:100%;max-width:100%;height:auto;display:block;margin:0;padding:0;">
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4"/>
       Your browser does not support the video tag.
-    </video>
-<button id="unmuteBtn" class="unmute-button">Unmute</button>
-</div>
-  </div>
-
-  <!-- Split Layout -->
-  <div class="container" id="splitLayout" style="display:none;">
-    <div class="video-section">
-      <div class="video-wrapper">
-        <div class="video-container" id="video2Container">
-<div class="media-block"><video id="video2" autoplay playsinline preload="auto" controls controls muted playsinline preload="auto" controls>
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video></div>
-<section id="mapSection" class="media-block" style="display:none;">
-  <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" style="width:100%;height:auto;display:block;">
-</section>
-<section id="video3Section" class="media-block" style="display:none;">
-  <div class="media-block">
-    <video id="video3" playsinline preload="auto" controls>
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</section>
-</div>
-        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
-      </div>
+     </video>
+     <button class="unmute-button" id="unmuteBtn">
+      Unmute
+     </button>
     </div>
-
-    <div class="map-bubble" id="mapBubbleContainer">
-  <img id="mapImg" class="fade-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Map" />
-  <video id="bubbleVideo" class="bubble-video" controls playsinline preload="auto" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4"></video>
-</div><div class="right-col"><div class="form-section">
+   </div>
+   <!-- Split Layout -->
+   <div class="container" id="splitLayout" style="display:none;">
+    <div class="left-col">
+     <div class="media-block">
+      <video autoplay="" controls="" id="video2" muted="" playsinline="" preload="auto">
+       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
+       Your browser does not support the video tag.
+      </video>
+     </div>
+     <section class="media-block" id="mapSection" style="display:none;">
+      <img alt="NM Counties Map" id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" style="width:100%;height:auto;display:block;"/>
+     </section>
+     <section class="media-block" id="video3Section" style="display:none;">
+      <div class="media-block">
+       <video controls="" id="video3" playsinline="" preload="auto">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/>
+        Your browser does not support the video tag.
+       </video>
+      </div>
+     </section>
+    </div>
+    <div class="right-col">
+     <div class="form-section">
       <div class="form-container">
-        <h2>Broker Price Opinion (BPO) Intake</h2>
-        <p>Please insert details below to submit:</p>
-        <form action="https://formspree.io/f/manbdzgp" method="POST">
-          <label>Subject Property Address</label>
-          <div class="address-row">
-            <input type="text" name="street" placeholder="Street Address" required>
-            <input type="text" name="city" placeholder="City/Town" required>
-            <input type="text" name="zip" placeholder="NM Zip" required>
-          </div>
-          <input type="text" name="owner" placeholder="County Assessor’s Owner Name" required>
-          <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
-          <input type="email" name="email" placeholder="Your Contact Email" required>
-          <input type="tel" name="phone" placeholder="Your Contact Phone" required>
-          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
-          <button type="submit" class="submit-btn">Submit BPO Request</button>
-        </form>
-        <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
+       <h2>
+        Broker Price Opinion (BPO) Intake
+       </h2>
+       <p>
+        Please insert details below to submit:
+       </p>
+       <form action="https://formspree.io/f/manbdzgp" enctype="multipart/form-data" method="POST">
+        <label>
+         Subject Property Address
+        </label>
+        <div class="address-row">
+         <input name="street" placeholder="Street Address" required="" type="text"/>
+         <input name="city" placeholder="City/Town" required="" type="text"/>
+         <input name="zip" placeholder="NM Zip" required="" type="text"/>
+        </div>
+        <div class="form-row">
+         <label>
+          Attach file(s) (.jpg or .pdf)
+         </label>
+         <input accept=".jpg,.jpeg,application/pdf" class="text-input file-input" multiple="True" name="attachments" type="file"/>
+        </div>
+       </form>
       </div>
-    </div>
-  </div>
-
-  
-
-
-
-
-
-<!-- SCROLL_TO_VIDEO2_START -->
-
-<!-- SCROLL_TO_VIDEO2_END -->
-
-</div>
-
-<script>
-(function(){
+      &gt;
+      <script>
+       (function(){
   var btn = document.getElementById('unmuteBtn');
   if (btn) {
     btn.addEventListener('click', function(){
@@ -283,7 +301,10 @@ html, body { overflow-x: hidden; box-sizing: border-box; }
     }, {once:true});
   }
 })();
-</script>
-
-</body>
+      </script>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
 </html>
