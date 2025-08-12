@@ -135,6 +135,32 @@
 /* Hide map and video3 by default */
 #mapSection{display:none;}
 #video3Section{display:none;}
+/* UNMUTE STYLES V18 */
+#unmuteBtn{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:12px;
+  z-index:20;
+  font-size:18px;
+  padding:10px 22px;
+  border-radius:28px;
+  background:#0D6EFD;
+  color:white;
+  border:none;
+  box-shadow:0 2px 8px rgba(0,0,0,0.35);
+  cursor:pointer;
+}
+#unmuteBtn:hover{ filter:brightness(1.05); }
+.video-container{ position:relative; } /* ensure positioning context for overlay */
+/* V18 SPLIT LAYOUT */
+#splitLayout{ display:none; gap:28px; align-items:flex-start; }
+#splitLayout .left-col{ flex:1; min-width:0; }
+#splitLayout .right-col{ flex:0 0 460px; max-width:460px; position:sticky; top:16px; align-self:flex-start; }
+#splitLayout .right-col .form-container{ max-height:calc(100vh - 32px); overflow:auto; }
+.left-col .media-block{ width:100%; max-width:1100px; margin:0 auto 18px auto; }
+.left-col .media-block video,
+.left-col .media-block img{ display:block; width:100%; height:auto; border:none; outline:none; }
 </style>
 
 <style>
@@ -175,19 +201,19 @@
 <div class="video-section">
       <div class="video-wrapper">
         <div class="video-container" id="video2Container">
-<video id="video2" autoplay playsinline preload="auto" controls controls muted playsinline preload="auto" controls>
+<div class="media-block"><video id="video2" autoplay playsinline preload="auto" controls controls muted playsinline preload="auto" controls>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
           Your browser does not support the video tag.
-        </video>
+        </video></div>
 </div>
-        <section id="mapSection" class="map-section" style="display:none; margin-top:16px;"<img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade"</section>
-<section id="video3Section" class="video3-section" style="display:none;margin-top:16px;">
+        <section id="mapSection" class="media-block" style="display:none;">
+<section id="video3Section" class="media-block" style="display:none;">
   <div class="left-wrap" style="max-width:1100px;margin:0 auto;">
     <div class="left-col" style="width:100%;">
-      <video id="video3" playsinline preload="auto" controls>
+      <div class="media-block"><video id="video3" playsinline preload="auto" controls>
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
         Your browser does not support the video tag.
-      </video>
+      </video></div>
     </div>
   </div>
 </section>
@@ -228,25 +254,21 @@
 
 
 <!-- SCROLL_TO_VIDEO2_START -->
-<script>
-(function(){
-  var v1=document.getElementById('video1');
-  var v2=document.getElementById('video2');
-  if(!v1||!v2) return;
-  v1.addEventListener('ended', function(){
-    var target = v2.closest('section') || v2;
-    if (target && target.scrollIntoView) {
-      target.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-  });
-})();
-</script>
-<!-- SCROLL_TO_VIDEO2_END -->
 
-
-
-
-
+<script>(function(){ var btn=document.getElementById("unmuteBtn"); if(btn){ 
+btn.addEventListener('click', function(){
+  try {
+    var v1 = document.getElementById('video1');
+    var v2 = document.getElementById('video2');
+    var v3 = document.getElementById('video3');
+    if (v1){ v1.currentTime = 0; v1.muted = false; v1.play(); }
+    if (v2){ v2.muted = false; }
+    if (v3){ v3.muted = false; }
+    window.userInteracted = true;
+    btn.style.display = 'none';
+  } catch(e){ btn.style.display = 'none'; }
+});
+ } })();</script>
 <script>
 (function(){
   var v1 = document.getElementById('video1');
@@ -254,7 +276,7 @@
   var v2 = document.getElementById('video2');
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
-  var v3Section = document.getElementById('video3Section') || (v3 && v3.closest && v3.closest('section'));
+  var v3Sec = document.getElementById('video3Section');
 
   if (v1 && split) {
     v1.addEventListener('ended', function(){
@@ -265,16 +287,18 @@
 
   if (v2 && mapSec) {
     v2.addEventListener('ended', function(){
+      // Keep v2 visible; reveal map (full width in left column), then show video3
       try { mapSec.style.display = 'block'; } catch(e){}
       try { mapSec.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
       setTimeout(async function(){
-        try { if (v3Section) v3Section.style.display = 'block'; } catch(e){}
-        try { if (v3Section && v3Section.scrollIntoView) v3Section.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
-        if (!v3) return;
-        try {
-          if (window.userInteracted) { v3.muted = false; v3.volume = 1.0; } else { v3.muted = true; }
-          await v3.play();
-        } catch(e) { try { v3.muted = true; await v3.play(); } catch(_){ } }
+        try { if (v3Sec) v3Sec.style.display = 'block'; } catch(e){}
+        try { if (v3Sec && v3Sec.scrollIntoView) v3Sec.scrollIntoView({behavior:'smooth', block:'start'}); } catch(e){}
+        if (v3){
+          try {
+            if (window.userInteracted) { v3.muted = false; v3.volume = 1.0; } else { v3.muted = true; }
+            await v3.play();
+          } catch(e){ try{ v3.muted = true; await v3.play(); } catch(_){} }
+        }
       }, 2500);
     }, {once:true});
   }
