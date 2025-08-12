@@ -259,6 +259,27 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 .form input, .form select, .form textarea { font-size: 15px !important; padding: 10px 12px !important; }
 #video3Section .vframe { max-width: 980px; margin: 0 auto; }
 #video3 { display:block; width:100%; height:auto; }
+
+/* === bpo_v18: compact intake, no inner scrollbar, proper grid, center video3 === */
+.tri-grid{ align-items:start !important; gap:14px !important; }
+.form, .form *{ max-height:none !important; }
+.form{ overflow:visible !important; height:auto !important; }
+.form .fields{ overflow:visible !important; height:auto !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar{ display:none !important; }
+
+@media(min-width:960px){
+  .tri-grid{ grid-template-columns: 1.25fr 1.2fr !important; }
+  .form{ max-width:560px !important; }
+}
+.form label{ font-size:14px; display:block; margin:6px 0 4px; }
+.form .fields.small input, .form .fields.small select{ 
+  width:100%; font-size:14px; padding:8px 10px; border-radius:6px;
+}
+.form .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#street{ width:60% !important; } /* shorter street input per request */
+
+#video3Section .vframe{ max-width:960px; margin:0 auto; }
+#video3{ display:block; width:100%; height:auto; }
 </style>
 
 <style>
@@ -332,44 +353,51 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
       <div class="form-container">
         <h2>Broker Price Opinion (BPO) Intake</h2>
         <p>Please insert details below to submit:</p>
-        <form action="https://formspree.io/f/manbdzgp" method="POST"><label for="street" style="display:block;margin-top:8px;">Street Address</label>
-    <input id="street" name="street" required />
+        <form action="https://formspree.io/f/manbdzgp" method="POST">
+    <div class="fields small">
+      <label for="street">Street Address</label>
+      <input id="street" name="street" />
 
-    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
-      <div>
-        <label for="city">City/Town</label>
-        <input id="city" name="city" required />
+      <div class="row2">
+        <div>
+          <label for="city">City/Town</label>
+          <input id="city" name="city" />
+        </div>
+        <div>
+          <label for="zip">NM Zip</label>
+          <input id="zip" name="zip" />
+        </div>
       </div>
-      <div>
-        <label for="zip">NM Zip</label>
-        <input id="zip" name="zip" required />
+
+      <label for="owner">County Assessor’s Owner Name</label>
+      <input id="owner" name="owner_name" />
+
+      <label for="ordering">Company or Person Ordering Name</label>
+      <input id="ordering" name="ordering_name" />
+
+      <div class="row2">
+        <div>
+          <label for="email">Your Contact Email</label>
+          <input id="email" type="email" name="email" />
+        </div>
+        <div>
+          <label for="phone">Your Contact Phone</label>
+          <input id="phone" name="phone" />
+        </div>
       </div>
+
+      <label for="notes">Additional notes</label>
+      <input id="notes" name="notes" placeholder="Additional notes" />
+
+      <label for="min_value">Min. Market $ Value PMI removal needed= $</label>
+      <input id="min_value" name="min_value" />
+
+      <label for="attachments">Attach a file (.jpg or .pdf)</label>
+      <input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf" />
+
+      <button type="submit" class="submit">Submit BPO Request</button>
     </div>
-
-    <label for="owner_name" style="display:block;margin-top:8px;">County Assessor’s Owner Name</label>
-    <input id="owner_name" name="owner_name" />
-
-    <label for="ordering_name" style="display:block;margin-top:8px;">Company or Person Ordering Name</label>
-    <input id="ordering_name" name="ordering_name" />
-
-    <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;">
-      <div>
-        <label for="email">Your Contact Email</label>
-        <input id="email" name="email" type="email" required />
-      </div>
-      <div>
-        <label for="phone">Your Contact Phone</label>
-        <input id="phone" name="phone" />
-      </div>
-    </div>
-
-    <label for="notes" style="display:block;margin-top:8px;">Additional notes</label>
-    <input id="notes" name="notes" placeholder="Additional notes" />
-<label for="min_value" style="display:block;margin-top:8px;">Min. Market $ Value PMI removal needed= $</label>
-<input id="min_value" name="min_value" />
-<label for="attachments" style="display:block;margin-top:12px;">Attach a file (.jpg or .pdf)</label>
-    <input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf" />
-<button type="submit" class="submit-btn">Submit BPO Request</button></form>
+    </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
     </div>
@@ -492,25 +520,25 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
 
-  // Make sure v3 doesn't start early
-  try{ v3.pause(); v3.currentTime = 0; }catch(e){}
-  try{ v3.removeAttribute('autoplay'); }catch(e){}
+  try { v3.pause(); } catch(e){}
 
   function smoothScrollTo(targetY, duration){
     var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var startTime = null;
-    function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
     function step(ts){
       if(!startTime) startTime = ts;
       var p = Math.min((ts - startTime) / duration, 1);
-      var eased = easeInOutQuad(p);
-      window.scrollTo(0, startY + (targetY - startY) * eased);
+      var y = startY + (targetY - startY) * ease(p);
+      window.scrollTo(0, y);
       if(p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -535,7 +563,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
         setTimeout(go, 300);
       }
     });
-  }, {threshold: 0.6});
+  }, {threshold: 0.55});
   io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
