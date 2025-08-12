@@ -436,13 +436,33 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 }
 </style>
 
+<script>
+(function(){
+  var v1 = document.getElementById('video1');
+  if(!v1) return;
+  async function tryPlayMuted(){
+    try {
+      v1.muted = true;
+      await v1.play();
+    } catch(e){ /* leave controls visible for click */ }
+  }
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(tryPlayMuted, 50);
+  } else {
+    window.addEventListener('DOMContentLoaded', tryPlayMuted);
+  }
+  v1.addEventListener('canplay', function(){
+    if (v1.paused) tryPlayMuted();
+  });
+})();
+</script>
 </head>
 <body>
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
+<video id="video1" autoplay muted playsinline preload="auto" controls style="width:96vw;max-width:1280px;height:auto;display:block;margin:0 auto;">
 
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -456,8 +476,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
   <div class="video-wrapper">
-    <video id="video2" playsinline preload="auto" controls>
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
+    <video \1https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4\2 type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
@@ -685,14 +704,12 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 </script><!-- MAP_TO_V3_SCROLL_END -->
 
 <script>
-// Auto-play Video 3 with sound after map shows
 (function(){
   var v2 = document.getElementById('video2');
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if (!v2 || !mapSec || !v3) return;
 
-  // When Video 2 ends, reveal the map and then scroll to and play Video 3
   v2.addEventListener('ended', function(){
     try {
       mapSec.style.display = 'block';
