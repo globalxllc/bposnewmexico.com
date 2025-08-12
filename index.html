@@ -262,5 +262,41 @@
 </script>
 <!-- SCROLL_TO_VIDEO2_END -->
 
+
+<!-- SCROLL_FIX_START --><script>
+(function(){
+  function scrollToV2(){
+    var v2 = document.getElementById('video2');
+    if(!v2) return;
+    var target = v2.closest('section') || v2;
+    try { target.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch(e) { target.scrollIntoView(); }
+  }
+
+  var v1 = document.getElementById('video1');
+  var v2 = document.getElementById('video2');
+  if(!v1 || !v2) return;
+
+  // 1) Primary: when v1 ends
+  v1.addEventListener('ended', function(){ scrollToV2(); }, { once: true });
+
+  // 2) Secondary: if v2 starts playing (covers cases where v2 is triggered by other logic)
+  var playedOnce = false;
+  v2.addEventListener('playing', function(){
+    if(playedOnce) return;
+    playedOnce = true;
+    scrollToV2();
+  });
+
+  // 3) Safety fallback: if neither event moves the page within a few seconds after load
+  setTimeout(function(){
+    // If user is still near the top and v2 has started (or is ready), nudge scroll
+    var rect = v2.getBoundingClientRect();
+    var nearTop = (window.scrollY || window.pageYOffset || 0) < 200;
+    if(nearTop && (v2.readyState >= 2 || !v1 || v1.paused)){
+      scrollToV2();
+    }
+  }, 6000);
+})();
+</script><!-- SCROLL_FIX_END -->
 </body>
 </html>
