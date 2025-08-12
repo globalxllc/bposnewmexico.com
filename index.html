@@ -398,7 +398,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 </style>
 
 <style>
-.video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
+.video-container { position: relative; display: block; width: 90vw; max-width: 980px; margin: 0 auto; margin: 0 auto; }
 .video-container video { width: 100%; height: auto; display: block; }
 #unmuteBtn {
   position: absolute;
@@ -421,7 +421,22 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   transform: translateX(-50%) scale(1.05);
 }
 </style>
-
+<script>
+// Robust autoplay for first video
+window.addEventListener('load', async function() {
+  try {
+    var v1 = document.getElementById('video1');
+    if (v1) {
+      v1.muted = true;
+      await v1.play();
+    }
+  } catch (e) {
+    // If browser blocks autoplay, leave controls visible and user can press play
+    var v1 = document.getElementById('video1');
+    if (v1) { v1.controls = true; }
+  }
+});
+</script>
 
 <style>
 #splitLayout {
@@ -442,7 +457,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
+<video id="video1" autoplay muted playsinline preload="auto" controls>
 
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -603,7 +618,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
           v3.muted = false; v3.volume = 1.0;
           await v3.play();
         }catch(e){
-          try{ v3.muted = true; await v3.play(); }catch(_){}
+          try{ v3.muted = false; await v3.play(); }catch(_){}
         }
       }
     });
@@ -673,7 +688,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
         // try to autoplay with audio
         (async function(){
           try{ v3.muted=false; v3.volume=1.0; await v3.play(); }
-          catch(e){ try{ v3.muted=true; await v3.play(); }catch(_){ } }
+          catch(e){ try{ v3.muted=false; await v3.play(); }catch(_){ } }
         })();
       }
     });
@@ -681,6 +696,38 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
+
+
+<script>
+// Ensure Video 3 auto-plays with sound shortly after the map is revealed
+(function(){
+  var v2 = document.getElementById('video2');
+  var mapSec = document.getElementById('mapSection');
+  var v3 = document.getElementById('video3');
+
+  if (!v2 || !mapSec || !v3) return;
+
+  v2.addEventListener('ended', function(){
+    // Map is shown/scroll handled by earlier script;
+    // after a short pause, scroll to video3 and play with sound.
+    setTimeout(async function(){
+      try {
+        // Scroll to video 3
+        var v3Section = document.getElementById('video3Section') || v3.closest('section');
+        if (v3Section && v3Section.scrollIntoView) {
+          v3Section.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+        // Play with sound; fallback to muted if browser blocks
+        v3.muted = false;
+        v3.volume = 1.0;
+        await v3.play();
+      } catch(e) {
+        try { v3.muted = true; await v3.play(); } catch(_){}
+      }
+    }, 2200);
+  });
+})();
+</script>
 
 </body>
 </html>
