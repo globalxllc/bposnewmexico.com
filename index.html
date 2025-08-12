@@ -22,7 +22,7 @@
       margin-bottom: 20px;
     }
     video, img {
-      width: 100%;
+      width: 96vw;
       max-height: 80vh;
       border-radius: 15px;
       background: black;
@@ -55,7 +55,7 @@
     }
     .video-section video {
       max-height: 60vh;
-      width: 100%;
+      width: 96vw;
     }
     .video-section img {
       max-width: 80%;
@@ -64,7 +64,7 @@
       display: none;
     }
     .form-container {
-      width: 100%;
+      width: 96vw;
       max-width: 550px;
       background: black;
       padding: 15px;
@@ -130,8 +130,8 @@
   </style>
 
 <style>
-.video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
-.video-container video { width: 100%; height: auto; display: block; }
+.video-container { position: relative; width: 96vw; max-width: 1200px; margin: 20px auto; }
+.video-container video { width: 96vw; height: auto; display: block; }
 .unmute-button {
   position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
   padding: 0.8em 1.5em; font-size: 1.1em;
@@ -152,7 +152,7 @@
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
     <div class="video-container" id="video1Container">
-<video id="video1" autoplay playsinline preload="auto" controls controls muted autoplay playsinline preload="auto">
+<video id="video1" autoplay playsinline preload="auto" controls controls muted autoplay playsinline preload="auto" style="width:96vw;max-width:1200px;height:auto;display:block;margin:0 auto;">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -321,6 +321,21 @@
       }
     }, 1400);
   }, true); // capture-phase to run before old bubbling listeners
+})();
+</script>
+<script>
+(function(){
+  var v1 = document.getElementById('video1');
+  var split = document.getElementById('splitLayout');
+  var v2 = document.getElementById('video2');
+  if(!v1 || !split) return;
+  v1.addEventListener('ended', function(){
+    try {
+      split.style.display = 'flex';
+      split.scrollIntoView({behavior: 'smooth', block: 'start'});
+    } catch(e){}
+    try { if (v2) { v2.muted = window.userInteracted ? false : v2.muted; v2.play(); } } catch(e){}
+  }, true);
 })();
 </script>
 </body>
