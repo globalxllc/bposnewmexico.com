@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,244 +127,23 @@
     .show {
       opacity: 1;
     }
-  
-/* === Alignment tweaks (bpo_v5) === */
-.tri-grid{ align-items: start; }
-.form{ padding-top: 8px; }
-.form h2{ margin-top: 0; }
-.form .pad-top-0{ padding-top: 0 !important; }
-
-/* === Hide native mute/volume so blue Unmute remains the audio UI === */
-video::-webkit-media-controls-mute-button{ display:none !important; }
-video::-webkit-media-controls-volume-slider{ display:none !important; }
-video::-webkit-media-controls-volume-control-container{ display:none !important; }
-
-/* === Intake visibility (bpo_v7) === */
-.form{ max-height:none !important; overflow:visible !important; }
-.form .fields, .form form{ max-height:none !important; overflow:visible !important; }
-.tri-grid{ align-items:start; gap:12px; }
-@media (min-width: 960px){
-  /* Keep video width, widen the right column to avoid internal scrolling */
-  .tri-grid{ grid-template-columns: 1.1fr 1.6fr !important; }
-}
-
-/* === bpo_v8: Intake fixes === */
-.form, .form * { max-height: none !important; }
-.form { overflow: visible !important; }
-.form .fields, .form form { overflow: visible !important; max-height: none !important; }
-.tri-grid { align-items: start !important; gap: 12px !important; }
-@media (min-width: 960px){
-  /* Keep left media width, widen right intake column */
-  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; }
-}
-/* Hide any accidental inner scrollbars */
-.form::-webkit-scrollbar { display: none; }
-
-/* === bpo_v9: Chrome intake scrollbar removal & layout === */
-.form, .form * { max-height: none !important; }
-.form { overflow: visible !important; height: auto !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-.tri-grid { align-items: start !important; gap: 12px !important; }
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; }
-}
-
-/* === bpo_v10: intake no inner scrollbar + full height === */
-.form { overflow: visible !important; max-height: none !important; height: auto !important; }
-.form .fields, .form form { overflow: visible !important; max-height: none !important; height: auto !important; }
-.form *::-webkit-scrollbar { display: none !important; }
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; align-items: start !important; gap: 12px !important; }
-}
-
-/* === bpo_v11: No inner scrollbar + intake width === */
-.form, .form * { max-height: none !important; }
-.form { overflow: visible !important; height: auto !important; }
-.form .fields, .form form { overflow: visible !important; height: auto !important; max-height: none !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
-.tri-grid { align-items: start !important; gap: 12px !important; }
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; }
-}
-
-/* === bpo_v12: wider intake === */
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 1.9fr !important; }
-}
-
-/* === bpo_v13: intake width & no inner scrollbar === */
-.form, .form * { max-height: none !important; }
-.form { overflow: visible !important; height: auto !important; }
-.form .fields, .form form { overflow: visible !important; height: auto !important; max-height: none !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 1.9fr !important; align-items: start !important; gap: 12px !important; }
-}
-
-/* === bpo_v14: kill inner scrollbar & compact fields === */
-.tri-grid, .tri-grid * { scrollbar-width: none !important; }
-.tri-grid *::-webkit-scrollbar { display: none !important; }
-.tri-grid > * { overflow: visible !important; max-height: none !important; }
-.form, .form * { overflow: visible !important; max-height: none !important; height: auto !important; }
-.card, .panel, .right, .wrap-right { overflow: visible !important; max-height: none !important; }
-/* Compact input heights */
-.form input[type="text"], .form input[type="email"], .form input[type="tel"], .form input[type="file"],
-.form input:not([type]), .form select {
-  padding: 6px 10px !important;
-  line-height: 1.2 !important;
-  font-size: 15px !important;
-}
-.form label { margin-bottom: 4px !important; display:block; }
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.0fr 2.0fr !important; align-items:start !important; gap: 12px !important; }
-}
-
-/* === bpo_v15: fix intake width & sizes === */
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.2fr 1.4fr !important; align-items:start !important; gap:14px !important; }
-  .form { max-width: 680px; }
-}
-.form input, .form textarea, .form select { font-size: 15px; padding: 10px 12px; }
-.vframe, #video3Section .vframe { max-width: 980px; margin: 0 auto; }
-
-/* === bpo_v16: intake sizing, no inner scrollbar, video centering === */
-.form, .form * { max-height: none !important; }
-.form { overflow: visible !important; height: auto !important; }
-.form .fields, .form form { overflow: visible !important; height: auto !important; max-height: none !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
-
-@media (min-width: 960px){
-  .tri-grid { grid-template-columns: 1.25fr 1.35fr !important; align-items:start !important; gap: 16px !important; }
-  .form { max-width: 620px !important; }
-}
-.form input, .form select, .form textarea { font-size: 14px !important; padding: 9px 10px !important; }
-
-/* Center the third video and keep a nice max width */
-#video3Section .vframe { max-width: 960px; margin: 0 auto; }
-#video3 { display:block; width:100%; height:auto; }
-
-/* === bpo_v17: intake sizing & no inner scrollbar; video3 centering === */
-@media (min-width: 1100px){
-  .tri-grid { grid-template-columns: 1.35fr 1.05fr !important; align-items:start !important; gap: 16px !important; }
-  .form { max-width: 600px !important; }
-}
-.form, .form *, .intake, .intake * , .right, .right * , .form-container, .form-container * {
-  max-height: none !important;
-  overscroll-behavior: contain;
-}
-.form, .intake, .form-container, .right { overflow: visible !important; height: auto !important; }
-.form::-webkit-scrollbar, .intake::-webkit-scrollbar, .form-container::-webkit-scrollbar, .right::-webkit-scrollbar { display: none !important; }
-.form input, .form select, .form textarea { font-size: 15px !important; padding: 10px 12px !important; }
-#video3Section .vframe { max-width: 980px; margin: 0 auto; }
-#video3 { display:block; width:100%; height:auto; }
-
-/* === bpo_v18: compact intake, no inner scrollbar, proper grid, center video3 === */
-.tri-grid{ align-items:start !important; gap:14px !important; }
-.form, .form *{ max-height:none !important; }
-.form{ overflow:visible !important; height:auto !important; }
-.form .fields{ overflow:visible !important; height:auto !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar{ display:none !important; }
-
-@media(min-width:960px){
-  .tri-grid{ grid-template-columns: 1.25fr 1.2fr !important; }
-  .form{ max-width:560px !important; }
-}
-.form label{ font-size:14px; display:block; margin:6px 0 4px; }
-.form .fields.small input, .form .fields.small select{ 
-  width:100%; font-size:14px; padding:8px 10px; border-radius:6px;
-}
-.form .row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-#street{ width:60% !important; } /* shorter street input per request */
-
-#video3Section .vframe{ max-width:960px; margin:0 auto; }
-#video3{ display:block; width:100%; height:auto; }
-
-/* === bpo_v19: map narrower, compact fields, no inner scrollbar, centered video3 === */
-#mapSection img{max-width:80% !important; display:block; margin:0 auto;}
-.form, .form * { max-height:none !important; }
-.form{ overflow:visible !important; height:auto !important; }
-.form .fields, .form form{ overflow:visible !important; height:auto !important; max-height:none !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar{ display:none !important; }
-/* Compact inputs */
-.form input[type="text"], .form input[type="email"], .form input[type="tel"], .form input[type="number"],
-.form input:not([type]), .form select{
-  font-size:14px !important; padding:6px 8px !important; line-height:1.2 !important; height:auto !important;
-}
-/* Half-length for designated fields */
-.form input.half{ width:50% !important; }
-/* Keep row inputs full width */
-.form .row input{ width:100% !important; }
-/* File input natural width */
-.form input[type="file"]{ width:auto !important; }
-/* Right column width reasonable */
-@media (min-width: 960px){
-  .tri-grid{ grid-template-columns: 1.25fr 1.35fr !important; align-items:start !important; gap:16px !important; }
-  .form{ max-width:620px !important; }
-}
-/* Center video 3 */
-#video3Section .vframe{ max-width:960px; margin:0 auto; }
-#video3{ display:block; width:100%; height:auto; }
-
-/* === bpo_v20: intake uniform fields, no inner scrollbar, map narrower === */
-#mapSection img{max-width:70% !important; height:auto; display:block; margin:0 auto;}
-.form, .form * { max-height: none !important; }
-.form{ overflow: visible !important; height: auto !important; }
-.form .fields, .form form{ overflow: visible !important; height: auto !important; max-height: none !important; }
-.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
-
-/* Uniform label+input rows */
-.field-row{ display:grid; grid-template-columns: 230px 1fr; gap:12px; align-items:center; margin:8px 0; }
-.field-row label{ white-space:nowrap; }
-.field-row input, .field-row select{ width:100%; box-sizing:border-box; padding:8px 10px; font-size:14px; line-height:1.3; }
-
-/* Right column sizing */
-@media(min-width: 960px){
-  .tri-grid{ grid-template-columns: 1.2fr 1.4fr !important; align-items:start !important; gap:18px !important; }
-  .form{ max-width: 640px !important; }
-}
-
-/* Center video 3 */
-#video3Section .vframe{ max-width: 960px; margin: 0 auto; }
-#video3{ display:block; width:100%; height:auto; }
-</style>
+  </style>
 
 <style>
-.video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
+.video-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
 .video-container video { width: 100%; height: auto; display: block; }
-#unmuteBtn {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 0.8em 1.2em;
-  font-size: 1.1em;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.unmute-button {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  padding: 0.8em 1.5em; font-size: 1.1em;
+  background-color: #007bff; color: #fff; border: none; border-radius: 999px;
+  cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   transition: background-color 0.3s, transform 0.2s;
 }
-#unmuteBtn:hover {
-  background-color: #0056b3;
-  transform: translateX(-50%) scale(1.05);
-}
-</style>
-
-
-<style>
-#splitLayout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-.form-section input,
-.form-section textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
+.unmute-button:hover { background-color: #0056b3; transform: translateX(-50%) scale(1.05); }
+.fade-map { opacity: 0; transition: opacity 1s ease-in-out; width: 200px; height: auto; margin: 20px; }
+.fade-map.show { opacity: 1; }
+.map-bubble { display: flex; align-items: flex-start; gap: 10px; justify-content: flex-start; margin: 20px auto; }
+.bubble-video { display: none; width: 200px; height: auto; }
 </style>
 
 </head>
@@ -374,14 +151,12 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <div class="video-container">
-<video id="video1" autoplay playsinline preload="auto" controls muted autoplay playsinline preload="auto">
-
+    <div class="video-container" id="video1Container">
+<video id="video1" autoplay playsinline preload="auto" controls controls muted autoplay playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
-    
-</video>
-<button id="unmuteBtn">Unmute</button>
+    </video>
+<button id="unmuteBtn" class="unmute-button">Unmute</button>
 </div>
   </div>
 
@@ -389,202 +164,115 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto" controls>
+        <div class="video-container" id="video2Container">
+<video id="video2" autoplay playsinline preload="auto" controls controls muted playsinline preload="auto">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade">
+</div>
+        <section id="mapSection" class="map-section" style="display:none; margin-top:16px;"><img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade"></section>
+<section id="video3Section" class="video3-section" style="margin-top:16px;">
+  <div class="left-wrap" style="max-width:1100px;margin:0 auto;">
+    <div class="left-col" style="width:100%;">
+      <video id="video3" playsinline preload="auto" controls>
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</section>
       </div>
     </div>
 
-    <div class="form-section">
+    <div class="map-bubble" id="mapBubbleContainer">
+  <img id="mapImg" class="fade-map" src="assets/New Mexico Counties Map.jpg" alt="New Mexico Map" />
+  <video id="bubbleVideo" class="bubble-video" controls playsinline preload="auto" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754463161/Order_Quote_Process_720_dlow7x.mp4"></video>
+</div><div class="form-section">
       <div class="form-container">
         <h2>Broker Price Opinion (BPO) Intake</h2>
         <p>Please insert details below to submit:</p>
         <form action="https://formspree.io/f/manbdzgp" method="POST">
-    <div class="field-row"><label for="street">Street Address</label><input id="street" name="street" required></div>
-    <div class="field-row"><label for="city">City/Town</label><input id="city" name="city" required></div>
-    <div class="field-row"><label for="zip">NM Zip</label><input id="zip" name="zip" required></div>
-    <div class="field-row"><label for="owner_name">County Assessor’s Owner Name</label><input id="owner_name" name="owner_name"></div>
-    <div class="field-row"><label for="ordering_name">Company or Person Ordering Name</label><input id="ordering_name" name="ordering_name"></div>
-    <div class="field-row"><label for="email">Your Contact Email</label><input id="email" name="email" type="email" required></div>
-    <div class="field-row"><label for="phone">Your Contact Phone</label><input id="phone" name="phone" type="tel"></div>
-    <div class="field-row"><label for="notes">Additional notes</label><input id="notes" name="notes" placeholder="Additional notes"></div>
-    <div class="field-row"><label for="min_value">Min. Market $ Value PMI removal needed= $</label><input id="min_value" name="min_value" placeholder=""></div>
-    <div class="field-row"><label for="attachments">Attach a file (.jpg or .pdf)</label><input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf"></div>
-    <button type="submit" class="submit">Submit BPO Request</button></form>
+          <label>Subject Property Address</label>
+          <div class="address-row">
+            <input type="text" name="street" placeholder="Street Address" required>
+            <input type="text" name="city" placeholder="City/Town" required>
+            <input type="text" name="zip" placeholder="NM Zip" required>
+          </div>
+          <input type="text" name="owner" placeholder="County Assessor’s Owner Name" required>
+          <input type="text" name="ordering" placeholder="Company or Person Ordering Name" required>
+          <input type="email" name="email" placeholder="Your Contact Email" required>
+          <input type="tel" name="phone" placeholder="Your Contact Phone" required>
+          <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
+          <button type="submit" class="submit-btn">Submit BPO Request</button>
+        </form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
     </div>
   </div>
 
-  <script>
-    const v1 = document.getElementById("video1");
-    const v2 = document.getElementById("video2");
-    const split = document.getElementById("splitLayout");
-    const map = document.getElementById("nmMap");
-
-    // After v1 ends, reveal split
-    v1.addEventListener("ended", () => {
-      split.style.display = "flex";
-      split.scrollIntoView({behavior:"smooth"});
-    });
-
-    // toggle play/pause on click
-    [v1, v2].forEach(v => {
-      v.addEventListener("click", () => {
-        v.paused ? v.play() : v.pause();
-      });
-    });
-
-    // After v2 ends, hide v2, show map
-    v2.addEventListener("ended", () => {
-      v2.style.display = "none";
-      map.style.display = "block";
-      setTimeout(()=>map.classList.add("show"),100);
-    });
-  </script>
+  
 
 
 <script>
 (function(){
-  const v1 = document.getElementById('video1');
-  const v2 = document.getElementById('video2');
-  const split = document.getElementById('splitLayout');
-  const btn = document.getElementById('unmuteBtn');
-  // Pause video2 until triggered
+  var v1 = document.getElementById('video1');
+  var v2 = document.getElementById('video2');
+  var btn = document.getElementById('unmuteBtn');
+  var mapImg = document.getElementById('mapImg');
+  var bubble = document.getElementById('bubbleVideo');
+  // Pause v2 initially
   v2.pause();
-  // On Unmute click: restart v1, unmute both, hide button
-  btn.addEventListener('click', function() {
+  // Toggle play/pause on click for videos
+  [v1, v2, bubble].forEach(function(v){
+    v.addEventListener('click', function(){
+      if (v.paused) v.play();
+      else v.pause();
+    });
+  });
+  // Unmute button logic
+  btn.addEventListener('click', function(){
     v1.currentTime = 0;
     v1.muted = false;
     v2.muted = false;
     var v3 = document.getElementById("video3");
     if (v3) { v3.muted = false; }
-    window.userInteracted = true;
     btn.style.display = 'none';
     v1.play();
   });
-  // When video1 ends: reveal split layout, scroll to it, play v2 unmuted
-  v1.addEventListener('ended', function() {
-    if (split) {
-      split.style.display = 'flex';
-      split.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
+  // When v1 ends, unmute/play v2 and scroll into view
+  v1.addEventListener('ended', function(){
     v2.muted = false;
     v2.play();
+    document.getElementById('video2Container').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  // When v2 ends, fade in map and play bubble, scroll into view
+  v2.addEventListener('ended', function(){
+    if (mapImg) {
+      mapImg.classList.add('show');
+      bubble.style.display = 'block';
+      bubble.play();
+      document.getElementById('mapBubbleContainer').scrollIntoView({behavior:'smooth', block:'start'});
+    }
   });
 })();
 </script>
 
 
+<!-- SCROLL_TO_VIDEO2_START -->
 <script>
 (function(){
-  var mapSec = document.getElementById('mapSection');
-  var v3 = document.getElementById('video3');
-  if(!mapSec || !v3) return;
-
-  // After map is in view for 3s, scroll to video3
-  var timer = null;
-  var seen = false;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting && !seen){
-        seen = true;
-        timer = setTimeout(function(){
-          try{
-            (v3.closest('section') || v3).scrollIntoView({behavior:'smooth', block:'start'});
-          }catch(e){
-            (v3.closest('section') || v3).scrollIntoView();
-          }
-        }, 3000);
-      }
-    });
-  }, {threshold: 0.6});
-  io.observe(mapSec);
-
-  // When video3 is on screen, try to autoplay with sound ON; fallback muted
-  var io2 = new IntersectionObserver(function(entries){
-    entries.forEach(async function(en){
-      if(en.isIntersecting){
-        try{
-          v3.muted = false; v3.volume = 1.0;
-          await v3.play();
-        }catch(e){
-          try{ v3.muted = true; await v3.play(); }catch(_){}
-        }
-      }
-    });
-  }, {threshold: 0.5});
-  io2.observe(v3);
+  var v1=document.getElementById('video1');
+  var v2=document.getElementById('video2');
+  if(!v1||!v2) return;
+  v1.addEventListener('ended', function(){
+    var target = v2.closest('section') || v2;
+    if (target && target.scrollIntoView) {
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
 })();
 </script>
+<!-- SCROLL_TO_VIDEO2_END -->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- MAP_TO_V3_SCROLL_START --><script>
-(function(){
-  var mapSec = document.getElementById('mapSection');
-  var v3 = document.getElementById('video3');
-  if(!mapSec || !v3) return;
-  try{ v3.pause(); }catch(e){}
-
-  function smoothScrollTo(targetY, duration){
-    var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    var startTime = null;
-    function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
-    function step(ts){
-      if(!startTime) startTime = ts;
-      var p = Math.min((ts - startTime) / duration, 1);
-      var eased = easeInOutQuad(p);
-      window.scrollTo(0, startY + (targetY - startY) * eased);
-      if(p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  function go(){
-    var sec = v3.closest('section') || v3;
-    var rect = sec.getBoundingClientRect();
-    var targetY = (window.pageYOffset || 0) + rect.top;
-    smoothScrollTo(targetY, 1500);
-    (async function(){
-      try{ v3.muted = false; v3.volume = 1.0; await v3.play(); }
-      catch(e){ try{ v3.muted = true; await v3.play(); }catch(_){ } }
-    })();
-  }
-  var fired = false;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting && !fired){
-        fired = true;
-        setTimeout(go, 300);
-      }
-    });
-  }, {threshold: 0.55});
-  io.observe(mapSec);
-})();
-</script><!-- MAP_TO_V3_SCROLL_END -->
 </body>
 </html>
