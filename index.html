@@ -149,7 +149,7 @@
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto">
+    <video id="video1" autoplay playsinline preload="auto" muted>
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -232,41 +232,61 @@
     });
   </script>
 
-<!-- BLUE_UNMUTE_BLOCK_START --><script>
-// --- Blue Unmute: controls both videos; scroll-to-video2 on end ---
+<!-- AUTOPLAY_FIX_START --><script>
+// --- Autoplay + Blue Unmute robust handling ---
 (function(){
   const v1 = document.getElementById('video1');
   const v2 = document.getElementById('video2');
   const btn = document.getElementById('unmuteBtn');
-  if(!v1 || !v2 || !btn) return;
+  if(!v1) return;
 
-  // Ensure both start muted for autoplay policies
-  [v1, v2].forEach(v => { try { v.muted = true; v.volume = 0; } catch(e){} });
+  // Ensure starting state for autoplay policies
+  try { v1.muted = true; v1.playsInline = true; } catch(e){}
+  if (v2) try { v2.muted = true; v2.playsInline = true; } catch(e){}
 
-  // Show button until clicked
-  btn.style.display = 'inline-block';
-
-  function unmuteAll(){
-    [v1, v2].forEach(v => { try { v.muted = false; v.volume = 1.0; } catch(e){} });
-    btn.style.display = 'none';
+  function tryPlayVideo(el){
+    if(!el) return;
+    const attempt = () => el.play().catch(()=>{});
+    // try immediately
+    attempt();
+    // on loadeddata
+    el.addEventListener('loadeddata', attempt, { once: true });
+    // on first user interaction
+    const kick = () => { attempt(); removeKickers(); };
+    const removeKickers = () => {
+      window.removeEventListener('pointerdown', kick);
+      window.removeEventListener('keydown', kick);
+      document.removeEventListener('visibilitychange', visKick);
+    };
+    const visKick = () => { if(!document.hidden){ kick(); } };
+    window.addEventListener('pointerdown', kick, { once: true });
+    window.addEventListener('keydown', kick, { once: true });
+    document.addEventListener('visibilitychange', visKick, { once: true });
   }
-  btn.addEventListener('click', unmuteAll);
 
-  // When video1 ends: scroll to video2 and try to autoplay with audio on
-  v1.addEventListener('ended', async () => {
-    const v2Section = v2.closest('section') || v2;
-    if (v2Section && v2Section.scrollIntoView) v2Section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Start video1 on load
+  tryPlayVideo(v1);
 
-    try {
-      v2.muted = false; v2.volume = 1.0;
-      await v2.play();
+  // Blue button logic
+  if(btn){
+    btn.style.display = 'inline-block';
+    btn.addEventListener('click', () => {
+      [v1, v2].forEach(v => { if(v){ try{ v.muted = false; v.volume = 1.0; }catch(e){} } });
       btn.style.display = 'none';
-    } catch (e) {
-      // If browser blocks sound-on autoplay, fall back to muted autoplay and keep the button visible
-      try { v2.muted = true; await v2.play(); } catch(_){}
-      btn.style.display = 'inline-block';
-    }
-  });
-})();
-</script><!-- BLUE_UNMUTE_BLOCK_END --></body>
+      tryPlayVideo(v1);
+      tryPlayVideo(v2);
+    });
+  }
+
+  // After v1 ends, scroll to v2 and try to autoplay with audio ON
+  if(v2){
+    v1.addEventListener('ended', async () => {
+      const sec2 = v2.closest('section') || v2;
+      if (sec2 && sec2.scrollIntoView) sec2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      try { v2.muted = false; v2.volume = 1.0; await v2.play(); if(btn) btn.style.display='none'; }
+      catch(e){ try { v2.muted = true; await v2.play(); } catch(_){} if(btn) btn.style.display='inline-block'; }
+    }, { once: true });
+  }
+})();</script><!-- AUTOPLAY_FIX_END --></body>
 </html>
