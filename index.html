@@ -275,5 +275,23 @@
 })();
 </script>
 
+
+<script>
+(function(){
+  const sec = document.getElementById('mapThenVideo');
+  if(!sec) return;
+  const overlay = sec.querySelector('.map-overlay');
+  if(!overlay) return;
+  // Fade after 5 seconds once visible
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        setTimeout(()=>{ overlay.style.opacity = '0'; }, 5000);
+      }
+    });
+  }, {threshold: 0.5});
+  observer.observe(sec);
+})();
+</script>
 </body>
 </html>
