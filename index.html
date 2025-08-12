@@ -191,6 +191,15 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 @media (min-width: 960px){
   .tri-grid { grid-template-columns: 1.0fr 1.9fr !important; }
 }
+
+/* === bpo_v13: intake width & no inner scrollbar === */
+.form, .form * { max-height: none !important; }
+.form { overflow: visible !important; height: auto !important; }
+.form .fields, .form form { overflow: visible !important; height: auto !important; max-height: none !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
+@media (min-width: 960px){
+  .tri-grid { grid-template-columns: 1.0fr 1.9fr !important; align-items: start !important; gap: 12px !important; }
+}
 </style>
 
 <style>
@@ -297,6 +306,8 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
     <label for="notes" style="display:block;margin-top:8px;">Additional notes</label>
     <input id="notes" name="notes" placeholder="Additional notes" />
+<label for="min_value" style="display:block;margin-top:8px;">Min. Market $ Value PMI removal needed= $</label>
+<input id="min_value" name="min_value" />
 <label for="min_value" style="display:block;margin-top:8px;">Min. Market $ Value PMI removal needed= $</label>
 <input id="min_value" name="min_value" />
 
