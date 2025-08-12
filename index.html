@@ -149,11 +149,11 @@
 
   <!-- Video 1 full screen -->
   <div class="video-wrapper">
-    <video id="video1" autoplay playsinline preload="auto" controls>
+    <video id="video1" autoplay playsinline preload="auto">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video1_fixed_kjltks.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <button id="unmute1" class="unmute-btn">Unmute</button>
+    
   </div>
 
   <!-- Split Layout -->
@@ -164,7 +164,7 @@
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <button id="unmute2" class="unmute-btn">Unmute</button>
+        
         <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
@@ -232,5 +232,41 @@
     });
   </script>
 
-</body>
+<!-- BLUE_UNMUTE_BLOCK_START --><script>
+// --- Blue Unmute: controls both videos; scroll-to-video2 on end ---
+(function(){
+  const v1 = document.getElementById('video1');
+  const v2 = document.getElementById('video2');
+  const btn = document.getElementById('unmuteBtn');
+  if(!v1 || !v2 || !btn) return;
+
+  // Ensure both start muted for autoplay policies
+  [v1, v2].forEach(v => { try { v.muted = true; v.volume = 0; } catch(e){} });
+
+  // Show button until clicked
+  btn.style.display = 'inline-block';
+
+  function unmuteAll(){
+    [v1, v2].forEach(v => { try { v.muted = false; v.volume = 1.0; } catch(e){} });
+    btn.style.display = 'none';
+  }
+  btn.addEventListener('click', unmuteAll);
+
+  // When video1 ends: scroll to video2 and try to autoplay with audio on
+  v1.addEventListener('ended', async () => {
+    const v2Section = v2.closest('section') || v2;
+    if (v2Section && v2Section.scrollIntoView) v2Section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    try {
+      v2.muted = false; v2.volume = 1.0;
+      await v2.play();
+      btn.style.display = 'none';
+    } catch (e) {
+      // If browser blocks sound-on autoplay, fall back to muted autoplay and keep the button visible
+      try { v2.muted = true; await v2.play(); } catch(_){}
+      btn.style.display = 'inline-block';
+    }
+  });
+})();
+</script><!-- BLUE_UNMUTE_BLOCK_END --></body>
 </html>
