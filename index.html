@@ -280,6 +280,32 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 #video3Section .vframe{ max-width:960px; margin:0 auto; }
 #video3{ display:block; width:100%; height:auto; }
+
+/* === bpo_v19: map narrower, compact fields, no inner scrollbar, centered video3 === */
+#mapSection img{max-width:80% !important; display:block; margin:0 auto;}
+.form, .form * { max-height:none !important; }
+.form{ overflow:visible !important; height:auto !important; }
+.form .fields, .form form{ overflow:visible !important; height:auto !important; max-height:none !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar{ display:none !important; }
+/* Compact inputs */
+.form input[type="text"], .form input[type="email"], .form input[type="tel"], .form input[type="number"],
+.form input:not([type]), .form select{
+  font-size:14px !important; padding:6px 8px !important; line-height:1.2 !important; height:auto !important;
+}
+/* Half-length for designated fields */
+.form input.half{ width:50% !important; }
+/* Keep row inputs full width */
+.form .row input{ width:100% !important; }
+/* File input natural width */
+.form input[type="file"]{ width:auto !important; }
+/* Right column width reasonable */
+@media (min-width: 960px){
+  .tri-grid{ grid-template-columns: 1.25fr 1.35fr !important; align-items:start !important; gap:16px !important; }
+  .form{ max-width:620px !important; }
+}
+/* Center video 3 */
+#video3Section .vframe{ max-width:960px; margin:0 auto; }
+#video3{ display:block; width:100%; height:auto; }
 </style>
 
 <style>
@@ -356,7 +382,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
         <form action="https://formspree.io/f/manbdzgp" method="POST">
     <div class="fields small">
       <label for="street">Street Address</label>
-      <input id="street" name="street" />
+      <input id="street" name="street" / class="half">
 
       <div class="row2">
         <div>
@@ -387,10 +413,10 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
       </div>
 
       <label for="notes">Additional notes</label>
-      <input id="notes" name="notes" placeholder="Additional notes" />
+      <input id="notes" name="notes" placeholder="Additional notes" / class="half">
 
       <label for="min_value">Min. Market $ Value PMI removal needed= $</label>
-      <input id="min_value" name="min_value" />
+      <input id="min_value" name="min_value" / class="half">
 
       <label for="attachments">Attach a file (.jpg or .pdf)</label>
       <input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf" />
@@ -522,23 +548,24 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
-
-  try { v3.pause(); } catch(e){}
+  try{ v3.pause(); }catch(e){}
 
   function smoothScrollTo(targetY, duration){
     var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var startTime = null;
-    function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
     function step(ts){
       if(!startTime) startTime = ts;
       var p = Math.min((ts - startTime) / duration, 1);
-      var y = startY + (targetY - startY) * ease(p);
-      window.scrollTo(0, y);
+      var eased = easeInOutQuad(p);
+      window.scrollTo(0, startY + (targetY - startY) * eased);
       if(p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -550,8 +577,8 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     var targetY = (window.pageYOffset || 0) + rect.top;
     smoothScrollTo(targetY, 1500);
     (async function(){
-      try{ v3.muted = false; v3.volume = 1.0; await v3.play(); }
-      catch(e){ try{ v3.muted = true; await v3.play(); }catch(_){ } }
+      try { v3.muted = false; v3.volume = 1.0; await v3.play(); }
+      catch(e){ try { v3.muted = true; await v3.play(); } catch(_){ } }
     })();
   }
 
