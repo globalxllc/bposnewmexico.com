@@ -390,10 +390,10 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     <div class="video-section">
       <div class="video-wrapper">
         <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto" controls>
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade">
+        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
 
@@ -459,9 +459,6 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     v1.currentTime = 0;
     v1.muted = false;
     v2.muted = false;
-    var v3 = document.getElementById("video3");
-    if (v3) { v3.muted = false; }
-    window.userInteracted = true;
     btn.style.display = 'none';
     v1.play();
   });
