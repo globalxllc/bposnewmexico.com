@@ -244,6 +244,21 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 /* Center the third video and keep a nice max width */
 #video3Section .vframe { max-width: 960px; margin: 0 auto; }
 #video3 { display:block; width:100%; height:auto; }
+
+/* === bpo_v17: intake sizing & no inner scrollbar; video3 centering === */
+@media (min-width: 1100px){
+  .tri-grid { grid-template-columns: 1.35fr 1.05fr !important; align-items:start !important; gap: 16px !important; }
+  .form { max-width: 600px !important; }
+}
+.form, .form *, .intake, .intake * , .right, .right * , .form-container, .form-container * {
+  max-height: none !important;
+  overscroll-behavior: contain;
+}
+.form, .intake, .form-container, .right { overflow: visible !important; height: auto !important; }
+.form::-webkit-scrollbar, .intake::-webkit-scrollbar, .form-container::-webkit-scrollbar, .right::-webkit-scrollbar { display: none !important; }
+.form input, .form select, .form textarea { font-size: 15px !important; padding: 10px 12px !important; }
+#video3Section .vframe { max-width: 980px; margin: 0 auto; }
+#video3 { display:block; width:100%; height:auto; }
 </style>
 
 <style>
@@ -475,14 +490,17 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
 
-  // Ensure video3 does NOT start until we scroll down
-  try { v3.pause(); } catch(e){}
+  // Make sure v3 doesn't start early
+  try{ v3.pause(); v3.currentTime = 0; }catch(e){}
+  try{ v3.removeAttribute('autoplay'); }catch(e){}
 
   function smoothScrollTo(targetY, duration){
     var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -502,10 +520,10 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     var sec = v3.closest('section') || v3;
     var rect = sec.getBoundingClientRect();
     var targetY = (window.pageYOffset || 0) + rect.top;
-    smoothScrollTo(targetY, 1500); // 1.5s
+    smoothScrollTo(targetY, 1500);
     (async function(){
-      try { v3.muted = false; v3.volume = 1.0; await v3.play(); }
-      catch(e){ try { v3.muted = true; await v3.play(); } catch(_){ } }
+      try{ v3.muted = false; v3.volume = 1.0; await v3.play(); }
+      catch(e){ try{ v3.muted = true; await v3.play(); }catch(_){ } }
     })();
   }
 
@@ -514,10 +532,10 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     entries.forEach(function(en){
       if(en.isIntersecting && !fired){
         fired = true;
-        setTimeout(go, 300); // brief settle then scroll
+        setTimeout(go, 300);
       }
     });
-  }, {threshold: 0.55});
+  }, {threshold: 0.6});
   io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
