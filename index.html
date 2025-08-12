@@ -455,14 +455,28 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   <!-- Split Layout -->
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
-      <div class="video-wrapper">
-        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto" controls>
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
+  <div class="video-wrapper">
+    <video id="video2" playsinline preload="auto" controls>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <section id="mapSection" class="map-section" style="display:none; margin-top:16px;">
+    <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map">
+  </section>
+
+  <section id="video3Section" class="video3-section" style="margin-top:16px;">
+    <div class="left-wrap">
+      <div class="left-col">
+        <video id="video3" playsinline preload="auto" controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
-        <img id="nmMap" src="assets/New Mexico Counties Map.jpg" alt="NM Counties Map" class="fade">
       </div>
     </div>
+  </section>
+</div>
 
     <div class="form-section">
       <div class="form-container">
@@ -537,6 +551,20 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
     }
     v2.muted = false;
     v2.play();
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var v2 = document.getElementById('video2');
+  var mapSec = document.getElementById('mapSection');
+  if(!v2 || !mapSec) return;
+  v2.addEventListener('ended', function(){
+    mapSec.style.display = 'block';
+    try {
+      mapSec.scrollIntoView({behavior:'smooth', block:'start'});
+    } catch(e){}
   });
 })();
 </script>
