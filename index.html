@@ -328,6 +328,32 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 /* Center video 3 */
 #video3Section .vframe{ max-width: 960px; margin: 0 auto; }
 #video3{ display:block; width:100%; height:auto; }
+
+/* === BPOsNewMexico_v6: Intake side-by-side & compact, no inner scrollbar === */
+.form, .form form, .form .fields { overflow: visible !important; height: auto !important; max-height: none !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; }
+
+/* Label + input on the same row */
+.form .field-row{ display:flex; align-items:center; gap:12px; flex-wrap:nowrap; margin:8px 0; }
+.form label{ flex: 0 0 220px; white-space:nowrap; margin:0; }
+.form input[type="text"], .form input[type="email"], .form input[type="tel"],
+.form input[type="number"], .form input:not([type]), .form select {
+  flex: 0 0 300px;  /* roughly half previous width */
+  max-width: 100%;
+  font-size: 13px; padding: 5px 8px; line-height:1.1; height:auto;
+}
+
+/* Make Street, Owner, Ordering, Notes, Min Value exactly half-width of the right column */
+.form input#street, .form input#owner_name, .form input#ordering_name,
+.form input#notes, .form input#min_value { width: 300px; }
+
+/* File input natural width */
+.form input[type="file"]{ width:auto; }
+
+@media (min-width: 960px){
+  .tri-grid { grid-template-columns: 1.25fr 1.35fr; align-items:start; gap:16px; }
+}
+
 </style>
 
 <style>
@@ -402,16 +428,16 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
         <h2>Broker Price Opinion (BPO) Intake</h2>
         <p>Please insert details below to submit:</p>
         <form action="https://formspree.io/f/manbdzgp" method="POST">
-    <div class="field-row"><label for="street">Street Address</label><input id="street" name="street" required></div>
-    <div class="field-row"><label for="city">City/Town</label><input id="city" name="city" required></div>
-    <div class="field-row"><label for="zip">NM Zip</label><input id="zip" name="zip" required></div>
-    <div class="field-row"><label for="owner_name">County Assessor’s Owner Name</label><input id="owner_name" name="owner_name"></div>
-    <div class="field-row"><label for="ordering_name">Company or Person Ordering Name</label><input id="ordering_name" name="ordering_name"></div>
-    <div class="field-row"><label for="email">Your Contact Email</label><input id="email" name="email" type="email" required></div>
-    <div class="field-row"><label for="phone">Your Contact Phone</label><input id="phone" name="phone" type="tel"></div>
-    <div class="field-row"><label for="notes">Additional notes</label><input id="notes" name="notes" placeholder="Additional notes"></div>
-    <div class="field-row"><label for="min_value">Min. Market $ Value PMI removal needed= $</label><input id="min_value" name="min_value" placeholder=""></div>
-    <div class="field-row"><label for="attachments">Attach a file (.jpg or .pdf)</label><input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf"></div>
+    <div class="field-row"><div class="field-row"><label for="street">Street Address</label><input id="street" name="street" required></div></div>
+    <div class="field-row"><div class="field-row"><label for="city">City/Town</label><input id="city" name="city" required></div></div>
+    <div class="field-row"><div class="field-row"><label for="zip">NM Zip</label><input id="zip" name="zip" required></div></div>
+    <div class="field-row"><div class="field-row"><label for="owner_name">County Assessor’s Owner Name</label><input id="owner_name" name="owner_name"></div></div>
+    <div class="field-row"><div class="field-row"><label for="ordering_name">Company or Person Ordering Name</label><input id="ordering_name" name="ordering_name"></div></div>
+    <div class="field-row"><div class="field-row"><label for="email">Your Contact Email</label><input id="email" name="email" type="email" required></div></div>
+    <div class="field-row"><div class="field-row"><label for="phone">Your Contact Phone</label><input id="phone" name="phone" type="tel"></div></div>
+    <div class="field-row"><div class="field-row"><label for="notes">Additional notes</label><input id="notes" name="notes" placeholder="Additional notes"></div></div>
+    <div class="field-row"><div class="field-row"><label for="min_value">Min. Market $ Value PMI removal needed= $</label><input id="min_value" name="min_value" placeholder=""></div></div>
+    <div class="field-row"><div class="field-row"><label for="attachments">Attach a file (.jpg or .pdf)</label><input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf"></div></div>
     <button type="submit" class="submit">Submit BPO Request</button></form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
@@ -541,47 +567,47 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
-  try{ v3.pause(); }catch(e){}
 
-  function smoothScrollTo(targetY, duration){
+  function smoothScrollTo(el, duration){
     var startY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    var rect = el.getBoundingClientRect();
+    var targetY = startY + rect.top;
     var startTime = null;
-    function easeInOutQuad(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function ease(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
     function step(ts){
       if(!startTime) startTime = ts;
-      var p = Math.min((ts - startTime) / duration, 1);
-      var eased = easeInOutQuad(p);
-      window.scrollTo(0, startY + (targetY - startY) * eased);
-      if(p < 1) requestAnimationFrame(step);
+      var p = Math.min((ts-startTime)/duration,1);
+      var y = startY + (targetY - startY) * ease(p);
+      window.scrollTo(0,y);
+      if(p<1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
-  function go(){
-    var sec = v3.closest('section') || v3;
-    var rect = sec.getBoundingClientRect();
-    var targetY = (window.pageYOffset || 0) + rect.top;
-    smoothScrollTo(targetY, 1500);
-    (async function(){
-      try{ v3.muted = false; v3.volume = 1.0; await v3.play(); }
-      catch(e){ try{ v3.muted = true; await v3.play(); }catch(_){ } }
-    })();
-  }
+
   var fired = false;
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
       if(en.isIntersecting && !fired){
         fired = true;
-        setTimeout(go, 300);
+        var sec = v3.closest('section') || v3;
+        smoothScrollTo(sec, 1500);
+        (async function(){
+          try{ v3.muted=false; v3.volume=1.0; await v3.play(); }
+          catch(e){ try{ v3.muted=true; await v3.play(); }catch(_){ } }
+        })();
       }
     });
-  }, {threshold: 0.55});
+  }, {threshold:0.5});
   io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
+
 </body>
 </html>
