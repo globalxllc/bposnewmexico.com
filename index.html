@@ -147,6 +147,18 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   /* Keep video width, widen the right column to avoid internal scrolling */
   .tri-grid{ grid-template-columns: 1.1fr 1.6fr !important; }
 }
+
+/* === bpo_v8: Intake fixes === */
+.form, .form * { max-height: none !important; }
+.form { overflow: visible !important; }
+.form .fields, .form form { overflow: visible !important; max-height: none !important; }
+.tri-grid { align-items: start !important; gap: 12px !important; }
+@media (min-width: 960px){
+  /* Keep left media width, widen right intake column */
+  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; }
+}
+/* Hide any accidental inner scrollbars */
+.form::-webkit-scrollbar { display: none; }
 </style>
 
 <style>
@@ -233,7 +245,12 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
           <input type="tel" name="phone" placeholder="Your Contact Phone" required>
           <textarea name="details" rows="4" placeholder="Additional Details"></textarea>
           <button type="submit" class="submit-btn">Submit BPO Request</button>
-        </form>
+        
+  <label for="notes" style="margin-top:12px;display:block;">Additional notes (one line)</label>
+  <input id="notes" name="notes" placeholder="Additional notes (one line)" />
+<label for="attachments" style="margin-top:12px;display:block;">Attach a file (.jpg or .pdf)</label>
+<input id="attachments" name="attachments" type="file" accept=".jpg,.jpeg,.pdf" />
+</form>
         <div class="note">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
       </div>
     </div>
@@ -338,20 +355,22 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 })();
 </script>
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
-  const mapSec = document.getElementById('mapSection');
-  const v3 = document.getElementById('video3');
+  var mapSec = document.getElementById('mapSection');
+  var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
 
   // Scroll to video3 after the map has been visible for 3 seconds
-  let scrolled = false;
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach((en)=>{
+  var scrolled = false;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
       if(en.isIntersecting && !scrolled){
         scrolled = true;
-        setTimeout(()=>{
-          const target = v3.closest('section') || v3;
+        setTimeout(function(){
+          var target = v3.closest('section') || v3;
           try { target.scrollIntoView({behavior:'smooth', block:'start'}); }
           catch(e){ target.scrollIntoView(); }
         }, 3000);
@@ -360,9 +379,9 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
   }, {threshold: 0.6});
   io.observe(mapSec);
 
-  // When video3 enters view, try to autoplay with sound ON (fallback muted if blocked)
-  const io2 = new IntersectionObserver((entries)=>{
-    entries.forEach(async (en)=>{
+  // When video3 is on screen, try to autoplay with sound ON; if blocked, it will play muted until user unmutes
+  var io2 = new IntersectionObserver(function(entries){
+    entries.forEach(async function(en){
       if(en.isIntersecting){
         try{
           v3.muted = false; v3.volume = 1.0;
