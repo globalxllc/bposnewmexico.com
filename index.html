@@ -159,6 +159,15 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 }
 /* Hide any accidental inner scrollbars */
 .form::-webkit-scrollbar { display: none; }
+
+/* === bpo_v9: Chrome intake scrollbar removal & layout === */
+.form, .form * { max-height: none !important; }
+.form { overflow: visible !important; height: auto !important; }
+.form::-webkit-scrollbar, .form *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+.tri-grid { align-items: start !important; gap: 12px !important; }
+@media (min-width: 960px){
+  .tri-grid { grid-template-columns: 1.0fr 1.8fr !important; }
+}
 </style>
 
 <style>
@@ -357,32 +366,24 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
 
 
 
+
+
 <!-- MAP_TO_V3_SCROLL_START --><script>
 (function(){
   var mapSec = document.getElementById('mapSection');
   var v3 = document.getElementById('video3');
   if(!mapSec || !v3) return;
 
-  // Scroll to video3 after the map has been visible for 3 seconds
-  var scrolled = false;
+  var did = false;
   var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if(en.isIntersecting && !scrolled){
-        scrolled = true;
-        setTimeout(function(){
-          var target = v3.closest('section') || v3;
-          try { target.scrollIntoView({behavior:'smooth', block:'start'}); }
-          catch(e){ target.scrollIntoView(); }
-        }, 3000);
-      }
-    });
-  }, {threshold: 0.6});
-  io.observe(mapSec);
-
-  // When video3 is on screen, try to autoplay with sound ON; if blocked, it will play muted until user unmutes
-  var io2 = new IntersectionObserver(function(entries){
     entries.forEach(async function(en){
-      if(en.isIntersecting){
+      if(en.isIntersecting && !did){
+        did = true;
+        // Immediately scroll to video3
+        var target = v3.closest('section') || v3;
+        try { target.scrollIntoView({behavior:'smooth', block:'start'}); }
+        catch(e){ target.scrollIntoView(); }
+        // Try to autoplay with sound ON; fallback to muted if blocked
         try{
           v3.muted = false; v3.volume = 1.0;
           await v3.play();
@@ -392,7 +393,7 @@ video::-webkit-media-controls-volume-control-container{ display:none !important;
       }
     });
   }, {threshold: 0.5});
-  io2.observe(v3);
+  io.observe(mapSec);
 })();
 </script><!-- MAP_TO_V3_SCROLL_END -->
 </body>
