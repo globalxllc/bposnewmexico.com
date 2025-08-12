@@ -127,7 +127,18 @@
     .show {
       opacity: 1;
     }
-  </style>
+  
+/* === Alignment tweaks (bpo_v5) === */
+.tri-grid{ align-items: start; }
+.form{ padding-top: 8px; }
+.form h2{ margin-top: 0; }
+.form .pad-top-0{ padding-top: 0 !important; }
+
+/* === Hide native mute/volume so blue Unmute remains the audio UI === */
+video::-webkit-media-controls-mute-button{ display:none !important; }
+video::-webkit-media-controls-volume-slider{ display:none !important; }
+video::-webkit-media-controls-volume-control-container{ display:none !important; }
+</style>
 
 <style>
 .video-container { position: relative; display: inline-block; width: 100%; max-width: 800px; margin: 0 auto; }
@@ -188,7 +199,7 @@
   <div class="container" id="splitLayout" style="display:none;">
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto">
+        <video id="video2"  playsinline preload="auto"  muted playsinline preload="auto" controls>
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/q_auto,f_auto/video2_fixed_sa43uj.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -278,19 +289,43 @@
 
 <script>
 (function(){
-  const sec = document.getElementById('mapThenVideo');
-  if(!sec) return;
-  const overlay = sec.querySelector('.map-overlay');
-  if(!overlay) return;
-  // Fade after 5 seconds once visible
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        setTimeout(()=>{ overlay.style.opacity = '0'; }, 5000);
+  var mapSec = document.getElementById('mapSection');
+  var v3 = document.getElementById('video3');
+  if(!mapSec || !v3) return;
+
+  // After map is in view for 3s, scroll to video3
+  var timer = null;
+  var seen = false;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting && !seen){
+        seen = true;
+        timer = setTimeout(function(){
+          try{
+            (v3.closest('section') || v3).scrollIntoView({behavior:'smooth', block:'start'});
+          }catch(e){
+            (v3.closest('section') || v3).scrollIntoView();
+          }
+        }, 3000);
+      }
+    });
+  }, {threshold: 0.6});
+  io.observe(mapSec);
+
+  // When video3 is on screen, try to autoplay with sound ON; fallback muted
+  var io2 = new IntersectionObserver(function(entries){
+    entries.forEach(async function(en){
+      if(en.isIntersecting){
+        try{
+          v3.muted = false; v3.volume = 1.0;
+          await v3.play();
+        }catch(e){
+          try{ v3.muted = true; await v3.play(); }catch(_){}
+        }
       }
     });
   }, {threshold: 0.5});
-  observer.observe(sec);
+  io2.observe(v3);
 })();
 </script>
 </body>
