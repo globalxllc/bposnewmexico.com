@@ -170,7 +170,7 @@
           Your browser does not support the video tag.
         </video>
 </div>
-        <section id="mapSection" class="map-section" style="display:none; margin-top:16px;"><img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade"></section>
+        <section id="mapSection" class="map-section" style="display:none; margin-top:16px;"<img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="NM Counties Map" class="fade"></section>
 <section id="video3Section" class="video3-section" style="margin-top:16px;">
   <div class="left-wrap" style="max-width:1100px;margin:0 auto;">
     <div class="left-col" style="width:100%;">
@@ -236,6 +236,7 @@
     v2.muted = false;
     var v3 = document.getElementById("video3");
     if (v3) { v3.muted = false; }
+    window.userInteracted = true;
     btn.style.display = 'none';
     v1.play();
   });
@@ -274,5 +275,53 @@
 </script>
 <!-- SCROLL_TO_VIDEO2_END -->
 
+<script>
+(function(){
+  var v2 = document.getElementById('video2');
+  var mapSec = document.getElementById('mapSection');
+  var v3 = document.getElementById('video3');
+  if (!v2 || !mapSec) return;
+
+  // Ensure v2 remains visible no matter what earlier scripts try
+  function keepV2Visible(){
+    try { v2.style.removeProperty('display'); } catch(e){}
+    try { v2.hidden = false; } catch(e){}
+  }
+
+  // Override any old handlers by setting onended and also add a capture listener to stop other handlers
+  v2.addEventListener('ended', function(ev){
+    // Keep v2 visible
+    keepV2Visible();
+
+    // Reveal map below video2 and scroll to it
+    try {
+      mapSec.style.display = 'block';
+      mapSec.scrollIntoView({behavior:'smooth', block:'start'});
+    } catch(e){}
+
+    // After a short pause, scroll to video 3 and play (sound if user clicked Unmute)
+    setTimeout(async function(){
+      if (!v3) return;
+      try {
+        var container = document.getElementById('video3Section') || (v3.closest && v3.closest('section')) || v3;
+        if (container && container.scrollIntoView) {
+          container.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      } catch(e){}
+      try {
+        if (window.userInteracted) {
+          v3.muted = false;
+          v3.volume = 1.0;
+        } else {
+          v3.muted = true;
+        }
+        await v3.play();
+      } catch (e) {
+        try { v3.muted = true; await v3.play(); } catch(_){}
+      }
+    }, 1400);
+  }, true); // capture-phase to run before old bubbling listeners
+})();
+</script>
 </body>
 </html>
