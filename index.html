@@ -7,7 +7,7 @@
 <style>
 :root{ --bg:#000; --text:#fff; --accent:#16a34a; }
 *{ box-sizing:border-box; }
-html, body{ margin:0; height:100%; background:var(--bg); color:var(--text); overflow-x:hidden; }
+html, body{ margin:0; height:100%; background:var(--bg); color:var(--text); overflow-x:hidden; overflow-y:auto; }
 
 /* Full-bleed hero */
 .hero-bleed{ width:100vw; position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw; background:#000; }
@@ -138,9 +138,11 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 </div>
 
 
+
+
 <script>
-/* v32 robust scroll + timing */
-(function(){
+/* v33: stronger unmute + guaranteed scroll fallbacks */
+document.addEventListener('DOMContentLoaded', function(){
   const v1 = document.getElementById('video1');
   const unmute1 = document.getElementById('unmute1');
   const split = document.getElementById('splitLayout');
@@ -150,76 +152,93 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
   const v3 = document.getElementById('video3');
   const v3Sec = document.getElementById('video3Section');
 
-  const nextFrame = () => new Promise(r => requestAnimationFrame(()=>r()));
-  async function smartScrollTo(el, durationMs){
-    if (!el) return;
-    const startY = window.scrollY || window.pageYOffset;
-    let moved = false;
-    try {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      await new Promise(res => setTimeout(res, 150));
-      moved = Math.abs((window.scrollY||window.pageYOffset) - startY) > 2;
-    } catch(_) { moved = false; }
-    if (moved) { await new Promise(res => setTimeout(res, durationMs||4800)); return; }
-    const rect = el.getBoundingClientRect();
-    const targetY = Math.max(0, (window.scrollY||window.pageYOffset) + rect.top - 8);
-    const startT = performance.now();
-    const dur = Math.max(1500, durationMs || 4800);
-    function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
-    function step(now){
-      const p = Math.min(1, (now - startT)/dur);
-      const y = startY + (targetY - startY) * ease(p);
-      window.scrollTo(0, y);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-    await new Promise(res => setTimeout(res, dur+80));
+  // Ensure button is clickable above controls
+  if (unmute1){ unmute1.style.zIndex = '99999'; unmute1.style.pointerEvents = 'auto'; }
+
+  // Helper: smooth scroll with reliable fallback
+  function smartScrollTo(el, durationMs){
+    return new Promise(async (resolve)=>{
+      if (!el){ resolve(); return; }
+      const startY = window.scrollY || window.pageYOffset;
+      let moved = false;
+      try {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        await new Promise(r => setTimeout(r, 150));
+        moved = Math.abs((window.scrollY||window.pageYOffset) - startY) > 2;
+      } catch(_) { moved = false; }
+      if (moved){ await new Promise(r => setTimeout(r, durationMs||4800)); resolve(); return; }
+      const rect = el.getBoundingClientRect();
+      const targetY = Math.max(0, (window.scrollY||window.pageYOffset) + rect.top - 8);
+      const startT = performance.now();
+      const dur = Math.max(1500, durationMs || 4800);
+      function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+      function step(now){
+        const p = Math.min(1, (now - startT)/dur);
+        const y = startY + (targetY - startY) * ease(p);
+        window.scrollTo(0, y);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      setTimeout(resolve, dur+60);
+    });
   }
 
-  // Unmute: restart Video 1 and flag gesture for audio later
-  unmute1.addEventListener('click', async () => {
-    try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(_) {}
+  // Strong unmute: blue button OR clicking the video restarts v1 and enables audio later
+  async function doUnmuteRestart(){
+    try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(_){}
     window.userInteracted = true;
-    unmute1.style.display = 'none';
-  });
+    if (unmute1) unmute1.style.display = 'none';
+  }
+  if (unmute1) unmute1.addEventListener('click', doUnmuteRestart);
+  if (v1) v1.addEventListener('click', () => { if (v1.muted) doUnmuteRestart(); }, { once:false });
 
-  // To Video 2
-  let toV2Started = False || false;
+  // Flow to V2
+  let toV2Started = false;
   async function toV2(){
     if (toV2Started) return; toV2Started = true;
-    if (split.style.display !== 'flex') split.style.display = 'flex';
-    await nextFrame();
-    await smartScrollTo(v2Sec, 4800);
+    if (split && split.style.display !== 'flex') split.style.display = 'flex';
+    await new Promise(r => requestAnimationFrame(()=>r()));
+    await smartScrollTo(v2Sec, 5000);
     setTimeout(async () => {
-      try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(_) {}
+      try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(_){}
     }, 5000);
   }
 
-  v1.addEventListener('ended', toV2, { once:true });
-  v1.addEventListener('timeupdate', () => {
-    if (!toV2Started && v1.duration && v1.currentTime / v1.duration > 0.985) { toV2(); }
-  });
+  if (v1){
+    v1.addEventListener('ended', toV2, { once:true });
+    v1.addEventListener('timeupdate', () => {
+      if (!toV2Started && v1.duration && v1.currentTime / v1.duration > 0.985) { toV2(); }
+    });
+    // Fallback: after metadata, set a max timeout to move on even if 'ended' fails
+    v1.addEventListener('loadedmetadata', () => {
+      const ms = Math.max(8000, Math.floor((v1.duration||20)*1000) + 1500);
+      setTimeout(() => { if (!toV2Started) toV2(); }, ms);
+    });
+    // Absolute fallback after 45s
+    setTimeout(() => { if (!toV2Started) toV2(); }, 45000);
+  }
 
   // V2 end -> Map -> V3 with delays
-  v2.addEventListener('ended', async () => {
-    mapSec.style.display = 'block';
-    await nextFrame();
-    await smartScrollTo(mapSec, 4800);
-    setTimeout(async () => {
-      v3Sec.style.display = 'block';
-      await nextFrame();
-      await smartScrollTo(v3Sec, 4800);
+  if (v2 && mapSec && v3 && v3Sec){
+    v2.addEventListener('ended', async () => {
+      mapSec.style.display = 'block';
+      await new Promise(r => requestAnimationFrame(()=>r()));
+      await smartScrollTo(mapSec, 5000);
       setTimeout(async () => {
-        try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(_) {}
-      }, 5000);
-    }, 6000);
-  }, { once:true });
+        v3Sec.style.display = 'block';
+        await new Promise(r => requestAnimationFrame(()=>r()));
+        await smartScrollTo(v3Sec, 5000);
+        setTimeout(async () => {
+          try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(_){}
+        }, 5000);
+      }, 6000);
+    }, { once:true });
+  }
 
-  // Clean any legacy overlays
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
-  });
-})();
+  // Cleanup legacy overlays
+  document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
+});
 </script>
+
 </body>
 </html>
