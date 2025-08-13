@@ -83,7 +83,7 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 
 <!-- HERO -->
 <section class="hero-bleed" id="hero">
-  <video id="video1" playsinline muted autoplay controls>
+  <video id="video1" playsinline muted controls autoplay muted playsinline >
     <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
   </video>
   <button id="unmute1" class="unmute-btn" type="button">Unmute</button>
@@ -261,6 +261,89 @@ async function smoothScrollToEl(el, durationMs, pad){
   }
 }
 
+</script>
+<script>
+/* v37: robust kickoff & sequencing */
+(function(){
+  const v1 = document.getElementById('video1');
+  const v2 = document.getElementById('video2');
+  const v3 = document.getElementById('video3');
+  const v2Sec = document.getElementById('video2-section') || document.querySelector('#v2-section, .video2-section, section.v2');
+  const mapSec = document.getElementById('map-section') || document.querySelector('#map, .map-section, section.map');
+  const v3Sec = document.getElementById('video3-section') || document.querySelector('#v3-section, .video3-section, section.v3');
+  const rightCol = document.querySelector('.right-col');
+
+  let userInteracted = false;
+  window.userInteracted = false; // keep old flag too
+
+  // ensure V1 attempts autoplay muted immediately; retry once if needed
+  function tryPlay(el){
+    try{ const p = el.play(); if (p && p.catch) p.catch(()=>{});}catch(_){}
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    if (v1){
+      v1.muted = true;
+      v1.setAttribute('muted','');
+      tryPlay(v1);
+      setTimeout(()=>{ // retry if gray frame
+        if (v1.paused){ tryPlay(v1); }
+      }, 600);
+    }
+  });
+
+  // Big Unmute button logic – restart from 0, unmute, mark userInteracted
+  const unmuteBtn = document.getElementById('unmute-btn') || document.querySelector('.unmute-btn');
+  function grantAudio(){
+    userInteracted = true; window.userInteracted = true;
+    if (!v1) return;
+    v1.currentTime = 0;
+    v1.muted = false; v1.removeAttribute('muted');
+    tryPlay(v1);
+  }
+  if (unmuteBtn){ unmuteBtn.addEventListener('click', grantAudio); }
+  if (v1){ v1.addEventListener('click', ()=>{ userInteracted = true; window.userInteracted = true; }); }
+
+  // Helpers
+  function waitEnded(el, fallbackMs){
+    return new Promise(resolve=>{
+      const to = setTimeout(()=>resolve('timeout'), Math.max(1000, fallbackMs||60000));
+      el.addEventListener('ended', ()=>{ clearTimeout(to); resolve('ended'); }, {once:true});
+    });
+  }
+
+  // Reuse v36 scroller if present
+  async function scrollToEl(el, ms){ 
+    if (typeof smoothScrollToEl === 'function'){ await smoothScrollToEl(el, ms, 8); }
+    else { el?.scrollIntoView({behavior:'smooth', block:'start'}); await new Promise(r=>setTimeout(r, ms||1500)); }
+  }
+
+  // Start sequence after v1 finishes (or 50s guard)
+  async function runSequence(){
+    if (!v1 || !v2 || !v2Sec || !mapSec || !v3 || !v3Sec) return;
+    await waitEnded(v1, 50000);
+    await scrollToEl(v2Sec, 5000);
+    // Start V2 muted first to avoid autoplay block; unmute after 3s if userInteracted
+    v2.style.display = 'block';
+    try{ v2.muted = true; tryPlay(v2); }catch(_){}
+    setTimeout(()=>{ try{ if (userInteracted){ v2.muted = false; } }catch(_){} }, 3000);
+    await waitEnded(v2, (v2.duration? v2.duration*1000+1000 : 45000));
+    // Map hold
+    mapSec.style.display = 'block';
+    await scrollToEl(mapSec, 4000);
+    await new Promise(r=>setTimeout(r, 6000));
+    // Video 3
+    v3Sec.style.display = 'block';
+    await scrollToEl(v3Sec, 5000);
+    if (rightCol){ rightCol.classList.add('full-on-v3'); }
+    try{ v3.muted = true; tryPlay(v3); }catch(_){}
+    setTimeout(()=>{ try{ if (userInteracted){ v3.muted = false; } }catch(_){} }, 3000);
+  }
+
+  // Kick it off after a small delay to ensure DOM is ready
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>runSequence(), 200);
+  });
+})();
 </script>
 </body>
 </html>
