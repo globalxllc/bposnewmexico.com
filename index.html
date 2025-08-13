@@ -1,221 +1,124 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BPOs New Mexico — v4c (Autoplay + Retry)</title>
-  
-  <style>
-    :root{ --bg:#0b0b0b; --text:#e9e9e9; --muted:#bdbdbd; --card:#141414; --field:#e6e6e6; --green:#138a3e; --accent:#1e88ff; }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);
-      font:16px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial}
-    .hidden{display:none}
-    .fade-in{animation:fadeIn .6s ease forwards}
-    .fade-out{animation:fadeOut .6s ease forwards}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}} @keyframes fadeOut{from{opacity:1}to{opacity:0}}
-    .hero{position:relative;min-height:100svh;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
-    .hero-video{width:100%;height:100svh;object-fit:cover;display:block;background:#000}
-    .unmute{position:absolute;left:50%;bottom:7svh;transform:translateX(-50%);
-      background:var(--accent);color:#fff;border:none;border-radius:999px;
-      padding:18px 34px;font-weight:900;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.45);
-      z-index:5;font-size:20px}
-    .tap-hint{position:absolute;left:50%;bottom:14svh;transform:translateX(-50%);
-      background:#1d4ed8;color:#fff;padding:.6rem 1rem;border-radius:999px;font-weight:600;
-      opacity:0;transition:opacity .3s;pointer-events:none;z-index:5}
-    .hero.ready .tap-hint{opacity:.9} .hero.hide-hint{opacity:0}
-    .start-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;
-      flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:6}
-    .start-overlay button{background:#10b981;color:#fff;border:none;border-radius:999px;
-      padding:16px 32px;font-weight:900;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.45);
-      font-size:20px}
-    .start-overlay p{color:#e5e7eb;margin:0;font-size:16px}
-    .main{padding:32px 16px}
-    .grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr min(44vw,560px);gap:32px;align-items:start}
-    .left-col{display:flex;flex-direction:column;gap:28px}
-    .block{width:100%}
-    .media{width:100%;height:auto;background:#000;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,.45)}
-    .media-small{max-width:520px}
-    .form-pane{position:sticky;top:16px}
-    .card{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,.06);
-      box-shadow:0 12px 40px rgba(0,0,0,.55);min-width:min(44vw,560px)}
-    .card h1{margin:0 0 6px;font-size:28px}
-    .sub{margin:.25rem 0 1rem;color:var(--muted);font-size:.95rem}
-    label{display:block;margin:.6rem 0 .25rem;color:var(--muted);font-size:.9rem}
-    .row-3{display:grid;grid-template-columns:2fr 1.5fr 1fr;gap:10px}
-    input,textarea{width:100%;background:var(--field);color:#111;border:none;border-radius:10px;padding:.85rem .95rem;font-size:1rem}
-    textarea{min-height:140px;resize:vertical}
-    .btn{margin-top:12px;width:100%;padding:.85rem 1rem;border:none;border-radius:10px;background:var(--green);color:#fff;font-weight:800;cursor:pointer}
-    .foot{margin:.6rem 0 0;color:var(--muted);font-size:.85rem}
-    @media (max-width:1100px){.grid{grid-template-columns:1fr;gap:20px}.form-pane{position:static}.card{min-width:unset}.media-small{max-width:100%}}
-    .map-overlay{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:50}
-    .map-overlay img{width:92vw;max-width:1600px;height:auto;border-radius:12px;box-shadow:0 16px 48px rgba(0,0,0,.55);opacity:0;transform:scale(.30)}
-    .map-fly-long{animation:mapFlyLong 8s ease-out forwards}
-    @keyframes mapFlyLong{0%{opacity:0;transform:scale(.30)}60%{opacity:.98;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
-  </style>
-
+  <title>Broker Price Opinion (BPO) Intake</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <section id="hero" class="hero">
-    <video id="v1" class="hero-video" playsinline autoplay muted controls
-      poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAIAAADZ0h0VAAAAD0lEQVR4nGP8//8/AwMDAAQAAf8B8s2fQAAAAABJRU5ErkJggg==">
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
-    </video>
-    <button id="unmuteBtn" class="unmute">Unmute</button>
-    <div id="tapHint" class="tap-hint" aria-hidden="true">Tap video to unmute</div>
-    <div id="startOverlay" class="start-overlay hidden">
-      <p>Autoplay was blocked. Click Start to begin.</p>
-      <button id="startBtn">Start ▶</button>
-    </div>
+  <!-- Intro: Start Button to satisfy autoplay policies -->
+  <div id="gate" class="gate">
+    <button id="startBtn" class="btn start">Start</button>
+  </div>
+
+  <!-- Fullscreen Stage: Video 1 -->
+  <section id="stageV1" class="stage stage--v1 hidden" aria-label="Intro Video">
+    <video id="video1"
+           class="stage__video"
+           playsinline
+           controls
+           muted
+           preload="auto"
+           src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4"></video>
+
+    <button id="unmuteBtn" class="btn unmute hidden" aria-label="Unmute and restart">
+      Unmute
+    </button>
   </section>
-  
-  <main id="main" class="main hidden" aria-hidden="true">
+
+  <!-- Two-Column Experience -->
+  <main id="app" class="app hidden">
     <div class="grid">
-      <div class="left-col">
-        <div id="v2Wrap" class="block">
-          <video id="v2" class="media" playsinline preload="auto" controls>
-            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
-          </video>
+      <!-- Left Column (media timeline) -->
+      <div id="leftCol" class="left">
+        <!-- Video 2 -->
+        <div id="v2Wrap" class="media hidden">
+          <video id="video2"
+                 class="media__video"
+                 playsinline
+                 controls
+                 preload="auto"
+                 muted
+                 src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4"></video>
         </div>
-        <div id="v3Wrap" class="block hidden">
-          <video id="v3" class="media media-small" playsinline preload="auto" controls>
-            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
-          </video>
+
+        <!-- NM Map (slender portrait) -->
+        <figure id="mapWrap" class="media media--map hidden">
+          <img src="assets/nm_map_portrait.jpg" alt="New Mexico Counties map" />
+        </figure>
+
+        <!-- Video 3 (smaller footprint) -->
+        <div id="v3Wrap" class="media media--v3 hidden">
+          <video id="video3"
+                 class="media__video"
+                 playsinline
+                 controls
+                 preload="auto"
+                 muted
+                 src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4"></video>
         </div>
       </div>
-      <aside id="formPane" class="form-pane">
-        <form id="bpoForm" class="card" action="#" method="post" onsubmit="return false;">
-          <h1>Broker Price Opinion (BPO) Intake</h1>
-          <p class="sub">Please insert details below to submit:</p>
-          <label>Subject Property Address</label>
-          <div class="row-3">
-            <input type="text" placeholder="Street Address" required />
-            <input type="text" placeholder="City/Town" required />
-            <input type="text" placeholder="NM Zip" required />
+
+      <!-- Right Column (Intake) -->
+      <aside id="intakeWrap" class="right hidden" aria-label="BPO Intake Form">
+        <form id="intake" class="card" novalidate>
+          <header class="card__header">
+            <h1>Broker Price Opinion (BPO) Intake</h1>
+            <p>Please insert details below to submit:</p>
+          </header>
+
+          <div class="row row--triple">
+            <label class="field">
+              <input type="text" placeholder="Street Address" name="street" />
+            </label>
+            <label class="field">
+              <input type="text" placeholder="City/Town" name="city" />
+            </label>
+            <label class="field">
+              <input type="text" placeholder="NM Zip" name="zip" />
+            </label>
           </div>
-          <label>County Assessor’s Owner Name</label>
-          <input type="text" placeholder="County Assessor’s Owner Name" />
-          <label>Company or Person Ordering Name</label>
-          <input type="text" placeholder="Company or Person Ordering Name" />
-          <label>Your Contact Email</label>
-          <input type="email" placeholder="Your Contact Email" />
-          <label>Your Contact Phone</label>
-          <input type="tel" placeholder="Your Contact Phone" />
-          <label>Additional Details</label>
-          <textarea placeholder="Additional Details"></textarea>
-          <label>Assessor Identifying Owner#</label>
-          <input type="text" placeholder="Assessor Identifying Owner#" />
-          <label>Attach file(s) (.jpg or .pdf)</label>
-          <input type="file" id="files" accept=".jpg,.jpeg,.pdf" multiple />
-          <button class="btn" type="submit">Submit BPO Request</button>
-          <p class="foot">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
+
+          <label class="field">
+            <input type="text" placeholder="County Assessor’s Owner Name" name="owner" />
+          </label>
+
+          <label class="field">
+            <input type="text" placeholder="Company or Person Ordering Name" name="orderingName" />
+          </label>
+
+          <label class="field">
+            <input type="email" placeholder="Your Contact Email" name="email" />
+          </label>
+
+          <label class="field">
+            <input type="tel" placeholder="Your Contact Phone" name="phone" />
+          </label>
+
+          <label class="field">
+            <textarea placeholder="Additional Details" name="details" rows="4"></textarea>
+          </label>
+
+          <label class="field">
+            <input type="text" placeholder="Assessor Identifying Owner#" name="assessorId" />
+          </label>
+
+          <div class="field">
+            <div class="fileRow">
+              <span>Attach file(s) (.jpg or .pdf)</span>
+              <input id="fileInput" type="file" accept=".jpg,.jpeg,.pdf" multiple />
+            </div>
+          </div>
+
+          <button type="submit" class="btn submit">Submit BPO Request</button>
+          <p class="foot">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
         </form>
       </aside>
     </div>
   </main>
 
-  <div id="mapOverlay" class="map-overlay hidden" aria-hidden="true">
-    <img id="mapImg" src="Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map" />
-  </div>
-
-  
-<script>
-(function(){
-  const v1 = document.getElementById('v1');
-  const startOverlay = document.getElementById('startOverlay');
-  const startBtn = document.getElementById('startBtn');
-  function tryPlay(el){ try{ const p = el.play(); if (p && p.catch) p.catch(()=>{}); }catch(e){} }
-  function attemptAutoplay(retries=3){
-    let n = 0;
-    function step(){
-      if (n >= retries){
-        startOverlay.classList.remove('hidden');
-        return;
-      }
-      n++;
-      tryPlay(v1);
-      setTimeout(()=>{
-        if (v1.paused || v1.readyState < 2) step();
-      }, 1200);
-    }
-    step();
-  }
-  tryPlay(v1);
-  setTimeout(()=>{
-    if (v1.paused || v1.readyState < 2) attemptAutoplay(3);
-  }, 1200);
-  startBtn.addEventListener('click', async ()=>{
-    startOverlay.classList.add('hidden');
-    try{ await v1.play(); }catch(e){}
-  });
-})();
-</script>
-
-  
-<script>
-function smoothScrollTo(y, duration=2200){
-  const start = window.scrollY, dx = y - start, t0 = performance.now();
-  function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t }
-  function step(now){ const p = Math.min(1, (now - t0)/duration); window.scrollTo(0, start + dx*ease(p)); if (p < 1) requestAnimationFrame(step) }
-  requestAnimationFrame(step)
-}
-(function(){
-  const hero = document.getElementById('hero')
-  const v1 = document.getElementById('v1')
-  const unmuteBtn = document.getElementById('unmuteBtn')
-  const main = document.getElementById('main')
-  const v2 = document.getElementById('v2')
-  const v3 = document.getElementById('v3')
-  const v3Wrap = document.getElementById('v3Wrap')
-  const formPane = document.getElementById('formPane')
-  const mapOverlay = document.getElementById('mapOverlay')
-  const mapImg = document.getElementById('mapImg')
-  const tapHint = document.getElementById('tapHint')
-  let userUnmuted = false
-
-  function tryPlay(el){ try{ const p = el.play(); if (p && p.catch) p.catch(()=>{}); } catch(e){} }
-  function waitEnded(video, ms=60000){ return new Promise(res=>{ const to=setTimeout(()=>res('timeout'), ms); video.addEventListener('ended', ()=>{ clearTimeout(to); res('ended') }, {once:true}); }) }
-
-  v1.addEventListener('loadeddata', ()=>{ hero.classList.add('ready'); setTimeout(()=> hero.classList.add('hide-hint'), 2500) })
-
-  unmuteBtn.addEventListener('click', async ()=>{ try{ v1.currentTime = 0; v1.muted = false; await v1.play(); userUnmuted = true; }catch(e){} unmuteBtn.classList.add('hidden') })
-  v1.addEventListener('click', async ()=>{ if (v1.muted){ try{ v1.currentTime = 0; v1.muted = false; await v1.play(); userUnmuted = true; }catch(e){} unmuteBtn.classList.add('hidden') }})
-
-  ;(async function run(){
-    await waitEnded(v1, 60000)
-    const mainTop = main.getBoundingClientRect().top + window.scrollY - 8
-    hero.classList.add('fade-out')
-    setTimeout(()=>{
-      hero.classList.add('hidden')
-      main.classList.remove('hidden')
-      main.classList.add('fade-in')
-      smoothScrollTo(mainTop, 2200)
-      if (userUnmuted) v2.muted = false
-      tryPlay(v2)
-    }, 400)
-
-    v2.addEventListener('ended', ()=>{
-      mapOverlay.classList.remove('hidden')
-      mapImg.classList.remove('map-fly-long'); void mapImg.offsetWidth; mapImg.classList.add('map-fly-long')
-      setTimeout(()=>{
-        mapOverlay.classList.add('hidden')
-        v3Wrap.classList.remove('hidden')
-        const v3Top = v3Wrap.getBoundingClientRect().top + window.scrollY - 12
-        smoothScrollTo(v3Top, 2200)
-        if (userUnmuted) v3.muted = false
-        tryPlay(v3)
-        setTimeout(()=>{
-          const fb = formPane.getBoundingClientRect().bottom + window.scrollY
-          const vb = window.scrollY + window.innerHeight
-          if (fb > vb){ smoothScrollTo(fb - window.innerHeight + 28, 1500) }
-        }, 700)
-      }, 8000 + 6000)
-    }, {once:true})
-  })()
-
-  document.documentElement.style.overflowX = 'hidden'
-})()
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
