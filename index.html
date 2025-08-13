@@ -1,61 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Broker Price Opinion (BPO) Intake</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>BPOs New Mexico</title>
+  <link rel="preload" href="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" as="video" type="video/mp4">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <section id="stage-hero" class="stage stage-hero visible">
-    <video id="v1" class="hero-video" playsinline autoplay muted controls
-      src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4"></video>
+  <section id="hero" class="hero">
+    <video id="v1" class="hero-video" playsinline autoplay muted controls>
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4">
+    </video>
     <button id="unmuteBtn" class="unmute">Unmute</button>
+    <div id="tapHint" class="tap-hint" aria-hidden="true">Tap video to unmute</div>
   </section>
 
-  <section id="stage-main" class="stage stage-main hidden" aria-hidden="true">
+  <section id="main" class="main hidden" aria-hidden="true">
     <div class="grid">
-      <div class="left">
-        <video id="v2" class="video v2 hidden" playsinline controls preload="metadata"
-          src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4"></video>
-
-        <img id="nmMap" class="map hidden" alt="New Mexico Counties Map" src="map-portrait.jpg" />
-
-        <video id="v3" class="video v3 small hidden" playsinline controls preload="metadata"
-          src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4"></video>
+      <div class="left-col">
+        <div id="v2Wrap" class="block">
+          <video id="v2" class="media" playsinline preload="auto" controls>
+            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div id="v3Wrap" class="block hidden">
+          <video id="v3" class="media media-small" playsinline preload="auto" controls>
+            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
-
-      <aside id="intakeCard" class="card hidden" aria-label="BPO Intake">
-        <h1>Broker Price Opinion (BPO) Intake</h1>
-        <p class="subtitle">Please insert details below to submit:</p>
-
-        <form id="intakeForm" class="form" action="#" method="post" enctype="multipart/form-data" onsubmit="return false;">
-          <div class="row">
-            <input type="text" placeholder="Street Address" required />
-            <input type="text" placeholder="City/Town" required />
-            <input type="text" placeholder="NM Zip" required />
+      <aside id="formPane" class="form-pane">
+        <form class="card" id="bpoForm" action="#" method="post" onsubmit="return false;">
+          <h1>Broker Price Opinion (BPO) Intake</h1>
+          <p class="sub">Please insert details below to submit:</p>
+          <label>Subject Property Address</label>
+          <div class="row-3">
+            <input type="text" placeholder="Street Address" required>
+            <input type="text" placeholder="City/Town" required>
+            <input type="text" placeholder="NM Zip" required>
           </div>
-
-          <input type="text" placeholder="County Assessor’s Owner Name" />
-          <input type="text" placeholder="Company or Person Ordering Name" />
-          <input type="email" placeholder="Your Contact Email" />
-          <input type="tel" placeholder="Your Contact Phone" />
-
-          <textarea rows="5" placeholder="Additional Details"></textarea>
-
-          <input type="text" placeholder="Assessor Identifying Owner#" />
-
-          <label class="filelabel">Attach file(s) (.jpg or .pdf)
-            <input id="fileInput" type="file" accept=".jpg,.jpeg,.pdf" multiple />
-          </label>
-
-          <button class="submit" type="submit">Submit BPO Request</button>
-          <p class="fine">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
+          <label>County Assessor’s Owner Name</label>
+          <input type="text" placeholder="County Assessor’s Owner Name">
+          <label>Company or Person Ordering Name</label>
+          <input type="text" placeholder="Company or Person Ordering Name">
+          <label>Your Contact Email</label>
+          <input type="email" placeholder="Your Contact Email">
+          <label>Your Contact Phone</label>
+          <input type="tel" placeholder="Your Contact Phone">
+          <label>Additional Details</label>
+          <textarea placeholder="Additional Details"></textarea>
+          <label>Assessor Identifying Owner#</label>
+          <input type="text" placeholder="Assessor Identifying Owner#">
+          <label>Attach file(s) (.jpg or .pdf)</label>
+          <input type="file" id="files" accept=".jpg,.jpeg,.pdf" multiple>
+          <button class="btn" type="submit">Submit BPO Request</button>
+          <p class="foot">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
         </form>
       </aside>
     </div>
   </section>
 
-  <script src="script.js"></script>
+  <div id="mapOverlay" class="map-overlay hidden" aria-hidden="true">
+    <img id="mapImg" src="assets/nm-map.jpg" alt="New Mexico counties map">
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

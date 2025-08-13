@@ -1,93 +1,11 @@
-
-(() => {
-  const qs = sel => document.querySelector(sel);
-
-  // DOM
-  const gate = qs('#gate');
-  const startBtn = qs('#startBtn');
-
-  const stageV1 = qs('#stageV1');
-  const v1 = qs('#video1');
-  const unmuteBtn = qs('#unmuteBtn');
-
-  const app = qs('#app');
-  const leftCol = qs('#leftCol');
-  const v2Wrap = qs('#v2Wrap');
-  const v2 = qs('#video2');
-  const mapWrap = qs('#mapWrap');
-  const v3Wrap = qs('#v3Wrap');
-  const v3 = qs('#video3');
-  const intakeWrap = qs('#intakeWrap');
-
-  let userUnmuted = false;
-
-  // Helpers
-  const show = el => { el.classList.remove('hidden'); el.classList.add('show'); };
-  const hide = el => { el.classList.remove('show'); el.classList.add('hidden'); };
-
-  // Start experience (user gesture)
-  startBtn.addEventListener('click', async () => {
-    hide(gate);
-    show(stageV1);
-    unmuteBtn.classList.remove('hidden'); // show blue unmute button
-    try {
-      await v1.play();
-    } catch (e) {
-      console.info('V1 play blocked until user interacts');
-    }
-  });
-
-  // Unmute & restart V1
-  unmuteBtn.addEventListener('click', async () => {
-    userUnmuted = true;
-    v1.pause();
-    v1.currentTime = 0;
-    v1.muted = false;
-    try {
-      await v1.play();
-    } catch(e){}
-  });
-
-  // When V1 ends, fade to two-column app
-  v1.addEventListener('ended', () => {
-    hide(stageV1);
-    show(app);
-    // Show V2 first
-    nextV2();
-  });
-
-  function nextV2(){
-    show(v2Wrap);
-    // Set V2 audio state based on userUnmuted
-    v2.muted = !userUnmuted;
-    v2.currentTime = 0;
-    v2.play().catch(()=>{});
-
-    v2.onended = () => {
-      // After V2 -> Map
-      hide(v2Wrap);
-      show(mapWrap);
-      // Reveal intake slightly later so it's not immediate
-      setTimeout(() => show(intakeWrap), 800);
-      // Hold map for 6s
-      setTimeout(() => {
-        hide(mapWrap);
-        nextV3();
-      }, 6000);
-    };
-  }
-
-  function nextV3(){
-    show(v3Wrap);
-    v3.muted = !userUnmuted;
-    v3.currentTime = 0;
-    v3.play().catch(()=>{});
-  }
-
-  // Prevent form submission navigation
-  const form = qs('#intake');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('BPO Request submitted. (Wire this up to your backend/email).');
-  });
-})();
+const smoothTo=(el,offset=0)=>{if(!el)return;const y=el.getBoundingClientRect().top+window.scrollY-offset;window.scrollTo({top:y,behavior:'smooth'})};
+const hero=document.getElementById('hero');const v1=document.getElementById('v1');const unmuteBtn=document.getElementById('unmuteBtn');const tapHint=document.getElementById('tapHint');
+const main=document.getElementById('main');const v2Wrap=document.getElementById('v2Wrap');const v2=document.getElementById('v2');const v3Wrap=document.getElementById('v3Wrap');const v3=document.getElementById('v3');const formPane=document.getElementById('formPane');
+const mapOverlay=document.getElementById('mapOverlay');const mapImg=document.getElementById('mapImg');let userUnmuted=false;
+v1.addEventListener('loadeddata',()=>{hero.classList.add('ready');setTimeout(()=>hero.classList.add('hide-hint'),2500)});
+unmuteBtn.addEventListener('click',async()=>{try{v1.currentTime=0;v1.muted=false;await v1.play();userUnmuted=true}catch(e){}unmuteBtn.classList.add('hidden')});
+v1.addEventListener('click',async()=>{if(v1.muted){try{v1.currentTime=0;v1.muted=false;await v1.play();userUnmuted=true}catch(e){}unmuteBtn.classList.add('hidden')}});
+v1.addEventListener('ended',()=>{hero.classList.add('fade-out');setTimeout(()=>{hero.classList.add('hidden');main.classList.remove('hidden');main.classList.add('fade-in');smoothTo(main,8);startV2()},400)});
+function startV2(){if(userUnmuted)v2.muted=false;v2.play().catch(()=>{v2.muted=true;v2.play().catch(()=>{})})}
+v2.addEventListener('ended',()=>{mapOverlay.classList.remove('hidden');requestAnimationFrame(()=>{mapImg.classList.remove('map-fly');void mapImg.offsetWidth;mapImg.classList.add('map-fly')});setTimeout(()=>{mapOverlay.classList.add('hidden');v3Wrap.classList.remove('hidden');smoothTo(v3Wrap,12);if(userUnmuted)v3.muted=false;v3.play().catch(()=>{v3.muted=true;v3.play().catch(()=>{})});setTimeout(()=>{const formBottom=formPane.getBoundingClientRect().bottom+window.scrollY;const viewportBottom=window.scrollY+window.innerHeight;if(formBottom>viewportBottom){window.scrollTo({top:formBottom-window.innerHeight+24,behavior:'smooth'})}},500)},6000+4500)});
+document.documentElement.style.overflowX='hidden';
