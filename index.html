@@ -1,176 +1,115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Broker Price Opinion (BPO) Intake</title>
-<style>
-  :root{
-    --bg:#0a0a0a;
-    --card:#111;
-    --text:#eaeaea;
-    --muted:#9aa0a6;
-    --accent:#0b5fff;
-    --btn:#0b5fff;
-    --btn-text:#fff;
-    --green:#198754;
-  }
-  html,body{height:100%; background:var(--bg); color:var(--text); margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; line-height:1.35;}
-  .wrap{max-width:1200px; margin:0 auto; padding:24px 16px;}
-  .grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:start;}
-  @media (max-width: 980px){
-    .grid{grid-template-columns:1fr; gap:20px;}
-  }
-
-  .stage{position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.6);}
-  .scene{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 700ms ease; pointer-events:none;}
-  .scene.active{opacity:1; pointer-events:auto;}
-  video, img.map{width:100%; height:100%; object-fit:cover;}
-
-  .unmute{position:absolute; left:50%; transform:translateX(-50%); bottom:12px; padding:12px 26px; border-radius:28px; background:var(--btn); color:var(--btn-text); font-weight:700; font-size:18px; border:none; cursor:pointer; box-shadow:0 6px 24px rgba(11,95,255,.35);}
-  .unmute:active{transform:translateX(-50%) scale(.98);}
-
-  .card{background:var(--card); border-radius:12px; padding:18px; box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.5);}
-  h1{font-size:28px; margin:0 0 8px;}
-  .hint{color:var(--muted); font-size:12px; margin-bottom:14px;}
-
-  .row{display:flex; gap:10px;}
-  .row > *{flex:1;}
-  label{display:block; font-size:12px; color:#cfd3d7; margin:10px 0 6px;}
-  input[type="text"], input[type="email"], input[type="tel"], textarea{width:100%; padding:10px 12px; border-radius:6px; border:1px solid #444; background:#ddd; color:#000; font-size:14px;}
-  textarea{min-height:120px; resize:vertical;}
-  input::placeholder, textarea::placeholder{color:#6b7280;}
-  .btn-submit{width:100%; margin-top:10px; padding:12px 14px; border:0; border-radius:8px; background:var(--green); color:#fff; font-weight:700; cursor:pointer;}
-  .fine{color:#aeb4ba; font-size:12px; margin-top:8px; text-align:center;}
-
-  .left-col{justify-self:start;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BPOs New Mexico – Intake</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="grid">
-      <div class="left-col">
-        <div class="stage" id="stage">
-          <div class="scene active" id="scene1">
-            <video id="video1" src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" autoplay muted playsinline></video>
-            <button class="unmute" id="unmuteBtn">Unmute</button>
-          </div>
-          <div class="scene" id="scene2">
-            <video id="video2" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" preload="metadata" playsinline></video>
-          </div>
-          <div class="scene" id="sceneMap">
-            <img class="map" src="assets/map.jpg" alt="New Mexico Counties Map"/>
-          </div>
-          <div class="scene" id="scene3">
-            <video id="video3" src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" preload="metadata" playsinline></video>
-          </div>
-        </div>
-      </div>
+  <div class="container">
+    <main class="stage" id="stage">
+      <div class="stage-inner">
+        <!-- Start overlay (ensures user gesture available for audio unlock on stricter browsers) -->
+        <button id="startBtn" class="start-btn" aria-label="Start sequence">Start</button>
 
-      <div class="card">
+        <!-- Big unmute for first video -->
+        <button id="unmuteBtn" class="unmute-btn" aria-label="Unmute & restart">Unmute</button>
+
+        <!-- Video 1 -->
+        <video id="v1"
+          class="media media-active"
+          playsinline
+          muted
+          preload="auto"
+          controls
+          poster="assets/stage-placeholder.jpg">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Video 2 -->
+        <video id="v2"
+          class="media"
+          playsinline
+          muted
+          preload="auto"
+          controls
+          poster="assets/stage-placeholder.jpg">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+        </video>
+
+        <!-- Map -->
+        <img id="map" class="media" src="assets/nm-counties-portrait.jpg" alt="New Mexico counties map" />
+
+        <!-- Video 3 -->
+        <video id="v3"
+          class="media"
+          playsinline
+          muted
+          preload="auto"
+          controls
+          poster="assets/stage-placeholder.jpg">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </main>
+
+    <aside class="intake">
+      <form class="card" id="bpoForm" action="#" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); alert('Form submitted (demo).');">
         <h1>Broker Price Opinion (BPO) Intake</h1>
-        <div class="hint">Please insert details below to submit:</div>
+        <p class="sub">Please insert details below to submit:</p>
 
-        <label>Subject Property Address</label>
-        <div class="row">
-          <input type="text" placeholder="Street Address">
-          <input type="text" placeholder="City/Town">
-          <input type="text" placeholder="NM Zip">
-        </div>
+        <label class="row">
+          <span>Subject Property Address</span>
+          <div class="row3">
+            <input type="text" placeholder="Street Address" required />
+            <input type="text" placeholder="City/Town" required />
+            <input type="text" placeholder="NM Zip" required />
+          </div>
+        </label>
 
-        <label>County Assessor's Owner Name</label>
-        <input type="text" placeholder="County Assessor’s Owner Name">
+        <label>
+          <span>County Assessor’s Owner Name</span>
+          <input type="text" placeholder="County Assessor’s Owner Name" />
+        </label>
 
-        <label>Company or Person Ordering Name</label>
-        <input type="text" placeholder="Company or Person Ordering Name">
+        <label>
+          <span>Company or Person Ordering Name</span>
+          <input type="text" placeholder="Company or Person Ordering Name" />
+        </label>
 
-        <label>Your Contact Email</label>
-        <input type="email" placeholder="Your Contact Email">
+        <label>
+          <span>Your Contact Email</span>
+          <input type="email" placeholder="Your Contact Email" />
+        </label>
 
-        <label>Your Contact Phone</label>
-        <input type="tel" placeholder="Your Contact Phone">
+        <label>
+          <span>Your Contact Phone</span>
+          <input type="tel" placeholder="Your Contact Phone" />
+        </label>
 
-        <label>Additional Details</label>
-        <textarea placeholder="Additional Details"></textarea>
+        <label>
+          <span>Additional Details</span>
+          <textarea rows="6" placeholder="Additional Details"></textarea>
+        </label>
 
-        <label>Assessor Identifying Owner#</label>
-        <input type="text" placeholder="Assessor Identifying Owner#">
+        <label>
+          <span>Assessor Identifying Owner#</span>
+          <input type="text" placeholder="Assessor Identifying Owner#" />
+        </label>
 
-        <label>Attach file(s) (.jpg or .pdf)</label>
-        <input type="file" accept=".jpg,.jpeg,.pdf" multiple>
+        <label>
+          <span>Attach file(s) (.jpg or .pdf)</span>
+          <input type="file" id="files" name="files" multiple accept=".jpg,.jpeg,.pdf" />
+          <small class="hint">You can pick multiple files in one go, or reopen to add more.</small>
+        </label>
 
-        <button class="btn-submit">Submit BPO Request</button>
-        <div class="fine">Optional: BPOsNewMexico.com direct phone: 505-453-0444</div>
-      </div>
-    </div>
+        <button class="submit" type="submit">Submit BPO Request</button>
+        <p class="foot">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
+      </form>
+    </aside>
   </div>
 
-<script>
-(function(){
-  const v1 = document.getElementById('video1');
-  const v2 = document.getElementById('video2');
-  const v3 = document.getElementById('video3');
-  const s1 = document.getElementById('scene1');
-  const s2 = document.getElementById('scene2');
-  const s3 = document.getElementById('sceneMap');
-  const s4 = document.getElementById('scene3');
-  const unmuteBtn = document.getElementById('unmuteBtn');
-
-  let userInteracted = false;
-
-  function show(scene){
-    [s1,s2,s3,s4].forEach(el=>el.classList.remove('active'));
-    scene.classList.add('active');
-  }
-  function tryPlay(el){ try{ const p = el.play(); if(p && p.catch) p.catch(()=>{});}catch(e){} }
-
-  window.addEventListener('load', ()=>{
-    v1.muted = true; v1.setAttribute('muted','');
-    tryPlay(v1);
-    setTimeout(()=>{ if (v1.paused) tryPlay(v1); }, 500);
-  });
-
-  function doUnmute(){
-    userInteracted = true;
-    v1.currentTime = 0;
-    v1.muted = false; v1.removeAttribute('muted');
-    tryPlay(v1);
-    unmuteBtn.style.display = 'none';
-  }
-  unmuteBtn.addEventListener('click', doUnmute);
-  v1.addEventListener('click', ()=>{ userInteracted = true; });
-
-  function waitEnded(video, fallbackMs){
-    return new Promise(res=>{
-      const t = setTimeout(()=>res('timeout'), fallbackMs||60000);
-      video.addEventListener('ended', ()=>{ clearTimeout(t); res('ended'); }, {once:true});
-    });
-  }
-
-  async function runTimeline(){
-    await waitEnded(v1, 50000);
-
-    // Scene 2 — play unmuted immediately IF user pressed Unmute earlier (gesture grants audio policy)
-    show(s2);
-    v2.currentTime = 0;
-    v2.muted = !userInteracted;
-    tryPlay(v2);
-    await waitEnded(v2, 50000);
-
-    // Map for 6s
-    show(s3);
-    await new Promise(r=>setTimeout(r, 6000));
-
-    // Scene 4 (Video 3) — same rule
-    show(s4);
-    v3.currentTime = 0;
-    v3.muted = !userInteracted;
-    tryPlay(v3);
-    // no need to wait; let it run
-  }
-
-  runTimeline();
-})();
-</script>
+  <script src="timeline.js"></script>
 </body>
 </html>
