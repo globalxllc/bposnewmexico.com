@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,117 +7,55 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Intro: Start Button to satisfy autoplay policies -->
-  <div id="gate" class="gate">
-    <button id="startBtn" class="btn start">Start</button>
-  </div>
-
-  <!-- Fullscreen Stage: Video 1 -->
-  <section id="stageV1" class="stage stage--v1 hidden" aria-label="Intro Video">
-    <video id="video1"
-           class="stage__video"
-           playsinline
-           controls
-           muted
-           preload="auto"
-           src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4"></video>
-
-    <button id="unmuteBtn" class="btn unmute hidden" aria-label="Unmute and restart">
-      Unmute
-    </button>
+  <section id="stage-hero" class="stage stage-hero visible">
+    <video id="v1" class="hero-video" playsinline autoplay muted controls
+      src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4"></video>
+    <button id="unmuteBtn" class="unmute">Unmute</button>
   </section>
 
-  <!-- Two-Column Experience -->
-  <main id="app" class="app hidden">
+  <section id="stage-main" class="stage stage-main hidden" aria-hidden="true">
     <div class="grid">
-      <!-- Left Column (media timeline) -->
-      <div id="leftCol" class="left">
-        <!-- Video 2 -->
-        <div id="v2Wrap" class="media hidden">
-          <video id="video2"
-                 class="media__video"
-                 playsinline
-                 controls
-                 preload="auto"
-                 muted
-                 src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4"></video>
-        </div>
+      <div class="left">
+        <video id="v2" class="video v2 hidden" playsinline controls preload="metadata"
+          src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4"></video>
 
-        <!-- NM Map (slender portrait) -->
-        <figure id="mapWrap" class="media media--map hidden">
-          <img src="assets/nm_map_portrait.jpg" alt="New Mexico Counties map" />
-        </figure>
+        <img id="nmMap" class="map hidden" alt="New Mexico Counties Map" src="map-portrait.jpg" />
 
-        <!-- Video 3 (smaller footprint) -->
-        <div id="v3Wrap" class="media media--v3 hidden">
-          <video id="video3"
-                 class="media__video"
-                 playsinline
-                 controls
-                 preload="auto"
-                 muted
-                 src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4"></video>
-        </div>
+        <video id="v3" class="video v3 small hidden" playsinline controls preload="metadata"
+          src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4"></video>
       </div>
 
-      <!-- Right Column (Intake) -->
-      <aside id="intakeWrap" class="right hidden" aria-label="BPO Intake Form">
-        <form id="intake" class="card" novalidate>
-          <header class="card__header">
-            <h1>Broker Price Opinion (BPO) Intake</h1>
-            <p>Please insert details below to submit:</p>
-          </header>
+      <aside id="intakeCard" class="card hidden" aria-label="BPO Intake">
+        <h1>Broker Price Opinion (BPO) Intake</h1>
+        <p class="subtitle">Please insert details below to submit:</p>
 
-          <div class="row row--triple">
-            <label class="field">
-              <input type="text" placeholder="Street Address" name="street" />
-            </label>
-            <label class="field">
-              <input type="text" placeholder="City/Town" name="city" />
-            </label>
-            <label class="field">
-              <input type="text" placeholder="NM Zip" name="zip" />
-            </label>
+        <form id="intakeForm" class="form" action="#" method="post" enctype="multipart/form-data" onsubmit="return false;">
+          <div class="row">
+            <input type="text" placeholder="Street Address" required />
+            <input type="text" placeholder="City/Town" required />
+            <input type="text" placeholder="NM Zip" required />
           </div>
 
-          <label class="field">
-            <input type="text" placeholder="County Assessor’s Owner Name" name="owner" />
+          <input type="text" placeholder="County Assessor’s Owner Name" />
+          <input type="text" placeholder="Company or Person Ordering Name" />
+          <input type="email" placeholder="Your Contact Email" />
+          <input type="tel" placeholder="Your Contact Phone" />
+
+          <textarea rows="5" placeholder="Additional Details"></textarea>
+
+          <input type="text" placeholder="Assessor Identifying Owner#" />
+
+          <label class="filelabel">Attach file(s) (.jpg or .pdf)
+            <input id="fileInput" type="file" accept=".jpg,.jpeg,.pdf" multiple />
           </label>
 
-          <label class="field">
-            <input type="text" placeholder="Company or Person Ordering Name" name="orderingName" />
-          </label>
-
-          <label class="field">
-            <input type="email" placeholder="Your Contact Email" name="email" />
-          </label>
-
-          <label class="field">
-            <input type="tel" placeholder="Your Contact Phone" name="phone" />
-          </label>
-
-          <label class="field">
-            <textarea placeholder="Additional Details" name="details" rows="4"></textarea>
-          </label>
-
-          <label class="field">
-            <input type="text" placeholder="Assessor Identifying Owner#" name="assessorId" />
-          </label>
-
-          <div class="field">
-            <div class="fileRow">
-              <span>Attach file(s) (.jpg or .pdf)</span>
-              <input id="fileInput" type="file" accept=".jpg,.jpeg,.pdf" multiple />
-            </div>
-          </div>
-
-          <button type="submit" class="btn submit">Submit BPO Request</button>
-          <p class="foot">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
+          <button class="submit" type="submit">Submit BPO Request</button>
+          <p class="fine">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
         </form>
       </aside>
     </div>
-  </main>
+  </section>
 
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
