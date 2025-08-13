@@ -163,5 +163,92 @@ unmute1.addEventListener('click', async () => {
 });
 
 
+
+<script>
+// === v29 scroll & audio sequencing ===
+(function(){
+  const v1 = document.getElementById('video1');
+  const unmute1 = document.getElementById('unmute1');
+  const split = document.getElementById('splitLayout');
+  const v2 = document.getElementById('video2');
+  const v2Sec = document.getElementById('video2Section');
+  const mapSec = document.getElementById('mapSection');
+  const v3 = document.getElementById('video3');
+  const v3Sec = document.getElementById('video3Section');
+
+  // Helper: promise-based smooth scroll
+  function smoothScrollToEl(el, durationMs){
+    return new Promise((resolve)=>{
+      if (!el){ resolve(); return; }
+      const startY = window.scrollY || window.pageYOffset;
+      const rect = el.getBoundingClientRect();
+      const targetY = Math.max(0, startY + rect.top - 8);
+      const startT = performance.now();
+      const dur = Math.max(1500, durationMs || 4400); // slow
+      function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+      function step(now){
+        const p = Math.min(1, (now - startT)/dur);
+        const y = startY + (targetY - startY) * ease(p);
+        window.scrollTo(0, y);
+        if (p < 1) requestAnimationFrame(step); else resolve();
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  // Unmute restarts v1 and sets interaction flag
+  if (unmute1) {
+    unmute1.addEventListener('click', async () => {
+      try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(e){}
+      window.userInteracted = true;
+      unmute1.style.display='none';
+    });
+  }
+
+  let toV2Done = false;
+  async function goToV2(){
+    if (toV2Done) return; toV2Done = true;
+    if (split) split.style.display = 'flex';
+    await smoothScrollToEl(v2Sec, 4600);
+    // Wait 5s, then start V2; unmuted if user interacted
+    setTimeout(async () => {
+      try {
+        v2.muted = window.userInteracted ? false : true;
+        await v2.play();
+      } catch(e){}
+    }, 5000);
+  }
+
+  // Primary trigger: V1 ended
+  if (v1) {
+    v1.addEventListener('ended', goToV2, {once:true});
+    // Fallback: if V1 gets near the end (>= 98%), also trigger
+    v1.addEventListener('timeupdate', () => {
+      if (!toV2Done && v1.duration && v1.currentTime / v1.duration > 0.985) {
+        goToV2();
+      }
+    });
+  }
+
+  // V2 ended -> Map 6s -> V3 with delayed start and audio
+  if (v2 && mapSec && v3 && v3Sec) {
+    v2.addEventListener('ended', async () => {
+      try { mapSec.style.display = 'block'; } catch(e){}
+      await smoothScrollToEl(mapSec, 4600);
+      setTimeout(async () => {
+        try { v3Sec.style.display = 'block'; } catch(e){}
+        await smoothScrollToEl(v3Sec, 4600);
+        setTimeout(async () => {
+          try {
+            v3.muted = window.userInteracted ? false : true;
+            await v3.play();
+          } catch(e){}
+        }, 5000);
+      }, 6000);
+    }, {once:true});
+  }
+})();
+</script>
+
 </body>
 </html>
