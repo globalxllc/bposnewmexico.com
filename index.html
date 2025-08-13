@@ -9,36 +9,38 @@
 *{ box-sizing:border-box; }
 html, body{ margin:0; height:100%; background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-/* Full-bleed hero video (no horizontal scroll) */
+/* Full-bleed hero video */
 .hero-bleed{ width:100vw; position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw; background:#000; }
 .hero-bleed video{ display:block; width:100%; height:auto; max-height:86vh; object-fit:cover; }
 .unmute-btn{
   position:absolute; left:50%; bottom:20px; transform:translateX(-50%);
   background:#1d4ed8; color:#fff; border:none; border-radius:999px;
-  padding:18px 42px; font-size:30px; cursor:pointer;
-  box-shadow:0 8px 22px rgba(0,0,0,.45); z-index:20;
+  padding:18px 46px; font-size:32px; cursor:pointer;
+  box-shadow:0 8px 24px rgba(0,0,0,.5); z-index:20;
 }
 .unmute-btn:focus{ outline:2px solid rgba(255,255,255,.7); outline-offset:2px; }
 
 /* Page container after hero */
-#pageWrap{ width:100%; max-width:1600px; margin:0 auto; padding:0 16px 48px; }
+#pageWrap{ width:100%; max-width:1600px; margin:0 auto; padding:0 16px 56px; }
 
-/* Split layout: 50/50 columns, sticky right */
-#splitLayout{ display:none; gap:28px; align-items:flex-start; margin-top:24px; }
+/* Split layout 50/50 with sticky right */
+#splitLayout{ display:none; gap:28px; align-items:flex-start; margin-top:28px; }
 .left-col{ flex:0 0 calc(50% - 14px); min-width:0; }
-.right-col{ flex:0 0 calc(50% - 14px); width:auto; max-width:none; position:sticky; top:16px; align-self:flex-start; }
+.right-col{ flex:0 0 calc(50% - 14px); position:sticky; top:16px; align-self:flex-start; }
 @media (max-width:1100px){
   #splitLayout{ flex-direction:column; }
   .right-col{ position:static; width:100%; max-width:100%; }
 }
 
-/* Left media stack (aligned to left edge) */
-.media-block{ width:100%; margin:0 0 24px 0; }
+/* Left media stack */
+.media-block{ width:100%; margin:0 0 26px 0; }
 .media-block video,.media-block img{ width:100%; height:auto; display:block; border-radius:8px; margin:0; }
-#mapSection{ display:none; }
-#mapSection.narrow{ max-width:520px; } /* narrower map showing state shape better */
 
-/* Intake form styles (white inputs) */
+/* Map narrower to show portrait shape */
+#mapSection{ display:none; }
+#mapSection.narrow{ max-width:520px; }
+
+/* Intake styles */
 .form-container{ overflow-x:hidden; }
 .form-container h2{ margin:0 0 10px 0; font-size:24px; }
 .form-row{ margin:10px 0; }
@@ -54,7 +56,7 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 .form-container input[type="file"].file-input::file-selector-button{
   background:#e9ecef; border:1px solid rgba(0,0,0,.2); border-radius:4px; padding:8px 12px; margin-right:10px; cursor:pointer;
 }
-.submit-btn{ display:inline-block; width:100%; padding:10px 14px; background:var(--accent); color:#fff; border:none; border-radius:4px; font-weight:600; cursor:pointer; }
+.submit-btn{ display:inline-block; width:100%; padding:12px 16px; background:var(--accent); color:#fff; border:none; border-radius:4px; font-weight:600; cursor:pointer; }
 .small-note{ margin-top:8px; color:rgba(255,255,255,.7); font-size:12px; }
 </style>
 </head>
@@ -69,8 +71,8 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 </section>
 
 <div id="pageWrap">
-  <div id="splitLayout" style="display:none;" class="flex">
-    <!-- LEFT column: Video 2 -> Map -> Video 3 -->
+  <div id="splitLayout" class="flex" style="display:none;">
+    <!-- LEFT column -->
     <div class="left-col">
       <section id="video2Section" class="media-block">
         <video id="video2" playsinline muted autoplay controls>
@@ -89,7 +91,7 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
       </section>
     </div>
 
-    <!-- RIGHT column: intake form (half-width) -->
+    <!-- RIGHT column -->
     <aside class="right-col">
       <div class="form-container">
         <h2>Broker Price Opinion (BPO) Intake</h2>
@@ -124,22 +126,24 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 </div>
 
 <script>
-// Easing-based smooth scroll with controllable duration (ms)
+// Promise-based smooth scroll (slow) resolves when finished
 function smoothScrollToEl(el, durationMs){
-  if (!el) return;
-  const startY = window.scrollY || window.pageYOffset;
-  const rect = el.getBoundingClientRect();
-  const targetY = startY + rect.top - 8;
-  const startT = performance.now();
-  const dur = Math.max(300, durationMs || 2000);
-  function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
-  function step(now){
-    const p = Math.min(1, (now - startT)/dur);
-    const y = startY + (targetY - startY) * ease(p);
-    window.scrollTo(0, y);
-    if (p < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+  return new Promise((resolve)=>{
+    if (!el){ resolve(); return; }
+    const startY = window.scrollY || window.pageYOffset;
+    const rect = el.getBoundingClientRect();
+    const targetY = Math.max(0, startY + rect.top - 8);
+    const startT = performance.now();
+    const dur = Math.max(1500, durationMs || 4200); // slow ~4.2s
+    function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function step(now){
+      const p = Math.min(1, (now - startT)/dur);
+      const y = startY + (targetY - startY) * ease(p);
+      window.scrollTo(0, y);
+      if (p < 1) requestAnimationFrame(step); else resolve();
+    }
+    requestAnimationFrame(step);
+  });
 }
 
 const v1 = document.getElementById('video1');
@@ -151,38 +155,13 @@ const mapSec = document.getElementById('mapSection');
 const v3 = document.getElementById('video3');
 const v3Sec = document.getElementById('video3Section');
 
-// Unmute all on click; keep videos playing with audio
+// Unmute button restarts v1 from beginning and enables audio later
 unmute1.addEventListener('click', async () => {
-  try { v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(e){}
-  try { v2.muted = false; v2.volume = 1.0; } catch(e){}
-  try { v3.muted = false; v3.volume = 1.0; } catch(e){}
+  try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(e){}
   window.userInteracted = true;
   unmute1.style.display='none';
 });
 
-// After Video 1 ends: reveal split, slow-scroll to Video 2, and play it
-v1.addEventListener('ended', async () => {
-  split.style.display = 'flex';
-  smoothScrollToEl(v2Sec, 2400); // ~2.4s
-  try { v2.muted = !window.userInteracted; await v2.play(); } catch(e){}
-});
 
-// After Video 2 ends: show map 6s, slow-scroll to it, then show Video 3 and slow-scroll + play
-v2.addEventListener('ended', async () => {
-  mapSec.style.display = 'block';
-  smoothScrollToEl(mapSec, 2600); // ~2.6s
-  setTimeout(async () => {
-    // keep map visible; then reveal v3 and scroll
-    v3Sec.style.display = 'block';
-    smoothScrollToEl(v3Sec, 2600);
-    try { v3.muted = !window.userInteracted; await v3.play(); } catch(e){}
-  }, 6000); // 6 seconds hold on map
-});
-
-// Defensive: remove any stray overlay map elements if left from older builds
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
-});
-</script>
 </body>
 </html>
