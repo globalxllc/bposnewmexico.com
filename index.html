@@ -13,11 +13,15 @@
     .fade-out{animation:fadeOut .6s ease forwards}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}} @keyframes fadeOut{from{opacity:1}to{opacity:0}}
 
-    .hero{position:relative;min-height:100svh;background:#000;display:flex;align-items:center;justify-content:center}
+    .hero{position:relative;min-height:100svh;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .hero-video{width:100%;height:100svh;object-fit:cover;display:block;background:#000}
-    .unmute{position:absolute;left:50%;bottom:7svh;transform:translateX(-50%);background:var(--accent);color:#fff;border:none;border-radius:999px;padding:14px 26px;font-weight:700;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.45);z-index:5}
+    .unmute{position:absolute;left:50%;bottom:7svh;transform:translateX(-50%);background:var(--accent);color:#fff;border:none;border-radius:999px;padding:16px 30px;font-weight:800;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.45);z-index:5;font-size:18px}
     .tap-hint{position:absolute;left:50%;bottom:14svh;transform:translateX(-50%);background:#1d4ed8;color:#fff;padding:.6rem 1rem;border-radius:999px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:5}
     .hero.ready .tap-hint{opacity:.9} .hero.hide-hint{opacity:0}
+
+    .start-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:6}
+    .start-overlay button{background:#10b981;color:#fff;border:none;border-radius:999px;padding:14px 28px;font-weight:800;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.45);font-size:18px}
+    .start-overlay p{color:#e5e7eb;margin:0;font-size:15px}
 
     .main{padding:32px 16px}
     .grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr min(44vw,560px);gap:32px;align-items:start}
@@ -52,11 +56,15 @@
 </head>
 <body>
   <section id="hero" class="hero">
-    <video id="v1" class="hero-video" playsinline autoplay muted controls>
+    <video id="v1" class="hero-video" playsinline autoplay muted controls poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAIAAADZ0h0VAAAAD0lEQVR4nGP8//8/AwMDAAQAAf8B8s2fQAAAAABJRU5ErkJggg==">
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
     </video>
     <button id="unmuteBtn" class="unmute">Unmute</button>
     <div id="tapHint" class="tap-hint" aria-hidden="true">Tap video to unmute</div>
+    <div id="startOverlay" class="start-overlay hidden">
+      <p>Autoplay was blocked. Click Start to begin.</p>
+      <button id="startBtn">Start</button>
+    </div>
   </section>
 
   <main id="main" class="main hidden" aria-hidden="true">
@@ -109,73 +117,53 @@
   </div>
 
 <script>
-function smoothScrollTo(y, duration=2200){
-  const start = window.scrollY; const delta = y - start; const t0 = performance.now();
-  function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
-  function step(now){ const p = Math.min(1, (now - t0)/duration); window.scrollTo(0, start + delta*ease(p)); if (p < 1) requestAnimationFrame(step); }
-  requestAnimationFrame(step);
-}
+function smoothScrollTo(y, duration=2200){const s=window.scrollY,dx=y-s,t0=performance.now();function e(t){return t<.5?2*t*t:-1+(4-2*t)*t}function step(n){const p=Math.min(1,(n-t0)/duration);window.scrollTo(0,s+dx*e(p));if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
 (function(){
-  const hero = document.getElementById('hero');
-  const v1 = document.getElementById('v1');
-  const unmuteBtn = document.getElementById('unmuteBtn');
-  const tapHint = document.getElementById('tapHint');
+  const hero=document.getElementById('hero'), v1=document.getElementById('v1'), unmuteBtn=document.getElementById('unmuteBtn'), tapHint=document.getElementById('tapHint');
+  const startOverlay=document.getElementById('startOverlay'), startBtn=document.getElementById('startBtn');
+  const main=document.getElementById('main'), v2=document.getElementById('v2'), v3=document.getElementById('v3'), v3Wrap=document.getElementById('v3Wrap'), formPane=document.getElementById('formPane');
+  const mapOverlay=document.getElementById('mapOverlay'), mapImg=document.getElementById('mapImg');
+  let userUnmuted=false;
 
-  const main = document.getElementById('main');
-  const v2 = document.getElementById('v2');
-  const v2Wrap = document.getElementById('v2Wrap');
-  const v3 = document.getElementById('v3');
-  const v3Wrap = document.getElementById('v3Wrap');
-  const formPane = document.getElementById('formPane');
+  function tryPlay(video){ try{ const p=video.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
+  function waitEnded(video, ms=60000){ return new Promise(res=>{ const to=setTimeout(()=>res('timeout'),ms); video.addEventListener('ended',()=>{clearTimeout(to);res('ended');},{once:true});}); }
 
-  const mapOverlay = document.getElementById('mapOverlay');
-  const mapImg = document.getElementById('mapImg');
+  v1.addEventListener('loadeddata',()=>{ hero.classList.add('ready'); setTimeout(()=>hero.classList.add('hide-hint'),2500); });
 
-  let userUnmuted = false;
+  unmuteBtn.addEventListener('click', async()=>{ try{ v1.currentTime=0; v1.muted=false; await v1.play(); userUnmuted=true; }catch(e){} unmuteBtn.classList.add('hidden'); });
+  v1.addEventListener('click', async()=>{ if(v1.muted){ try{ v1.currentTime=0; v1.muted=false; await v1.play(); userUnmuted=true; }catch(e){} unmuteBtn.classList.add('hidden'); }});
 
-  function tryPlay(el){ try{ const p = el.play(); if (p && p.catch) p.catch(()=>{});}catch(e){} }
-  function waitEnded(video, ms=60000){ return new Promise(res=>{ const to=setTimeout(()=>res('timeout'), ms); video.addEventListener('ended', ()=>{ clearTimeout(to); res('ended'); }, {once:true}); }); }
-
-  v1.addEventListener('loadeddata', ()=>{ hero.classList.add('ready'); setTimeout(()=> hero.classList.add('hide-hint'), 2500); });
-
-  unmuteBtn.addEventListener('click', async ()=>{ try{ v1.currentTime=0; v1.muted=false; await v1.play(); userUnmuted=true; }catch(e){} unmuteBtn.classList.add('hidden'); });
-  v1.addEventListener('click', async ()=>{ if (v1.muted){ try{ v1.currentTime=0; v1.muted=false; await v1.play(); userUnmuted=true; }catch(e){} unmuteBtn.classList.add('hidden'); } });
-
-  tryPlay(v1); setTimeout(()=>{ if (v1.paused) tryPlay(v1); }, 600);
+  tryPlay(v1);
+  setTimeout(()=>{ if(v1.paused || v1.readyState<2){ startOverlay.classList.remove('hidden'); } }, 2500);
+  startBtn.addEventListener('click', async()=>{ startOverlay.classList.add('hidden'); try{ await v1.play(); }catch(e){} });
 
   (async function run(){
     await waitEnded(v1, 60000);
-    const mainTop = main.getBoundingClientRect().top + window.scrollY - 8;
+    const mainTop=main.getBoundingClientRect().top+window.scrollY-8;
     hero.classList.add('fade-out');
     setTimeout(()=>{
-      hero.classList.add('hidden');
-      main.classList.remove('hidden');
-      main.classList.add('fade-in');
-      smoothScrollTo(mainTop, 2200);
-      if (userUnmuted) v2.muted = false;
+      hero.classList.add('hidden'); main.classList.remove('hidden'); main.classList.add('fade-in');
+      smoothScrollTo(mainTop,2200);
+      if(userUnmuted) v2.muted=false;
       tryPlay(v2);
-    }, 400);
+    },400);
 
-    v2.addEventListener('ended', ()=>{
+    v2.addEventListener('ended',()=>{
       mapOverlay.classList.remove('hidden');
       mapImg.classList.remove('map-fly-long'); void mapImg.offsetWidth; mapImg.classList.add('map-fly-long');
       setTimeout(()=>{
-        mapOverlay.classList.add('hidden');
-        v3Wrap.classList.remove('hidden');
-        const v3Top = v3Wrap.getBoundingClientRect().top + window.scrollY - 12;
-        smoothScrollTo(v3Top, 2200);
-        if (userUnmuted) v3.muted = false;
-        tryPlay(v3);
+        mapOverlay.classList.add('hidden'); v3Wrap.classList.remove('hidden');
+        const v3Top=v3Wrap.getBoundingClientRect().top+window.scrollY-12; smoothScrollTo(v3Top,2200);
+        if(userUnmuted) v3.muted=false; tryPlay(v3);
         setTimeout(()=>{
-          const formBottom = formPane.getBoundingClientRect().bottom + window.scrollY;
-          const vpBottom = window.scrollY + window.innerHeight;
-          if (formBottom > vpBottom){ smoothScrollTo(formBottom - window.innerHeight + 28, 1500); }
-        }, 700);
-      }, 8000 + 6000);
+          const fb=formPane.getBoundingClientRect().bottom+window.scrollY, vb=window.scrollY+window.innerHeight;
+          if(fb>vb){ smoothScrollTo(fb-window.innerHeight+28,1500); }
+        },700);
+      }, 8000+6000);
     }, {once:true});
   })();
-  document.documentElement.style.overflowX = 'hidden';
-})();
-</script>
+
+  document.documentElement.style.overflowX='hidden';
+})();</script>
 </body>
 </html>
