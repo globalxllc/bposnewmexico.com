@@ -23,7 +23,7 @@ html, body{ margin:0; height:100%; background:var(--bg); color:var(--text); over
 /* Page container */
 #pageWrap{ width:100%; max-width:1600px; margin:0 auto; padding:0 16px 56px; }
 
-/* Split layout 50/50 with sticky right */
+/* Split layout */
 #splitLayout{ display:none; gap:28px; align-items:flex-start; margin-top:28px; }
 .left-col{ flex:0 0 calc(50% - 14px); min-width:0; }
 .right-col{ flex:0 0 calc(50% - 14px); position:sticky; top:16px; align-self:flex-start; }
@@ -32,15 +32,28 @@ html, body{ margin:0; height:100%; background:var(--bg); color:var(--text); over
   .right-col{ position:static; width:100%; max-width:100%; }
 }
 
-/* Left media stack */
-.media-block{ width:100%; margin:0 0 26px 0; }
+/* Media blocks */
+.media-block{ width:100%; margin:0 0 24px 0; }
 .media-block video,.media-block img{ width:100%; height:auto; display:block; border-radius:8px; margin:0; }
 
-/* Map narrower to show portrait shape */
-#mapSection{ display:none; }
-#mapSection.narrow{ max-width:520px; }
+/* Video 3 smaller & centered; Map matches width */
+#video3Section{
+  width:50%;
+  min-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+}
+#mapSection{
+  width:50%;
+  min-width:420px;
+  margin-left:auto;
+  margin-right:auto;
+}
+@media (max-width:1100px){
+  #video3Section, #mapSection{ width:100%; min-width:0; }
+}
 
-/* Intake styles */
+/* Intake form */
 .form-container{ overflow-x:hidden; }
 .form-container h2{ margin:0 0 10px 0; font-size:24px; }
 .form-row{ margin:10px 0; }
@@ -58,18 +71,12 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 }
 .submit-btn{ display:inline-block; width:100%; padding:12px 16px; background:var(--accent); color:#fff; border:none; border-radius:4px; font-weight:600; cursor:pointer; }
 .small-note{ margin-top:8px; color:rgba(255,255,255,.7); font-size:12px; }
-/* v32: make only Video 3 smaller & centered */
-#video3Section{
-  width:50%;
-  min-width:420px;
-  margin-left:auto;
-  margin-right:auto;
+
+/* v35: when viewing Video 3, show the entire intake in flow (not sticky) so it aligns with V3 */
+.right-col.full-on-v3{
+  position: static !important;
 }
-/* keep map portrait-narrow */
-#mapSection.narrow{ max-width:520px; }
-@media (max-width:1100px){
-  #video3Section{ width:100%; min-width:0; }
-}
+
 </style>
 </head>
 <body>
@@ -84,7 +91,6 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
 
 <div id="pageWrap">
   <div id="splitLayout" class="flex" style="display:none;">
-    <!-- LEFT column -->
     <div class="left-col">
       <section id="video2Section" class="media-block">
         <video id="video2" playsinline muted controls>
@@ -92,7 +98,7 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
         </video>
       </section>
 
-      <section id="mapSection" class="media-block narrow" style="display:none;">
+      <section id="mapSection" class="media-block" style="display:none;">
         <img id="nmMap" src="assets/Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map">
       </section>
 
@@ -103,7 +109,6 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
       </section>
     </div>
 
-    <!-- RIGHT column -->
     <aside class="right-col">
       <div class="form-container">
         <h2>Broker Price Opinion (BPO) Intake</h2>
@@ -137,108 +142,88 @@ label{ display:block; margin:0 0 6px 2px; font-size:13px; color:rgba(255,255,255
   </div>
 </div>
 
-
-
-
 <script>
-/* v33: stronger unmute + guaranteed scroll fallbacks */
-document.addEventListener('DOMContentLoaded', function(){
-  const v1 = document.getElementById('video1');
-  const unmute1 = document.getElementById('unmute1');
-  const split = document.getElementById('splitLayout');
-  const v2 = document.getElementById('video2');
-  const v2Sec = document.getElementById('video2Section');
-  const mapSec = document.getElementById('mapSection');
-  const v3 = document.getElementById('video3');
-  const v3Sec = document.getElementById('video3Section');
+// Manual smooth scroll (uniform across browsers)
+function smoothScrollTo(el, durationMs){
+  return new Promise((resolve)=>{
+    if (!el){ resolve(); return; }
+    const startY = window.scrollY || window.pageYOffset;
+    const rect = el.getBoundingClientRect();
+    const targetY = Math.max(0, startY + rect.top - 8);
+    const startT = performance.now();
+    const dur = Math.max(1200, durationMs || 5000);
+    function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function step(now){
+      const p = Math.min(1, (now - startT)/dur);
+      const y = startY + (targetY - startY) * ease(p);
+      window.scrollTo(0, y);
+      if (p < 1) requestAnimationFrame(step); else resolve();
+    }
+    requestAnimationFrame(step);
+  });
+}
 
-  // Ensure button is clickable above controls
-  if (unmute1){ unmute1.style.zIndex = '99999'; unmute1.style.pointerEvents = 'auto'; }
+const v1 = document.getElementById('video1');
+const unmute1 = document.getElementById('unmute1');
+const split = document.getElementById('splitLayout');
+const v2 = document.getElementById('video2');
+const v2Sec = document.getElementById('video2Section');
+const mapSec = document.getElementById('mapSection');
+const v3 = document.getElementById('video3');
+const v3Sec = document.getElementById('video3Section');
 
-  // Helper: smooth scroll with reliable fallback
-  function smartScrollTo(el, durationMs){
-    return new Promise(async (resolve)=>{
-      if (!el){ resolve(); return; }
-      const startY = window.scrollY || window.pageYOffset;
-      let moved = false;
-      try {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        await new Promise(r => setTimeout(r, 150));
-        moved = Math.abs((window.scrollY||window.pageYOffset) - startY) > 2;
-      } catch(_) { moved = false; }
-      if (moved){ await new Promise(r => setTimeout(r, durationMs||4800)); resolve(); return; }
-      const rect = el.getBoundingClientRect();
-      const targetY = Math.max(0, (window.scrollY||window.pageYOffset) + rect.top - 8);
-      const startT = performance.now();
-      const dur = Math.max(1500, durationMs || 4800);
-      function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
-      function step(now){
-        const p = Math.min(1, (now - startT)/dur);
-        const y = startY + (targetY - startY) * ease(p);
-        window.scrollTo(0, y);
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-      setTimeout(resolve, dur+60);
-    });
-  }
+async function doUnmuteRestart(){
+  try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(_){}
+  window.userInteracted = true;
+  if (unmute1) unmute1.style.display = 'none';
+}
+if (unmute1) unmute1.addEventListener('click', doUnmuteRestart);
+if (v1) v1.addEventListener('click', () => { if (v1.muted) doUnmuteRestart(); });
 
-  // Strong unmute: blue button OR clicking the video restarts v1 and enables audio later
-  async function doUnmuteRestart(){
-    try { v1.currentTime = 0; v1.muted = false; v1.volume = 1.0; await v1.play(); } catch(_){}
-    window.userInteracted = true;
-    if (unmute1) unmute1.style.display = 'none';
-  }
-  if (unmute1) unmute1.addEventListener('click', doUnmuteRestart);
-  if (v1) v1.addEventListener('click', () => { if (v1.muted) doUnmuteRestart(); }, { once:false });
+let toV2Started = false;
+async function toV2(){
+  if (toV2Started) return; toV2Started = true;
+  if (split && split.style.display !== 'flex') split.style.display = 'flex';
+  await new Promise(r => requestAnimationFrame(()=>r()));
+  await smoothScrollTo(v2Sec, 5000);
+  setTimeout(async () => {
+    try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(_){}
+  }, 3000);
+}
 
-  // Flow to V2
-  let toV2Started = false;
-  async function toV2(){
-    if (toV2Started) return; toV2Started = true;
-    if (split && split.style.display !== 'flex') split.style.display = 'flex';
+if (v1){
+  v1.addEventListener('ended', toV2, { once:true });
+  v1.addEventListener('timeupdate', () => {
+    if (!toV2Started && v1.duration && v1.currentTime / v1.duration > 0.985) { toV2(); }
+  });
+  v1.addEventListener('loadedmetadata', () => {
+    const ms = Math.max(8000, Math.floor((v1.duration||20)*1000) + 1500);
+    setTimeout(() => { if (!toV2Started) toV2(); }, ms);
+  });
+  setTimeout(() => { if (!toV2Started) toV2(); }, 45000);
+}
+
+if (v2 && mapSec && v3 && v3Sec){
+  v2.addEventListener('ended', async () => {
+  mapSec.style.display = 'block';
+  await new Promise(r => requestAnimationFrame(()=>r()));
+  await smoothScrollTo(mapSec, 5000);
+  setTimeout(async () => {
+    v3Sec.style.display = 'block';
     await new Promise(r => requestAnimationFrame(()=>r()));
-    await smartScrollTo(v2Sec, 5000);
+    await smoothScrollTo(v3Sec, 5000);
+    // New: move intake to V3 level and show full menu
+    const rightCol = document.querySelector('.right-col');
+    if (rightCol){ rightCol.classList.add('full-on-v3'); await smoothScrollTo(rightCol, 1200); }
     setTimeout(async () => {
-      try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(_){}
-    }, 5000);
-  }
+      try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(_){ }
+    }, 3000);
+  }, 6000);
+}, { once:true });
+}
 
-  if (v1){
-    v1.addEventListener('ended', toV2, { once:true });
-    v1.addEventListener('timeupdate', () => {
-      if (!toV2Started && v1.duration && v1.currentTime / v1.duration > 0.985) { toV2(); }
-    });
-    // Fallback: after metadata, set a max timeout to move on even if 'ended' fails
-    v1.addEventListener('loadedmetadata', () => {
-      const ms = Math.max(8000, Math.floor((v1.duration||20)*1000) + 1500);
-      setTimeout(() => { if (!toV2Started) toV2(); }, ms);
-    });
-    // Absolute fallback after 45s
-    setTimeout(() => { if (!toV2Started) toV2(); }, 45000);
-  }
-
-  // V2 end -> Map -> V3 with delays
-  if (v2 && mapSec && v3 && v3Sec){
-    v2.addEventListener('ended', async () => {
-      mapSec.style.display = 'block';
-      await new Promise(r => requestAnimationFrame(()=>r()));
-      await smartScrollTo(mapSec, 5000);
-      setTimeout(async () => {
-        v3Sec.style.display = 'block';
-        await new Promise(r => requestAnimationFrame(()=>r()));
-        await smartScrollTo(v3Sec, 5000);
-        setTimeout(async () => {
-          try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(_){}
-        }, 5000);
-      }, 6000);
-    }, { once:true });
-  }
-
-  // Cleanup legacy overlays
-  document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
-});
+// Cleanup
+document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
 </script>
-
 </body>
 </html>
