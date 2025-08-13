@@ -185,7 +185,7 @@ async function toV2(){
   if (toV2Started) return; toV2Started = true;
   if (split && split.style.display !== 'flex') split.style.display = 'flex';
   await new Promise(r => requestAnimationFrame(()=>r()));
-  await smoothScrollTo(v2Sec, 5000);
+  await smoothScrollToEl(v2Sec, 5000, 8);
   setTimeout(async () => {
     try { v2.muted = window.userInteracted ? false : true; await v2.play(); } catch(_){}
   }, 3000);
@@ -207,14 +207,14 @@ if (v2 && mapSec && v3 && v3Sec){
   v2.addEventListener('ended', async () => {
   mapSec.style.display = 'block';
   await new Promise(r => requestAnimationFrame(()=>r()));
-  await smoothScrollTo(mapSec, 5000);
+  await smoothScrollToEl(mapSec, 5000, 8);
   setTimeout(async () => {
     v3Sec.style.display = 'block';
     await new Promise(r => requestAnimationFrame(()=>r()));
-    await smoothScrollTo(v3Sec, 5000);
+    await smoothScrollToEl(v3Sec, 5000, 8);
     // New: move intake to V3 level and show full menu
     const rightCol = document.querySelector('.right-col');
-    if (rightCol){ rightCol.classList.add('full-on-v3'); await smoothScrollTo(rightCol, 1200); }
+    if (rightCol){ rightCol.classList.add('full-on-v3'); await smoothScrollToEl(rightCol, 1200, 8); }
     setTimeout(async () => {
       try { v3.muted = window.userInteracted ? false : true; await v3.play(); } catch(_){ }
     }, 3000);
@@ -224,6 +224,43 @@ if (v2 && mapSec && v3 && v3Sec){
 
 // Cleanup
 document.querySelectorAll('.map-bubble, #mapBubbleContainer').forEach(n => n.remove());
+
+function smoothY(targetY, durationMs){
+  return new Promise((resolve)=>{
+    const startY = window.scrollY || window.pageYOffset;
+    const startT = performance.now();
+    const dur = Math.max(1200, durationMs || 5000);
+    function ease(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+    function step(now){
+      const p = Math.min(1, (now - startT)/dur);
+      const y = startY + (targetY - startY) * ease(p);
+      window.scrollTo(0, y);
+      if (p < 1) requestAnimationFrame(step); else resolve();
+    }
+    requestAnimationFrame(step);
+  });
+}
+function getTargetY(el, pad){
+  try{
+    const rect = el.getBoundingClientRect();
+    return Math.max(0, (window.scrollY || window.pageYOffset) + rect.top - (pad ?? 8));
+  }catch(_){ return 0; }
+}
+async function smoothScrollToEl(el, durationMs, pad){
+  // wait two frames to ensure layout has settled (prevents half-scrolls)
+  await new Promise(r => requestAnimationFrame(()=>requestAnimationFrame(r)));
+  let targetY = getTargetY(el, pad);
+  await smoothY(targetY, durationMs);
+  // verify landing; if off by more than 36px, snap-correct
+  await new Promise(r => setTimeout(r, 50));
+  const rect = el.getBoundingClientRect();
+  const off = Math.abs(rect.top - (pad ?? 8));
+  if (off > 36){
+    targetY = getTargetY(el, pad);
+    window.scrollTo({ top: targetY, left: 0, behavior: 'auto' });
+  }
+}
+
 </script>
 </body>
 </html>
