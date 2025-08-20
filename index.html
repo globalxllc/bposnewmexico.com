@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BPOs New Mexico — v12</title>
+  <title>BPOs New Mexico — v13</title>
   <link rel="stylesheet" href="assets/styles.css"/>
 </head>
 <body>
@@ -16,9 +16,9 @@
     <button id="unmuteV1" class="unmute">Unmute</button>
   </section>
 
-  <!-- Overlay PlayerFrame: fixed two-column viewport after V1 -->
+  <!-- Fixed two-column viewport after V1 -->
   <div id="playerFrame" class="frame" aria-hidden="true">
-    <!-- Left: its own scrollable rail (we auto-scroll this only) -->
+    <!-- Left rail (auto-scrolls) -->
     <div id="leftRail" class="left-rail">
       <div id="railInner" class="rail-inner">
         <section id="panelV2" class="rail-panel">
@@ -41,11 +41,11 @@
       </div>
     </div>
 
-    <!-- Right: fully fixed intake (static, not moving at all) -->
-    <aside id="intakeWrap" class="intake">
-      <form id="intake" class="card" novalidate>
-        <h1>Broker Price Opinion (BPO) Intake</h1>
-        <p class="sub">Please insert details below to submit:</p>
+    <!-- Right intake (smaller, static, compact) -->
+    <aside id="intakeWrap" class="intake compact">
+      <form id="intake" class="card compact" novalidate>
+        <h1>BPO Intake</h1>
+        <p class="sub">Please enter details:</p>
         <div class="row-3">
           <input placeholder="Street Address" required/>
           <input placeholder="City/Town" required/>
@@ -61,7 +61,7 @@
           <input type="file" accept=".jpg,.jpeg,.pdf" multiple/>
         </label>
         <button class="btn" type="submit">Submit BPO Request</button>
-        <p class="opt">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
+        <p class="opt">Optional: BPOsNewMexico.com 505‑453‑0444</p>
       </form>
     </aside>
   </div>
