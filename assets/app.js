@@ -3,17 +3,21 @@
 
   // Elements
   const v1 = $('#v1'), v2 = $('#v2'), v3 = $('#v3');
-  const c1 = $('#c1'), c2 = $('#c2'), c3 = $('#c3');
+  const cover1 = $('#cover1');
   const unmute = $('#unmuteV1');
+  const flow = $('#flow');
+  const p2 = $('#p2'), pmap = $('#pmap'), p3 = $('#p3');
   const map = $('#nmMap');
-  let audioAllowed = false;
 
-  // Helper: hide cover as soon as frames actually render
+  let audioAllowed = false;
+  let mapShown = false;
+
+  // Hide cover when V1 is actually rendering frames
   function bindCover(video, cover){
     function hide(){ cover && cover.classList.add('hide'); cleanup(); }
     function onPlay(){ hide(); }
     function onTU(){ if (video.currentTime > 0.05) hide(); }
-    function onCP(){ if (video.readyState >= 2) setTimeout(hide, 100); }
+    function onCP(){ if (video.readyState >= 2) setTimeout(hide, 80); }
     function cleanup(){
       video.removeEventListener('playing', onPlay);
       video.removeEventListener('timeupdate', onTU);
@@ -25,22 +29,14 @@
     video.addEventListener('canplay', onCP);
     video.addEventListener('canplaythrough', onCP);
   }
+  bindCover(v1, cover1);
 
-  bindCover(v1, c1);
-  bindCover(v2, c2);
-  bindCover(v3, c3);
+  // Try to start V1 muted on load
+  document.addEventListener('DOMContentLoaded', () => {
+    try { v1.muted = true; const p=v1.play(); if(p&&p.catch) p.catch(()=>{});} catch {}
+  });
 
-  // Try to start V1 muted immediately; if blocked, first tap starts it
-  function tryPlayMuted(video){
-    try {
-      video.muted = true;
-      const p = video.play();
-      if (p && p.catch) p.catch(()=>{});
-    } catch {}
-  }
-  document.addEventListener('DOMContentLoaded', () => tryPlayMuted(v1));
-
-  // Unmute behavior for V1 only
+  // Unmute V1 -> restart and hide button
   unmute.addEventListener('click', () => {
     audioAllowed = true;
     try { v1.currentTime = 0; } catch {}
@@ -49,68 +45,55 @@
     unmute.classList.add('hidden');
   }, {once:true});
 
-  document.addEventListener('pointerdown', () => {
-    if (v1.paused) tryPlayMuted(v1);
-  }, {passive:true});
-
-  // Robust play attempt with retries until 'playing' or max tries
-  function robustStart(video, {wantAudio, maxTries=10, interval=800}={}){
+  // Helper: robust play attempts for V2/V3
+  function robustStart(video, {wantAudio=true, maxTries=12, interval=700}={}){
     let tries = 0;
-    const timer = setInterval(() => {
-      if (!video.paused && !video.ended && video.currentTime > 0) { clearInterval(timer); return; }
+    const h = setInterval(() => {
+      if (!video.paused && !video.ended && video.currentTime > 0.05){ clearInterval(h); return; }
       tries++;
       video.muted = !wantAudio;
-      const p = video.play();
-      if (p && p.catch) p.catch(()=>{});
-      if (tries >= maxTries) clearInterval(timer);
+      const p = video.play(); if (p && p.catch) p.catch(()=>{});
+      if (tries >= maxTries) clearInterval(h);
     }, interval);
   }
 
-  // When V1 ends, go to S2 and start V2; Intake is already visible/sticky
+  // Sequence: V1 end -> scroll to flow and start V2
   v1.addEventListener('ended', () => {
-    document.getElementById('s2').scrollIntoView({behavior:'smooth', block:'start'});
+    flow.scrollIntoView({behavior:'smooth', block:'start'});
     setTimeout(() => {
-      v2.currentTime = 0;
+      try { v2.currentTime = 0; } catch {}
       robustStart(v2, {wantAudio: audioAllowed});
-    }, 500);
+    }, 400);
   });
 
-  // Start V2 as soon as S2 becomes visible too (in case user scrolls early)
-  const s2 = $('#s2');
+  // If user scrolls to V2 early, start it
   const io2 = new IntersectionObserver((entries)=>{
-    entries.forEach(e => {
-      if (e.isIntersecting) {
+    entries.forEach(e=>{
+      if (e.isIntersecting && e.target === p2){
         robustStart(v2, {wantAudio: audioAllowed});
       }
     });
-  }, {threshold: .35});
-  io2.observe(s2);
+  }, {threshold: .5});
+  io2.observe(p2);
 
-  // From V2 to map (on ended OR near-end OR after 45s fallback)
-  let mapTriggered = false;
-  function toMap(){
-    if (mapTriggered) return;
-    mapTriggered = true;
+  // On V2 end -> show map, hold 6s, then scroll to V3 and start
+  function revealMapThenV3(){
+    if (mapShown) return;
+    mapShown = true;
     map.classList.remove('show'); void map.offsetWidth; map.classList.add('show');
     setTimeout(() => {
-      document.getElementById('s3').scrollIntoView({behavior:'smooth', block:'start'});
+      p3.scrollIntoView({behavior:'smooth', block:'start'});
       setTimeout(() => {
-        v3.currentTime = 0;
+        try { v3.currentTime = 0; } catch {}
         robustStart(v3, {wantAudio: audioAllowed});
-      }, 600);
+      }, 400);
     }, 6000);
   }
-  v2.addEventListener('ended', toMap);
+  v2.addEventListener('ended', revealMapThenV3);
   v2.addEventListener('timeupdate', () => {
-    if (!mapTriggered && v2.duration && v2.currentTime / v2.duration > 0.985) toMap();
+    if (!mapShown && v2.duration && v2.currentTime / v2.duration > 0.985) revealMapThenV3();
   });
-  setTimeout(() => { if (!mapTriggered) toMap(); }, 45000); // hard fallback
-
-  // Show map when S3 becomes visible by scroll
-  const s3 = $('#s3');
-  const io3 = new IntersectionObserver((entries)=>{
-    entries.forEach(e => { if (e.isIntersecting) map.classList.add('show'); });
-  }, {threshold: .4});
-  io3.observe(s3);
+  // Hard fallback in case metadata is odd
+  setTimeout(()=>{ if (!mapShown) revealMapThenV3(); }, 60000);
 
 })();

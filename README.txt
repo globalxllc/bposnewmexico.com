@@ -1,10 +1,10 @@
-BPOsNewMexico.com — v10
+BPOsNewMexico.com — v11
 
-Fixes vs v9:
-- **Video 2 autoplay hardened**: multiple start triggers (V1 end, S2 visible, retry watchdog) so V2 reliably begins.
-- **Covers** now hide on playing/canplay/timeupdate, so overlays don’t linger.
-- **Intake** is visible/sticky immediately at Section 2 and persists beside Map and V3.
-- **Map progression**: triggered on V2 ended OR >98.5% watched, with a 45s fallback.
-- **Video 3** starts only after map’s 6s hold and scroll to Section 3.
+What changed from v10:
+- **Unified flow section**: Video 2, Map, and Video 3 are now stacked in one left column with a single sticky **intake** on the right. The intake stays visible as you move past the map to Video 3.
+- **Removed V2/V3 overlay covers** to prevent any visual shrinking/overlay issues; posters remain for pre-play visuals.
+- **Video 2 sizing fixed** (large width), **Video 3** slightly smaller as preferred.
+- **V2 autoplay hardened** (robust retries + scroll-into-view trigger). V3 is delayed until after the map’s 6s hold.
+- **Map** sits between V2 and V3, sized similar to V3 with a slender aspect and fly-in animation.
 
-Cloudinary links are hardwired for all 3 videos. No “Start” button anywhere. V1 has a small **Unmute** chip only.
+Cloudinary links are embedded for all 3 videos. No “Start” button anywhere. Video 1 has a small **Unmute** chip only.
