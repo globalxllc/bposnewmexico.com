@@ -3,28 +3,30 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BPOs New Mexico — v9</title>
+  <title>BPOs New Mexico — v10</title>
   <link rel="stylesheet" href="assets/styles.css"/>
 </head>
 <body>
   <main class="shell">
 
-    <!-- HERO: Video 1 (no start button; cover image overlay until video actually plays) -->
+    <!-- HERO: Video 1 (no start button; cover image overlay until frames draw) -->
     <section id="s1" class="hero">
-      <img id="v1Cover" class="cover" src="assets/poster1.jpg" alt=""/>
+      <img id="c1" class="cover" src="assets/poster1.jpg" alt=""/>
       <video id="v1" class="hero-video" playsinline autoplay muted preload="auto" controls poster="assets/poster1.jpg">
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4"/>
       </video>
       <button id="unmuteV1" class="unmute">Unmute</button>
     </section>
 
-    <!-- SECTION 2: Video 2 + Sticky Intake -->
+    <!-- SECTION 2: Video 2 + Sticky Intake (intake visible immediately) -->
     <section id="s2" class="split">
       <div class="left">
-        <img id="v2Cover" class="cover-inline" src="assets/poster2.jpg" alt=""/>
-        <video id="v2" class="media" playsinline preload="auto" controls poster="assets/poster2.jpg">
-          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
-        </video>
+        <div class="video-shell">
+          <img id="c2" class="cover-inline" src="assets/poster2.jpg" alt=""/>
+          <video id="v2" class="media" playsinline preload="auto" controls poster="assets/poster2.jpg">
+            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
+          </video>
+        </div>
       </div>
       <aside class="right sticky">
         <form id="intake" class="card" novalidate>
@@ -50,14 +52,14 @@
       </aside>
     </section>
 
-    <!-- SECTION 3: Map fly-in (holds 6s), then Video 3 below (cover overlay too) -->
+    <!-- SECTION 3: Map (holds 6s) then V3 below (no replacement) -->
     <section id="s3" class="split map-section">
       <div class="left">
         <figure class="map-wrap">
           <img id="nmMap" class="map" src="assets/nm-map.jpg" alt="New Mexico counties map"/>
         </figure>
-        <div class="v3wrap">
-          <img id="v3Cover" class="cover-inline" src="assets/poster3.jpg" alt=""/>
+        <div class="video-shell v3wrap">
+          <img id="c3" class="cover-inline" src="assets/poster3.jpg" alt=""/>
           <video id="v3" class="media v3" playsinline preload="auto" controls poster="assets/poster3.jpg">
             <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/>
           </video>

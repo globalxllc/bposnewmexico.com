@@ -1,8 +1,10 @@
-BPOsNewMexico.com — v9
-- No start button. Video 1 attempts **muted autoplay** immediately.
-- **Cover image overlay** sits on top of each video and only fades out when frames are actually playing. This prevents any black screen even when autoplay stalls.
-- Blue **Unmute** chip for Video 1 only; click restarts V1 with audio and removes the chip.
-- Intake is sticky on the right starting in Section 2.
-- Map flies in, holds ~6s, then scrolls to Video 3 (which plays below the map).
+BPOsNewMexico.com — v10
 
-Cloudinary video links are hardwired for all 3 videos.
+Fixes vs v9:
+- **Video 2 autoplay hardened**: multiple start triggers (V1 end, S2 visible, retry watchdog) so V2 reliably begins.
+- **Covers** now hide on playing/canplay/timeupdate, so overlays don’t linger.
+- **Intake** is visible/sticky immediately at Section 2 and persists beside Map and V3.
+- **Map progression**: triggered on V2 ended OR >98.5% watched, with a 45s fallback.
+- **Video 3** starts only after map’s 6s hold and scroll to Section 3.
+
+Cloudinary links are hardwired for all 3 videos. No “Start” button anywhere. V1 has a small **Unmute** chip only.
