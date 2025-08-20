@@ -1,0 +1,115 @@
+/* ===== Global / reset ===== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #0b0b0b; color: #eee; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica, sans-serif; }
+html, body { overflow-x: hidden; }
+
+.section { padding: 0; margin: 0 auto; max-width: 1440px; }
+
+.media { width: 100%; height: auto; display: block; border-radius: 8px; }
+.hero { display: block; border-radius: 0; }
+
+/* Two-column sections */
+.two-col {
+  display: grid;
+  grid-template-columns: minmax(480px, 1fr) minmax(520px, 1fr);
+  gap: clamp(16px, 2vw, 32px);
+  align-items: start;
+  padding: clamp(16px, 3vw, 40px);
+}
+.left-col { display: block; }
+
+/* Sticky intake on the right from Section 2 onward */
+.right-col.sticky { position: sticky; top: clamp(12px, 2vh, 32px); align-self: start; }
+
+#intakeWrap {
+  width: 100%;
+  background: #121212;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: clamp(14px, 1.8vw, 24px);
+  box-shadow: 0 12px 36px rgba(0,0,0,.35);
+}
+
+#intakeWrap h1 { margin: 4px 0 10px; font-size: clamp(20px, 2.2vw, 28px); }
+#intakeWrap .subtle { margin: 0 0 14px; color: #bdbdbd; font-size: 0.95rem; }
+
+#intakeWrap label { display: block; margin-top: 10px; margin-bottom: 6px; font-weight: 600; color: #ddd; }
+
+#intakeWrap input,
+#intakeWrap textarea,
+#intakeWrap select {
+  width: 100%;
+  background: #e5e5e5;
+  color: #111;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 16px;
+  outline: none;
+}
+#intakeWrap textarea { resize: vertical; min-height: 120px; }
+
+.row-3 { display: grid; grid-template-columns: 2fr 1.5fr 1fr; gap: 8px; }
+.file-row { display: flex; gap: 10px; align-items: center; }
+
+.submit {
+  width: 100%;
+  margin-top: 12px;
+  background: #14833b;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.submit:hover { filter: brightness(1.05); }
+.optional { color: #bdbdbd; font-size: 0.9rem; margin-top: 8px; }
+
+/* Custom small, low blue Unmute for Video 1 only */
+.unmute-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(16px, 6vh, 72px);
+  z-index: 5;
+  border: 0;
+  border-radius: 999px;
+  padding: .65rem 1.2rem;
+  font-size: clamp(13px, .95vw, 16px);
+  color: #fff;
+  background: #1f5bd8;
+  box-shadow: 0 8px 24px rgba(31,91,216,.35);
+  cursor: pointer;
+}
+.unmute-btn.hidden { display: none; }
+body.edge .unmute-btn { bottom: clamp(10px, 5vh, 64px); } /* slight tweak for Edge */
+
+/* Map fly-in (slimmer aspect) */
+.map {
+  width: min(720px, 95%);
+  aspect-ratio: 5 / 6;
+  object-fit: contain;
+  display: block;
+  margin: clamp(10px, 2vh, 20px) 0;
+  opacity: 0;
+  transform: scale(.8);
+  animation: none;
+  background: #0b0b0b;
+  border-radius: 8px;
+}
+.map.show { animation: nmFlyIn 700ms ease-out forwards; }
+
+@keyframes nmFlyIn {
+  from { opacity: 0; transform: translateY(20px) scale(.8); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* V3 a little smaller, per feedback */
+.media.v3 { width: min(640px, 92%); border-radius: 8px; }
+
+/* Kill any legacy “start” layers if they existed */
+#start, .start-overlay, [data-start] { display: none !important; }
+
+/* Prevent rogue horizontal scroll caused by nested bits */
+body, .section, .left-col, .right-col, #intakeWrap { max-width: 100%; overflow-x: hidden; }
