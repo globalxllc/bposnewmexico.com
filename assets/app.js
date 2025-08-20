@@ -1,80 +1,59 @@
-(function(){
-  const $ = s => document.querySelector(s);
+(()=>{
+  if (/Edg\//.test(navigator.userAgent)) document.body.classList.add('edge');
 
-  // UA tweak for Edge
-  if (navigator.userAgent.includes('Edg')) document.body.classList.add('edge');
+  const v1 = document.getElementById('v1');
+  const v2 = document.getElementById('v2');
+  const v3 = document.getElementById('v3');
+  const unmute = document.getElementById('unmute');
 
-  const body = document.body;
-  const v1 = $('#v1'), v2 = $('#v2'), v3 = $('#v3');
-  const cover1 = $('#cover1');
-  const unmute = $('#unmuteV1');
-  const frame = $('#playerFrame');
-  const leftRail = $('#leftRail');
-  const panelMap = $('#panelMap');
-  const panelV3 = $('#panelV3');
-  const map = $('#nmMap');
+  const layerV2  = document.getElementById('layer-v2');
+  const layerMap = document.getElementById('layer-map');
+  const layerV3  = document.getElementById('layer-v3');
 
-  let audioAllowed = false;
-
-  function bindCover(video, cover){
-    function hide(){ cover && cover.classList.add('hide'); cleanup(); }
-    function onPlay(){ hide(); }
-    function onTU(){ if (video.currentTime > 0.05) hide(); }
-    function onCP(){ if (video.readyState >= 2) setTimeout(hide, 80); }
-    function cleanup(){
-      video.removeEventListener('playing', onPlay);
-      video.removeEventListener('timeupdate', onTU);
-      video.removeEventListener('canplay', onCP);
-      video.removeEventListener('canplaythrough', onCP);
-    }
-    video.addEventListener('playing', onPlay);
-    video.addEventListener('timeupdate', onTU);
-    video.addEventListener('canplay', onCP);
-    video.addEventListener('canplaythrough', onCP);
-  }
-  bindCover(v1, cover1);
-
-  document.addEventListener('DOMContentLoaded', () => {
-    try { v1.muted = true; const p=v1.play(); if(p&&p.catch) p.catch(()=>{});} catch {}
-  });
-
-  unmute.addEventListener('click', () => {
-    audioAllowed = true;
-    try { v1.currentTime = 0; } catch {}
+  async function handleUnmute(){
+    try{ v1.pause(); }catch{}
+    try{ v1.currentTime = 0; }catch{}
     v1.muted = false;
-    const p = v1.play(); if (p && p.catch) p.catch(()=>{});
+    try{ await v1.play().catch(()=>{}); }catch{}
     unmute.classList.add('hidden');
+  }
+  unmute.addEventListener('click', handleUnmute);
+  document.addEventListener('keydown', (e)=>{
+    if((e.code==='Space'||e.code==='Enter') && !unmute.classList.contains('hidden')) handleUnmute();
   }, {once:true});
 
-  function robustStart(video, {wantAudio=true, maxTries=12, interval=700}={}){
-    let tries = 0;
-    const h = setInterval(() => {
-      if (!video.paused && !video.ended && video.currentTime > 0.05){ clearInterval(h); return; }
+  function robustStart(video,{wantAudio=true,maxTries=10,interval=600}={}){
+    let tries=0;
+    const t = setInterval(()=>{
+      if(!video.paused && !video.ended && video.currentTime>0.05){ clearInterval(t); return; }
       tries++;
       video.muted = !wantAudio;
-      const p = video.play(); if (p && p.catch) p.catch(()=>{});
-      if (tries >= maxTries) clearInterval(h);
+      const p = video.play(); if(p&&p.catch) p.catch(()=>{});
+      if(tries>=maxTries) clearInterval(t);
     }, interval);
   }
 
-  v1.addEventListener('ended', () => {
-    body.classList.add('pin');
-    frame.setAttribute('aria-hidden', 'false');
-    leftRail.scrollTo({top: 0, left: 0, behavior: 'auto'});
-    try { v2.currentTime = 0; } catch {}
-    robustStart(v2, {wantAudio: audioAllowed});
+  function showLayer(target){
+    [layerV2, layerMap, layerV3].forEach(l => l.classList.toggle('active', l===target));
+  }
 
-    v2.addEventListener('ended', () => {
-      leftRail.scrollTo({ top: panelMap.offsetTop - 10, behavior: 'smooth' });
-      map.classList.remove('show'); void map.offsetWidth; map.classList.add('show');
-      setTimeout(() => {
-        leftRail.scrollTo({ top: panelV3.offsetTop - 10, behavior: 'smooth' });
-        setTimeout(() => {
-          try { v3.currentTime = 0; } catch {}
-          robustStart(v3, {wantAudio: audioAllowed});
-        }, 450);
-      }, 6000);
-    }, { once: true });
+  v1.addEventListener('ended', ()=>{
+    showLayer(layerV2);
+    setTimeout(()=> robustStart(v2, {wantAudio: !v1.muted}), 350);
   });
 
+  v2.addEventListener('ended', ()=>{
+    showLayer(layerMap);
+    setTimeout(()=>{
+      showLayer(layerV3);
+      setTimeout(()=> robustStart(v3, {wantAudio: !v1.muted}), 400);
+    }, 6000);
+  });
+
+  const ta = document.querySelector('textarea.autosize');
+  if (ta){
+    const resize = () => { ta.style.height='auto'; ta.style.height = Math.min(ta.scrollHeight, 12*16) + 'px'; };
+    ta.addEventListener('input', resize);
+    resize();
+  }
 })();
