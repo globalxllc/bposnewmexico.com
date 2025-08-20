@@ -3,70 +3,69 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>BPOs New Mexico — v11</title>
+  <title>BPOs New Mexico — v12</title>
   <link rel="stylesheet" href="assets/styles.css"/>
 </head>
 <body>
-  <main class="shell">
+  <!-- Section 1: Fullscreen Video 1 -->
+  <section id="s1" class="hero">
+    <img id="cover1" class="cover" src="assets/poster1.jpg" alt=""/>
+    <video id="v1" class="hero-video" playsinline autoplay muted preload="auto" controls poster="assets/poster1.jpg">
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4"/>
+    </video>
+    <button id="unmuteV1" class="unmute">Unmute</button>
+  </section>
 
-    <!-- HERO: Video 1 (cover overlay until frames render) -->
-    <section id="s1" class="hero">
-      <img id="cover1" class="cover" src="assets/poster1.jpg" alt=""/>
-      <video id="v1" class="hero-video" playsinline autoplay muted preload="auto" controls poster="assets/poster1.jpg">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4"/>
-      </video>
-      <button id="unmuteV1" class="unmute">Unmute</button>
-    </section>
-
-    <!-- FLOW: Left column stacks V2 -> Map -> V3. Right column keeps ONE sticky intake -->
-    <section id="flow" class="split flow">
-      <div class="left stack">
-        <!-- Panel: Video 2 -->
-        <div id="p2" class="panel">
+  <!-- Overlay PlayerFrame: fixed two-column viewport after V1 -->
+  <div id="playerFrame" class="frame" aria-hidden="true">
+    <!-- Left: its own scrollable rail (we auto-scroll this only) -->
+    <div id="leftRail" class="left-rail">
+      <div id="railInner" class="rail-inner">
+        <section id="panelV2" class="rail-panel">
           <video id="v2" class="media v2" playsinline preload="auto" controls poster="assets/poster2.jpg">
             <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
           </video>
-        </div>
+        </section>
 
-        <!-- Panel: Map (between V2 and V3) -->
-        <figure id="pmap" class="panel map-wrap" aria-label="New Mexico counties map">
-          <img id="nmMap" class="map" src="assets/nm-map.jpg" alt="New Mexico counties map"/>
-        </figure>
+        <section id="panelMap" class="rail-panel">
+          <figure class="map-wrap">
+            <img id="nmMap" class="map" src="assets/nm-map.jpg" alt="New Mexico counties map"/>
+          </figure>
+        </section>
 
-        <!-- Panel: Video 3 -->
-        <div id="p3" class="panel">
+        <section id="panelV3" class="rail-panel">
           <video id="v3" class="media v3" playsinline preload="auto" controls poster="assets/poster3.jpg">
             <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/>
           </video>
-        </div>
+        </section>
       </div>
+    </div>
 
-      <!-- Sticky Intake lives here for the whole flow -->
-      <aside class="right sticky">
-        <form id="intake" class="card" novalidate>
-          <h1>Broker Price Opinion (BPO) Intake</h1>
-          <p class="sub">Please insert details below to submit:</p>
-          <div class="row-3">
-            <input placeholder="Street Address" required/>
-            <input placeholder="City/Town" required/>
-            <input placeholder="NM Zip" required/>
-          </div>
-          <input placeholder="County Assessor’s Owner Name"/>
-          <input placeholder="Company or Person Ordering Name"/>
-          <input type="email" placeholder="Your Contact Email"/>
-          <input placeholder="Your Contact Phone"/>
-          <textarea placeholder="Additional Details"></textarea>
-          <input placeholder="Assessor Identifying Owner#"/>
-          <label class="file-label">Attach file(s) (.jpg or .pdf)
-            <input type="file" accept=".jpg,.jpeg,.pdf" multiple/>
-          </label>
-          <button class="btn" type="submit">Submit BPO Request</button>
-          <p class="opt">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
-        </form>
-      </aside>
-    </section>
+    <!-- Right: fully fixed intake (static, not moving at all) -->
+    <aside id="intakeWrap" class="intake">
+      <form id="intake" class="card" novalidate>
+        <h1>Broker Price Opinion (BPO) Intake</h1>
+        <p class="sub">Please insert details below to submit:</p>
+        <div class="row-3">
+          <input placeholder="Street Address" required/>
+          <input placeholder="City/Town" required/>
+          <input placeholder="NM Zip" required/>
+        </div>
+        <input placeholder="County Assessor’s Owner Name"/>
+        <input placeholder="Company or Person Ordering Name"/>
+        <input type="email" placeholder="Your Contact Email"/>
+        <input placeholder="Your Contact Phone"/>
+        <textarea placeholder="Additional Details"></textarea>
+        <input placeholder="Assessor Identifying Owner#"/>
+        <label class="file-label">Attach file(s) (.jpg or .pdf)
+          <input type="file" accept=".jpg,.jpeg,.pdf" multiple/>
+        </label>
+        <button class="btn" type="submit">Submit BPO Request</button>
+        <p class="opt">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
+      </form>
+    </aside>
+  </div>
 
-  </main>
   <script src="assets/app.js"></script>
 </body>
 </html>

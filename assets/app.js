@@ -2,15 +2,18 @@
   const $ = s => document.querySelector(s);
 
   // Elements
+  const body = document.body;
   const v1 = $('#v1'), v2 = $('#v2'), v3 = $('#v3');
   const cover1 = $('#cover1');
   const unmute = $('#unmuteV1');
-  const flow = $('#flow');
-  const p2 = $('#p2'), pmap = $('#pmap'), p3 = $('#p3');
+  const frame = $('#playerFrame');
+  const leftRail = $('#leftRail');
+  const panelV2 = $('#panelV2');
+  const panelMap = $('#panelMap');
+  const panelV3 = $('#panelV3');
   const map = $('#nmMap');
 
   let audioAllowed = false;
-  let mapShown = false;
 
   // Hide cover when V1 is actually rendering frames
   function bindCover(video, cover){
@@ -36,7 +39,7 @@
     try { v1.muted = true; const p=v1.play(); if(p&&p.catch) p.catch(()=>{});} catch {}
   });
 
-  // Unmute V1 -> restart and hide button
+  // Unmute V1 -> restart and hide the button
   unmute.addEventListener('click', () => {
     audioAllowed = true;
     try { v1.currentTime = 0; } catch {}
@@ -45,7 +48,7 @@
     unmute.classList.add('hidden');
   }, {once:true});
 
-  // Helper: robust play attempts for V2/V3
+  // Helper to play videos robustly
   function robustStart(video, {wantAudio=true, maxTries=12, interval=700}={}){
     let tries = 0;
     const h = setInterval(() => {
@@ -57,43 +60,31 @@
     }, interval);
   }
 
-  // Sequence: V1 end -> scroll to flow and start V2
+  // After V1 ends: pin overlay and start the left-only flow
   v1.addEventListener('ended', () => {
-    flow.scrollIntoView({behavior:'smooth', block:'start'});
-    setTimeout(() => {
-      try { v2.currentTime = 0; } catch {}
-      robustStart(v2, {wantAudio: audioAllowed});
-    }, 400);
-  });
+    body.classList.add('pin'); // shows overlay & disables body scroll
+    frame.setAttribute('aria-hidden', 'false');
 
-  // If user scrolls to V2 early, start it
-  const io2 = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if (e.isIntersecting && e.target === p2){
-        robustStart(v2, {wantAudio: audioAllowed});
-      }
-    });
-  }, {threshold: .5});
-  io2.observe(p2);
+    // Ensure left rail at top (V2)
+    leftRail.scrollTo({top: 0, left: 0, behavior: 'instant' || 'auto'});
 
-  // On V2 end -> show map, hold 6s, then scroll to V3 and start
-  function revealMapThenV3(){
-    if (mapShown) return;
-    mapShown = true;
-    map.classList.remove('show'); void map.offsetWidth; map.classList.add('show');
-    setTimeout(() => {
-      p3.scrollIntoView({behavior:'smooth', block:'start'});
+    // Start V2 (audio follows V1 unmute)
+    try { v2.currentTime = 0; } catch {}
+    robustStart(v2, {wantAudio: audioAllowed});
+
+    // When V2 ends: auto-scroll left rail to map, show it, wait 6s, then to V3
+    v2.addEventListener('ended', () => {
+      leftRail.scrollTo({ top: panelMap.offsetTop - 12, behavior: 'smooth' });
+      // map fly-in
+      map.classList.remove('show'); void map.offsetWidth; map.classList.add('show');
       setTimeout(() => {
-        try { v3.currentTime = 0; } catch {}
-        robustStart(v3, {wantAudio: audioAllowed});
-      }, 400);
-    }, 6000);
-  }
-  v2.addEventListener('ended', revealMapThenV3);
-  v2.addEventListener('timeupdate', () => {
-    if (!mapShown && v2.duration && v2.currentTime / v2.duration > 0.985) revealMapThenV3();
+        leftRail.scrollTo({ top: panelV3.offsetTop - 12, behavior: 'smooth' });
+        setTimeout(() => {
+          try { v3.currentTime = 0; } catch {}
+          robustStart(v3, {wantAudio: audioAllowed});
+        }, 500);
+      }, 6000);
+    }, { once: true });
   });
-  // Hard fallback in case metadata is odd
-  setTimeout(()=>{ if (!mapShown) revealMapThenV3(); }, 60000);
 
 })();
