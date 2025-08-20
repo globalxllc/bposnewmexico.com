@@ -43,7 +43,6 @@
     entries.forEach(e=>{
       if (e.isIntersecting){
         e.target.classList.add('revealed');
-        // Start videos with a gentle delay for stability
         if (e.target.id==='sec-v2' && v2.paused && v2.currentTime===0){
           setTimeout(()=>{
             const wantAudio = !v1.muted;
@@ -61,7 +60,7 @@
         io.unobserve(e.target);
       }
     });
-  }, {threshold:0.40}); // earlier reveal
+  }, {threshold:0.40});
 
   revealables.forEach(el=> io.observe(el));
 
