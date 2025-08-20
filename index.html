@@ -1,79 +1,76 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BPOs New Mexico</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <!-- SECTION 1: HERO VIDEO (V1) -->
-  <section id="s1-hero" class="section">
-    <video id="v1" class="media hero" playsinline muted autoplay controls preload="auto" poster="">
-      <!-- Replace these with your actual media paths -->
-      <source src="media/video1.mp4" type="video/mp4" />
+  <section id="scene1" class="scene scene--full">
+    <video id="v1" class="video-full" playsinline muted autoplay controls preload="metadata">
+      <source src="videos/video1.mp4" type="video/mp4">
     </video>
-    <button id="unmuteV1" class="unmute-btn" aria-label="Unmute video">Unmute</button>
+    <button id="unmuteBtn" aria-label="Unmute and restart video">Unmute</button>
   </section>
 
-  <!-- SECTION 2: VIDEO 2 + STICKY INTAKE -->
-  <section id="s2" class="section two-col">
-    <div class="left-col">
-      <video id="v2" class="media" playsinline controls preload="auto">
-        <source src="media/video2.mp4" type="video/mp4" />
+  <section id="scene2" class="scene scene--split">
+    <div class="leftCol">
+      <video id="v2" class="video-pane" playsinline controls preload="metadata">
+        <source src="videos/video2.mp4" type="video/mp4">
       </video>
     </div>
-
-    <aside id="intakeWrap" class="right-col sticky" aria-label="BPO Intake Form">
-      <h1>Broker Price Opinion (BPO) Intake</h1>
-      <p class="subtle">Please insert details below to submit:</p>
-
-      <label>Subject Property Address</label>
-      <div class="row-3">
-        <input type="text" placeholder="Street Address" />
-        <input type="text" placeholder="City/Town" />
-        <input type="text" placeholder="NM Zip" />
+    <aside class="rightCol">
+      <div id="intake" class="intake sticky">
+        <h1>Broker Price Opinion (BPO) Intake</h1>
+        <form id="bpoForm" action="#" method="post" enctype="multipart/form-data" novalidate>
+          <div class="row three">
+            <label class="sr-only" for="addr">Street Address</label>
+            <input id="addr" name="addr" placeholder="Street Address" required>
+            <label class="sr-only" for="city">City/Town</label>
+            <input id="city" name="city" placeholder="City/Town" required>
+            <label class="sr-only" for="zip">NM Zip</label>
+            <input id="zip" name="zip" placeholder="NM Zip" required>
+          </div>
+          <input name="owner_name" placeholder="County Assessor’s Owner Name">
+          <input name="ordering_name" placeholder="Company or Person Ordering Name">
+          <input type="email" name="email" placeholder="Your Contact Email">
+          <input name="phone" placeholder="Your Contact Phone">
+          <textarea name="details" placeholder="Additional Details"></textarea>
+          <input name="assessor_id" placeholder="Assessor Identifying Owner#">
+          <div class="uploads">
+            <label class="uploads-label">Attach file(s) (.jpg or .pdf)</label>
+            <input type="file" name="files" accept=".jpg,.jpeg,.pdf" multiple>
+          </div>
+          <button type="submit" class="submitBtn">Submit BPO Request</button>
+          <p class="optional">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
+        </form>
       </div>
-
-      <label>County Assessor’s Owner Name</label>
-      <input type="text" placeholder="County Assessor’s Owner Name" />
-
-      <label>Company or Person Ordering Name</label>
-      <input type="text" placeholder="Company or Person Ordering Name" />
-
-      <label>Your Contact Email</label>
-      <input type="email" placeholder="Your Contact Email" />
-
-      <label>Your Contact Phone</label>
-      <input type="tel" placeholder="Your Contact Phone" />
-
-      <label>Additional Details</label>
-      <textarea rows="6" placeholder="Additional Details"></textarea>
-
-      <label>Assessor Identifying Owner#</label>
-      <input type="text" placeholder="Assessor Identifying Owner#" />
-
-      <label>Attach file(s) (.jpg or .pdf)</label>
-      <div class="file-row">
-        <input id="fileAttach" type="file" accept=".jpg,.jpeg,.pdf" multiple />
-      </div>
-
-      <button class="submit">Submit BPO Request</button>
-      <p class="optional">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
     </aside>
   </section>
 
-  <!-- SECTION 3: MAP + VIDEO 3 BELOW (MAP IS NOT REPLACED) -->
-  <section id="s3" class="section two-col">
-    <div class="left-col">
-      <img id="nmMap" class="map" src="media/nm-map.png" alt="New Mexico counties map" />
-      <video id="v3" class="media v3" playsinline controls preload="auto">
-        <source src="media/video3.mp4" type="video/mp4" />
-      </video>
+  <section id="sceneMap" class="scene scene--map">
+    <div class="leftCol">
+      <div id="mapWrap">
+        <img id="mapImg" src="assets/nm-map.png" alt="New Mexico counties map">
+      </div>
     </div>
-    <aside class="right-col ghost"></aside>
+    <aside class="rightCol">
+      <div class="intake placeholder sticky"></div>
+    </aside>
   </section>
 
-  <script src="js/app.js"></script>
+  <section id="scene3" class="scene scene--split">
+    <div class="leftCol">
+      <video id="v3" class="video-pane" playsinline controls preload="metadata">
+        <source src="videos/video3.mp4" type="video/mp4">
+      </video>
+    </div>
+    <aside class="rightCol">
+      <div class="intake placeholder sticky"></div>
+    </aside>
+  </section>
+
+  <script src="assets/app.js"></script>
 </body>
 </html>
