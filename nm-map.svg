@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="New Mexico map placeholder">
+  <rect width="800" height="600" fill="#e4e4e4" rx="24"/>
+  <rect x="18" y="18" width="764" height="564" fill="#d0d0d0" rx="18" stroke="#bbb" stroke-width="4"/>
+  <text x="400" y="60" font-family="Arial, Helvetica, sans-serif" font-size="36" text-anchor="middle" fill="#444">NEW MEXICO</text>
+  <g fill="#b0c4de" stroke="#666" stroke-width="2">
+    <rect x="90" y="120" width="160" height="110"/><rect x="250" y="120" width="160" height="110"/>
+    <rect x="410" y="120" width="160" height="110"/><rect x="570" y="120" width="140" height="110"/>
+    <rect x="90" y="230" width="220" height="120"/><rect x="310" y="230" width="200" height="120"/>
+    <rect x="510" y="230" width="200" height="120"/><rect x="90" y="350" width="200" height="160"/>
+    <rect x="290" y="350" width="220" height="160"/><rect x="510" y="350" width="200" height="160"/>
+  </g>
+</svg>
