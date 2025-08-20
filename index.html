@@ -3,69 +3,73 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BPOs New Mexico – v18</title>
+  <title>BPOs New Mexico – v19</title>
+  <meta http-equiv="Permissions-Policy" content="autoplay=(self)">
   <link rel="preload" as="video" href="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" />
-  <link rel="preload" as="video" href="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" />
-  <link rel="preload" as="video" href="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
+  <main>
+    <section id="hero" class="hero">
       <div class="hero-frame">
         <video id="v1" class="hero-video" playsinline muted autoplay controls preload="auto" aria-label="Intro video">
           <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
         </video>
         <button id="unmute" class="unmute" type="button" aria-label="Unmute and restart">Unmute</button>
       </div>
+      <button id="toStage" class="scroll-cue" type="button" aria-label="Continue">▼ Continue</button>
     </section>
 
-    <section class="stage">
-      <div class="stage-left">
-        <div id="layer-v2" class="layer active">
-          <video id="v2" class="media media-v2" playsinline muted controls preload="auto" aria-label="Explainer video">
-            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
-          </video>
+    <section id="stage" class="stage" aria-live="polite">
+      <div class="stage-grid">
+        <div class="left-col">
+          <section id="sec-v2" class="revealable" aria-label="Video 2">
+            <div class="card">
+              <video id="v2" class="media media-v2" playsinline muted controls preload="metadata" aria-label="Explainer video">
+                <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </section>
+
+          <section id="sec-map" class="revealable" aria-label="New Mexico map">
+            <div class="card map-card">
+              <div class="map-wrap">
+                <img src="assets/nm-map.jpg" alt="New Mexico map" class="map-img" loading="lazy" />
+              </div>
+            </div>
+          </section>
+
+          <section id="sec-v3" class="revealable" aria-label="Video 3">
+            <div class="card">
+              <video id="v3" class="media media-v3" playsinline muted controls preload="metadata" aria-label="Final video">
+                <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </section>
         </div>
-        <div id="layer-map" class="layer">
-          <div class="map-frame">
-            <img src="assets/nm-map.jpg" alt="New Mexico map" class="map" />
-          </div>
-        </div>
-        <div id="layer-v3" class="layer">
-          <video id="v3" class="media media-v3" playsinline muted controls preload="auto" aria-label="Final video">
-            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4" type="video/mp4" />
-          </video>
-        </div>
+
+        <aside class="right-rail">
+          <form class="intake" id="intake" autocomplete="on">
+            <header class="intake-header">Broker Price Opinion (BPO) Intake</header>
+            <fieldset class="grid3" aria-label="Subject Property Address">
+              <input required placeholder="Street Address" name="street" />
+              <input required placeholder="City/Town" name="city" />
+              <input required placeholder="NM Zip" name="zip" />
+            </fieldset>
+            <input placeholder="County Assessor’s Owner Name" name="owner" />
+            <input placeholder="Company or Person Ordering Name" name="ordering_name" />
+            <input type="email" placeholder="Your Contact Email" name="email" />
+            <input type="tel" placeholder="Your Contact Phone" name="phone" />
+            <textarea placeholder="Additional Details" name="details" rows="2" class="autosize"></textarea>
+            <input placeholder="Assessor Identifying Owner#" name="assessor_id" />
+            <label class="filepicker">Attach file(s) (.jpg or .pdf)
+              <input type="file" name="attachments" accept=".jpg,.jpeg,.pdf" multiple />
+            </label>
+            <button type="submit" class="submit">Submit BPO Request</button>
+            <p class="foot">Optional: BPOsNewMexico.com • 505-453-0444</p>
+          </form>
+        </aside>
       </div>
-
-      <aside class="right-rail">
-        <form class="intake" id="intake" autocomplete="on">
-          <header class="intake-header">Broker Price Opinion (BPO) Intake</header>
-
-          <fieldset class="grid3" aria-label="Subject Property Address">
-            <input required placeholder="Street Address" name="street" />
-            <input required placeholder="City/Town" name="city" />
-            <input required placeholder="NM Zip" name="zip" />
-          </fieldset>
-
-          <input placeholder="County Assessor’s Owner Name" name="owner" />
-          <input placeholder="Company or Person Ordering Name" name="ordering_name" />
-          <input type="email" placeholder="Your Contact Email" name="email" />
-          <input type="tel" placeholder="Your Contact Phone" name="phone" />
-
-          <textarea placeholder="Additional Details" name="details" rows="2" class="autosize"></textarea>
-
-          <input placeholder="Assessor Identifying Owner#" name="assessor_id" />
-
-          <label class="filepicker">Attach file(s) (.jpg or .pdf)
-            <input type="file" name="attachments" accept=".jpg,.jpeg,.pdf" multiple />
-          </label>
-
-          <button type="submit" class="submit">Submit BPO Request</button>
-          <p class="foot">Optional: BPOsNewMexico.com • 505-453-0444</p>
-        </form>
-      </aside>
     </section>
   </main>
 
