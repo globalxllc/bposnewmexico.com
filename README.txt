@@ -1,6 +1,5 @@
-v19 implements:
-- Fullscreen V1, V2 hidden until scroll/progressive reveal.
-- Smooth scroll (Chrome native + Edge fallback).
-- Edge no longer shows all at once; sections use content-visibility + IO.
-- Map centered & larger; portrait asset used.
-- V2/V3 autoplay on reveal; V1 Unmute resets and plays from start.
+v19a tweaks:
+- Map larger (up to 1100px / 96vw) and centered.
+- Reveal threshold lowered to 0.40 so sections appear slightly earlier.
+- 300ms delay before V2/V3 autoplay on reveal for smoothness.
+- All v19 behavior retained (fullscreen V1, smooth scroll w/ Edge fallback, progressive reveal).

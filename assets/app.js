@@ -43,20 +43,26 @@
     entries.forEach(e=>{
       if (e.isIntersecting){
         e.target.classList.add('revealed');
+        // Start videos with a gentle delay for stability
         if (e.target.id==='sec-v2' && v2.paused && v2.currentTime===0){
-          const wantAudio = !v1.muted;
-          v2.muted = !wantAudio;
-          v2.play().catch(()=>{});
+          setTimeout(()=>{
+            const wantAudio = !v1.muted;
+            v2.muted = !wantAudio;
+            v2.play().catch(()=>{});
+          }, 300);
         }
         if (e.target.id==='sec-v3' && v3.paused && v3.currentTime===0){
-          const wantAudio = !v1.muted;
-          v3.muted = !wantAudio;
-          v3.play().catch(()=>{});
+          setTimeout(()=>{
+            const wantAudio = !v1.muted;
+            v3.muted = !wantAudio;
+            v3.play().catch(()=>{});
+          }, 300);
         }
         io.unobserve(e.target);
       }
     });
-  }, {threshold:0.55});
+  }, {threshold:0.40}); // earlier reveal
+
   revealables.forEach(el=> io.observe(el));
 
   v1.addEventListener('ended', ()=> smoothScrollToEl(document.getElementById('sec-v2')));

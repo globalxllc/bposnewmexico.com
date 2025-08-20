@@ -19,7 +19,8 @@ body.edge .stage-grid{grid-template-columns:minmax(0,1fr) clamp(430px,39vw,580px
 .revealable.revealed{opacity:1;transform:none}
 .map-card{display:block}
 .map-wrap{display:grid;place-items:center;padding:10px}
-.map-img{max-width:min(900px,92vw);height:auto;display:block;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
+/* Larger map */
+.map-img{max-width:min(1100px,96vw);height:auto;display:block;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
 .right-rail{position:sticky;top:10px;align-self:start}
 .intake{width:100%;max-width:560px;background:#0b0b0d;border:1px solid #1f2024;border-radius:14px;padding:14px 14px 12px;box-shadow:0 8px 30px rgba(0,0,0,.55)}
 .intake-header{font-size:20px;font-weight:800;margin:2px 2px 8px;color:#f5f6f7}
