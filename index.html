@@ -1,76 +1,72 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BPOs New Mexico</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BPOs New Mexico — v9</title>
+  <link rel="stylesheet" href="assets/styles.css"/>
 </head>
 <body>
-  <section id="scene1" class="scene scene--full">
-    <video id="v1" class="video-full" playsinline muted autoplay controls preload="metadata">
-      <source src="videos/video1.mp4" type="video/mp4">
-    </video>
-    <button id="unmuteBtn" aria-label="Unmute and restart video">Unmute</button>
-  </section>
+  <main class="shell">
 
-  <section id="scene2" class="scene scene--split">
-    <div class="leftCol">
-      <video id="v2" class="video-pane" playsinline controls preload="metadata">
-        <source src="videos/video2.mp4" type="video/mp4">
+    <!-- HERO: Video 1 (no start button; cover image overlay until video actually plays) -->
+    <section id="s1" class="hero">
+      <img id="v1Cover" class="cover" src="assets/poster1.jpg" alt=""/>
+      <video id="v1" class="hero-video" playsinline autoplay muted preload="auto" controls poster="assets/poster1.jpg">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4"/>
       </video>
-    </div>
-    <aside class="rightCol">
-      <div id="intake" class="intake sticky">
-        <h1>Broker Price Opinion (BPO) Intake</h1>
-        <form id="bpoForm" action="#" method="post" enctype="multipart/form-data" novalidate>
-          <div class="row three">
-            <label class="sr-only" for="addr">Street Address</label>
-            <input id="addr" name="addr" placeholder="Street Address" required>
-            <label class="sr-only" for="city">City/Town</label>
-            <input id="city" name="city" placeholder="City/Town" required>
-            <label class="sr-only" for="zip">NM Zip</label>
-            <input id="zip" name="zip" placeholder="NM Zip" required>
+      <button id="unmuteV1" class="unmute">Unmute</button>
+    </section>
+
+    <!-- SECTION 2: Video 2 + Sticky Intake -->
+    <section id="s2" class="split">
+      <div class="left">
+        <img id="v2Cover" class="cover-inline" src="assets/poster2.jpg" alt=""/>
+        <video id="v2" class="media" playsinline preload="auto" controls poster="assets/poster2.jpg">
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4"/>
+        </video>
+      </div>
+      <aside class="right sticky">
+        <form id="intake" class="card" novalidate>
+          <h1>Broker Price Opinion (BPO) Intake</h1>
+          <p class="sub">Please insert details below to submit:</p>
+          <div class="row-3">
+            <input placeholder="Street Address" required/>
+            <input placeholder="City/Town" required/>
+            <input placeholder="NM Zip" required/>
           </div>
-          <input name="owner_name" placeholder="County Assessor’s Owner Name">
-          <input name="ordering_name" placeholder="Company or Person Ordering Name">
-          <input type="email" name="email" placeholder="Your Contact Email">
-          <input name="phone" placeholder="Your Contact Phone">
-          <textarea name="details" placeholder="Additional Details"></textarea>
-          <input name="assessor_id" placeholder="Assessor Identifying Owner#">
-          <div class="uploads">
-            <label class="uploads-label">Attach file(s) (.jpg or .pdf)</label>
-            <input type="file" name="files" accept=".jpg,.jpeg,.pdf" multiple>
-          </div>
-          <button type="submit" class="submitBtn">Submit BPO Request</button>
-          <p class="optional">Optional: BPOsNewMexico.com direct phone: 505-453-0444</p>
+          <input placeholder="County Assessor’s Owner Name"/>
+          <input placeholder="Company or Person Ordering Name"/>
+          <input type="email" placeholder="Your Contact Email"/>
+          <input placeholder="Your Contact Phone"/>
+          <textarea placeholder="Additional Details"></textarea>
+          <input placeholder="Assessor Identifying Owner#"/>
+          <label class="file-label">Attach file(s) (.jpg or .pdf)
+            <input type="file" accept=".jpg,.jpeg,.pdf" multiple/>
+          </label>
+          <button class="btn" type="submit">Submit BPO Request</button>
+          <p class="opt">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
         </form>
+      </aside>
+    </section>
+
+    <!-- SECTION 3: Map fly-in (holds 6s), then Video 3 below (cover overlay too) -->
+    <section id="s3" class="split map-section">
+      <div class="left">
+        <figure class="map-wrap">
+          <img id="nmMap" class="map" src="assets/nm-map.jpg" alt="New Mexico counties map"/>
+        </figure>
+        <div class="v3wrap">
+          <img id="v3Cover" class="cover-inline" src="assets/poster3.jpg" alt=""/>
+          <video id="v3" class="media v3" playsinline preload="auto" controls poster="assets/poster3.jpg">
+            <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4"/>
+          </video>
+        </div>
       </div>
-    </aside>
-  </section>
+      <aside class="right placeholder sticky"></aside>
+    </section>
 
-  <section id="sceneMap" class="scene scene--map">
-    <div class="leftCol">
-      <div id="mapWrap">
-        <img id="mapImg" src="assets/nm-map.png" alt="New Mexico counties map">
-      </div>
-    </div>
-    <aside class="rightCol">
-      <div class="intake placeholder sticky"></div>
-    </aside>
-  </section>
-
-  <section id="scene3" class="scene scene--split">
-    <div class="leftCol">
-      <video id="v3" class="video-pane" playsinline controls preload="metadata">
-        <source src="videos/video3.mp4" type="video/mp4">
-      </video>
-    </div>
-    <aside class="rightCol">
-      <div class="intake placeholder sticky"></div>
-    </aside>
-  </section>
-
+  </main>
   <script src="assets/app.js"></script>
 </body>
 </html>
