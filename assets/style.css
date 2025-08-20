@@ -44,15 +44,32 @@ body.edge .intake{inline-size:clamp(26.5rem,37vw,35rem)}
 
 /* Left column */
 .left-col{display:grid;gap:24px}
-.left-col .card{margin-inline:auto;max-inline-size:clamp(40rem,62vw,65rem);background:#0b0b0d;border:1px solid #1f2024;border-radius:14px;padding:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
-.media{display:block;max-inline-size:100%;block-size:auto;aspect-ratio:16/9;object-fit:contain;border-radius:10px;background:#111}
-.media-v2{max-inline-size:100%}
-.media-v3{max-inline-size:100%}
+/* Tighter cap so V2 cannot encroach intake in Chrome */
+.left-col .card{
+  margin-inline:auto;
+  max-inline-size:clamp(38rem, 52vw, 56rem);
+  background:#0b0b0d;border:1px solid #1f2024;border-radius:14px;padding:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)
+}
+.media{
+  display:block;
+  max-inline-size:min(100%, 56rem);
+  block-size:auto;
+  aspect-ratio:16/9;
+  object-fit:contain;
+  border-radius:10px;background:#111
+}
+.media-v2{max-inline-size:min(100%, 56rem)}
+.media-v3{max-inline-size:min(100%, 52rem)}
 
-/* Map */
+/* Map (smaller than before, still centered) */
 .map-card{display:block}
 .map-wrap{display:grid;place-items:center;padding:10px}
-.map-img{display:block;max-inline-size:clamp(34rem,58vw,68rem);block-size:auto;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.map-img{
+  display:block;
+  max-inline-size:clamp(30rem, 48vw, 54rem);
+  block-size:auto;
+  border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.45)
+}
 
 /* Reveal */
 .revealable{opacity:0;transform:translateY(16px);transition:opacity .45s ease, transform .45s ease;content-visibility:auto;contain-intrinsic-size:600px}
