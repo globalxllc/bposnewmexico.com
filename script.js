@@ -1,4 +1,19 @@
+// HLS on Chrome/Edge with MP4 fallbacks; sequence controls; no overlap playback.
 function pauseOthers(except){['v1','v2','v3'].forEach(id=>{const el=document.getElementById(id);if(el&&el!==except){try{el.pause()}catch(e){}}})}
+
+function attachHLS(video){
+  const src = video.getAttribute('data-hls');
+  if (!src) return;
+  if (window.Hls && window.Hls.isSupported()) {
+    const hls = new Hls({ maxBufferLength: 10, maxMaxBufferLength: 20, lowLatencyMode: true });
+    hls.loadSource(src);
+    hls.attachMedia(video);
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Safari
+    video.src = src;
+  }
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   const v1=document.getElementById('v1');
   const v2=document.getElementById('v2');
@@ -6,9 +21,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   const content=document.getElementById('content');
   const mapEl=document.getElementById('nmMap');
   const unmuteBtn=document.getElementById('unmuteBtn');
-  const scrollCue=document.getElementById('scrollCue');
   const form=document.getElementById('bpoForm');
   const statusEl=document.getElementById('formStatus');
+
+  // Attach HLS for adaptive streaming
+  [v1,v2,v3].forEach(v=> attachHLS(v));
 
   let userUnmuted=false;
 
@@ -20,16 +37,13 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   [v1,v2,v3].forEach(v=>v&&v.addEventListener('play',()=>pauseOthers(v)));
 
-  // Manual scroll cue (click to jump)
-  scrollCue.addEventListener('click', ()=>{
-    content.scrollIntoView({behavior:'smooth', block:'start'});
-  });
-
+  // On V1 end: guaranteed scroll to content + play V2
   v1.addEventListener('ended',()=>{
     content.scrollIntoView({behavior:'smooth', block:'start'});
     setTimeout(()=>{ v2.play().catch(()=>{}); if(userUnmuted) setTimeout(()=>tryUnmute(v2), 600); }, 400);
   });
 
+  // After V2 end: map 6s, then V3
   v2.addEventListener('ended',()=>{
     if(mapEl) mapEl.scrollIntoView({behavior:'smooth', block:'start'});
     setTimeout(()=>{
