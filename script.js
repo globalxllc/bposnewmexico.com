@@ -1,4 +1,4 @@
-// v19-style sequencing with only the 1-inch border added for V1
+// v19-style sequencing with 1.5in edge on V1 and same-size frames for V2/V3.
 function pauseOthers(except){
   ['v1','v2','v3'].forEach(id => {
     const el = document.getElementById(id);
@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
     userUnmuted = true;
     try { v1.currentTime = 0; } catch(e){}
     tryUnmute(v1);
-    setTimeout(() => { tryUnmute(v2); tryUnmute(v3); }, 1500);
+    setTimeout(() => { tryUnmute(v2); tryUnmute(v3); }, 1200);
     unmuteBtn.style.display = 'none';
   }
 
@@ -42,20 +42,20 @@ window.addEventListener('DOMContentLoaded', () => {
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v2.play().catch(()=>{});
-      if (userUnmuted) setTimeout(() => tryUnmute(v2), 800);
-    }, 400);
+      if (userUnmuted) setTimeout(() => tryUnmute(v2), 600);
+    }, 350);
   });
 
-  // After V2 end: map 6s hold then V3
+  // After V2 end: map 5s hold then V3
   v2.addEventListener('ended', () => {
     if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v3.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
         v3.play().catch(()=>{});
-        if (userUnmuted) setTimeout(() => tryUnmute(v3), 800);
-      }, 300);
-    }, 6000);
+        if (userUnmuted) setTimeout(() => tryUnmute(v3), 600);
+      }, 250);
+    }, 5000);
   });
 
   // Form submit via fetch -> on-screen confirmation

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HERO (Video 1) - full screen with a 1-inch black edge -->
+  <!-- HERO (Video 1) - full screen with a 1.5-inch black edge -->
   <section id="hero" aria-label="Intro">
     <div class="hero-inner">
       <video id="v1" playsinline muted autoplay preload="auto">
@@ -20,15 +20,20 @@
   <!-- TWO-COLUMN (Video 2 → Map → Video 3) -->
   <section id="content" aria-label="Main content">
     <div class="left">
-      <video id="v2" playsinline muted preload="auto" controls>
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
-      </video>
+      <!-- V2 same visual size as V1 inner area (no black border) -->
+      <div class="media-same">
+        <video id="v2" playsinline muted preload="auto" controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+        </video>
+      </div>
 
       <img id="nmMap" src="Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map" />
 
-      <video id="v3" playsinline muted preload="auto" controls>
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
-      </video>
+      <div class="media-same">
+        <video id="v3" playsinline muted preload="auto" controls>
+          <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
+        </video>
+      </div>
     </div>
 
     <aside class="intake" aria-label="BPO Intake Form">
