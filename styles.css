@@ -1,111 +1,103 @@
-/* Base */
+/* Base (v19-style) */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; background:#000; color:#0f172a; overflow-x: hidden; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color: #0f172a; background:#000; overflow-x: hidden; }
 
-/* HERO: true full viewport, no peeking of content below */
+/* HERO: full view height; black 1-inch edge around the video area */
 #hero {
+  position: relative;
   width: 100dvw;
-  height: 100svh;          /* full height on mobile & desktop */
+  height: 100svh;            /* true full screen */
   background: #000;
   overflow: hidden;
-  position: relative;
 }
-.hero-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
+/* Inner frame inset by exactly 1 inch on all sides */
+.hero-inner {
+  position: absolute;
+  inset: 1in;                /* <-- 1 inch black edge, as requested */
+  background: #000;
   display: grid;
   place-items: center;
-  background: #000;
 }
-/* Inset black border without reducing layout size */
-.hero-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  box-shadow: inset 0 0 0 8px #000; /* thin black frame, adjustable */
-  pointer-events: none;
-}
-.hero-frame video#v1 {
+.hero-inner video#v1 {
   width: 100%;
   height: 100%;
-  object-fit: contain;     /* letterbox; ensures black bars where needed */
-  background: #000;
+  object-fit: cover;         /* immersive look inside the 1in border */
   display: block;
+  background: #000;
 }
 
-/* Unmute */
+/* Unmute button */
 #unmuteBtn {
-  position: absolute;
-  left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
+  position: absolute; inset: auto 1.25rem 1.25rem auto;
   z-index: 5;
-  font-size: 1.05rem;
-  padding: .6rem 1rem;
-  border: 0;
-  border-radius: 12px;
-  background: #2563eb;
-  color: #fff;
-  cursor: pointer;
+  font-size: 1rem; padding: .65rem .9rem;
+  border: 0; border-radius: 12px;
+  background: #2563eb; color:#fff; cursor: pointer;
   box-shadow: 0 8px 28px rgba(0,0,0,.35);
 }
 
-/* Two-column layout (below the fold) */
+/* TWO-COLUMN stage */
 #content {
   display: grid;
-  grid-template-columns: 1fr 420px;
-  gap: 20px;
-  width: min(1200px, 95vw);
+  grid-template-columns: 1fr 480px;  /* left column + sticky intake */
+  gap: 24px;
+  width: min(1200px, 96vw);
   margin: 0 auto;
-  padding: 28px 0 64px;
+  padding: 48px 0 72px;
   background: #fff;
   color: #0f172a;
 }
 
-.left video, .left img { width: 100%; height: auto; display: block; }
+.left video, .left img { width: 100%; height: auto; display:block; }
 
-#nmMap { max-width: 720px; margin: 10px auto 0; }
+/* Map kept tidy */
+#nmMap { max-width: 780px; margin: 12px auto 0; }
 
-/* Sticky intake */
+/* Intake sticky on the right */
 aside.intake {
   position: sticky;
-  top: 12px;
+  top: 16px;
   align-self: start;
-  max-height: calc(100svh - 24px);
+  max-height: calc(100svh - 32px);
   overflow: auto;
-  padding: 12px;
+  padding: 16px;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 8px 30px rgba(2,6,23,0.06);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
+  background: #ffffff;
 }
 
-aside.intake h2 { font-size: 1.05rem; margin: 0 0 8px; }
-aside.intake label { display:block; font-size:.93rem; margin:8px 0 6px; }
+aside.intake h2 { font-size: 1.05rem; margin: 0 0 10px; }
+
+aside.intake label { display: block; font-size: 0.93rem; margin: 8px 0 6px; }
 aside.intake input[type="text"],
 aside.intake input[type="email"],
 aside.intake input[type="tel"],
 aside.intake textarea,
 aside.intake input[type="file"] {
-  width:100%;
-  border:1px solid #cbd5e1;
-  border-radius:10px;
-  padding:8px 10px;
-  font-size:.95rem;
-  background:#fff;
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  background: #fff;
 }
 
-/* Submit contact block sticks within intake panel */
-#contactBlock { position: sticky; bottom: 0; background: linear-gradient(180deg, rgba(255,255,255,0), #fff 35%); padding-top: 8px; margin-top: 10px; }
-#contactBlock .contact { font-size:.93rem; color:#334155; margin-bottom: 8px; }
-#submitBtn { width: 100%; padding: 10px 14px; font-size:1rem; border:0; border-radius:12px; background:#1d4ed8; color:#fff; cursor:pointer; }
+#contactBlock {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0), #fff 35%);
+  padding-top: 8px;
+  margin-top: 10px;
+}
+#contactBlock .contact { font-size: 0.93rem; color: #334155; margin-bottom: 8px; }
+#submitBtn { width: 100%; padding: 10px 14px; font-size: 1rem; border: 0; border-radius: 12px; background: #1d4ed8; color: #fff; cursor: pointer; }
 
-/* Scroll anchoring */
+/* Scroll anchoring for media below */
 #v2, #nmMap, #v3 { scroll-margin-top: 16px; }
 
-/* Mobile */
+/* Mobile: collapse to single column */
 @media (max-width: 960px) {
   #content { grid-template-columns: 1fr; padding: 24px 12px 48px; }
   aside.intake { position: static; max-height: none; }

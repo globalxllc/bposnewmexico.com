@@ -5,34 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BPOs New Mexico</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8"></script>
 </head>
 <body>
-  <!-- HERO: full-viewport, border via inset shadow (no layout shrink), guaranteed no peek of section 2 -->
+  <!-- HERO (Video 1) - full screen with a 1-inch black edge -->
   <section id="hero" aria-label="Intro">
-    <div class="hero-frame">
-      <video id="v1" playsinline muted autoplay preload="metadata" poster="https://res.cloudinary.com/ds5kbupzc/video/upload/so_0/video1_fixed_kjltks.jpg"
-             data-hls="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/video1_fixed_kjltks.m3u8">
-        <!-- MP4 fallbacks (lowest bitrate first) -->
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_300k,w_640/video1_fixed_kjltks.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_400k,w_960/video1_fixed_kjltks.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_550k,w_1280/video1_fixed_kjltks.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/video1_fixed_kjltks.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
+    <div class="hero-inner">
+      <video id="v1" playsinline muted autoplay preload="auto">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
       </video>
-      <button id="unmuteBtn" aria-label="Unmute and restart">Unmute</button>
+      <button id="unmuteBtn" aria-label="Unmute">Unmute</button>
     </div>
   </section>
 
   <!-- TWO-COLUMN (Video 2 → Map → Video 3) -->
   <section id="content" aria-label="Main content">
     <div class="left">
-      <video id="v2" playsinline muted preload="metadata" controls poster="https://res.cloudinary.com/ds5kbupzc/video/upload/so_0/v1754981683/video2C_fixed_gcuiql.jpg"
-             data-hls="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1754981683/video2C_fixed_gcuiql.m3u8">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_300k,w_640/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_400k,w_960/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_550k,w_1280/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+      <video id="v2" playsinline muted preload="auto" controls>
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
       </video>
 
       <img id="nmMap" src="Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map" />
 
-      <video id="v3" playsinline muted preload="metadata" controls poster="https://res.cloudinary.com/ds5kbupzc/video/upload/so_0/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.jpg"
-             data-hls="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.m3u8">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_300k,w_640/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_400k,w_960/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_550k,w_1280/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" /><source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
+      <video id="v3" playsinline muted preload="auto" controls>
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
       </video>
     </div>
 
