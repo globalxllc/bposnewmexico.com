@@ -2,58 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BPOs New Mexico — v23</title>
-  <meta http-equiv="Permissions-Policy" content="autoplay=(self)">
-  <link rel="preload" as="video" href="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BPOs New Mexico — Intake</title>
+  <link rel="preload" href="styles.css" as="style" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HERO (Video 1) -->
-  <section id="hero" class="hero">
-    <div class="hero-frame">
-      <video id="v1" class="hero-video" playsinline muted autoplay controls preload="auto" aria-label="Intro video">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
+  <!-- Stage 1: hero video (full row), smaller than full-screen to keep captions + Unmute clear -->
+  <section id="stage-hero" class="stage hero">
+    <div class="hero-inner">
+      <video id="video1" class="hero-video" playsinline muted preload="auto" poster="" data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Office_Morning_Open_v1.mp4">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Office_Morning_Open_v1.mp4" type="video/mp4" />
       </video>
-      <button id="unmute" class="unmute" type="button" aria-label="Unmute and restart">Unmute</button>
+      <button id="unmuteBtn" class="unmute">Unmute</button>
     </div>
   </section>
 
-  <!-- STAGE (Left: V2 → Map → V3, Right: sticky intake) -->
-  <main id="stage" class="stage">
-    <div class="stage-grid two-col">
-      <div class="left-rail">
+  <!-- Stage 2+: two-column app -->
+  <main id="app" class="shell">
+    <div class="grid">
+      <!-- LEFT: panels stack (V2, MAP, V3) -->
+      <section id="leftRail" class="left">
         <!-- Video 2 -->
-        <article id="panel-v2" class="panel fade">
-          <div class="card media-card">
-            <video id="v2" class="media video" playsinline muted controls preload="metadata" aria-label="Explainer video">
-              <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+        <article class="panel" data-kind="video2" aria-labelledby="v2label">
+          <h2 id="v2label" class="sr-only">Video 2</h2>
+          <div class="media shadow">
+            <video id="video2" playsinline muted preload="auto" class="media-el"
+              data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/NM_Portals_Intro_v2.mp4">
+              <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/NM_Portals_Intro_v2.mp4" type="video/mp4" />
             </video>
           </div>
         </article>
 
-        <!-- Map -->
-        <article id="panel-map" class="panel fade">
-          <div class="card media-card map-card">
-            <!-- Prefer your portrait map image if present; fallback to SVG -->
-            <img src="assets/nm-map.jpg" alt="New Mexico map" class="map-img" loading="lazy" />
+        <!-- MAP -->
+        <article class="panel" data-kind="map" aria-labelledby="maplabel">
+          <h2 id="maplabel" class="sr-only">New Mexico Counties Map</h2>
+          <div class="media shadow">
+            <img id="nmMap" class="media-el" src="assets/nm_map_placeholder.svg" alt="New Mexico map" />
           </div>
         </article>
 
         <!-- Video 3 -->
-        <article id="panel-v3" class="panel fade">
-          <div class="card media-card">
-            <video id="v3" class="media video" playsinline muted controls preload="metadata" aria-label="Final video">
+        <article class="panel" data-kind="video3" aria-labelledby="v3label">
+          <h2 id="v3label" class="sr-only">Video 3</h2>
+          <div class="media shadow">
+            <video id="video3" playsinline muted preload="auto" class="media-el"
+              data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4">
               <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4" type="video/mp4" />
             </video>
           </div>
         </article>
-      </div>
+      </section>
 
-      <!-- RIGHT rail (sticky intake) -->
-      <aside class="right-rail">
-        <!-- Keep your existing intake if we can find it; otherwise render a clean default -->
-        <form id="intakeForm" class="form" autocomplete="on" novalidate>
+      <!-- RIGHT: intake card (sticky) -->
+      <aside id="rightRail" class="right">
+        <div class="card shadow">
+          <header class="card-h">
+            <h1>Broker Price Opinion (BPO) Intake</h1>
+            <p class="eyebrow">Please insert details below to submit.</p>
+          </header>
+
+          <form id="intakeForm" class="form" autocomplete="on" novalidate>
             <div class="row three">
               <label class="sr-only" for="street">Street Address</label>
               <input id="street" name="street" placeholder="Street Address" inputmode="text" />
@@ -90,10 +99,11 @@
 
             <p class="fine">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
           </form>
+        </div>
       </aside>
     </div>
   </main>
 
-  <script src="assets/app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
