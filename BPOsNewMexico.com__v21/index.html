@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BPOs New Mexico — Intake</title>
+  <link rel="preload" href="styles.css" as="style" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Stage 1: hero video (full row), smaller than full-screen to keep captions + Unmute clear -->
+  <section id="stage-hero" class="stage hero">
+    <div class="hero-inner">
+      <video id="video1" class="hero-video" playsinline muted preload="auto" poster="" data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Office_Morning_Open_v1.mp4">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Office_Morning_Open_v1.mp4" type="video/mp4" />
+      </video>
+      <button id="unmuteBtn" class="unmute">Unmute</button>
+    </div>
+  </section>
+
+  <!-- Stage 2+: two-column app -->
+  <main id="app" class="shell">
+    <div class="grid">
+      <!-- LEFT: panels stack (V2, MAP, V3) -->
+      <section id="leftRail" class="left">
+        <!-- Video 2 -->
+        <article class="panel" data-kind="video2" aria-labelledby="v2label">
+          <h2 id="v2label" class="sr-only">Video 2</h2>
+          <div class="media shadow">
+            <video id="video2" playsinline muted preload="auto" class="media-el"
+              data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/NM_Portals_Intro_v2.mp4">
+              <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/NM_Portals_Intro_v2.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </article>
+
+        <!-- MAP -->
+        <article class="panel" data-kind="map" aria-labelledby="maplabel">
+          <h2 id="maplabel" class="sr-only">New Mexico Counties Map</h2>
+          <div class="media shadow">
+            <img id="nmMap" class="media-el" src="assets/nm_map_placeholder.svg" alt="New Mexico map" />
+          </div>
+        </article>
+
+        <!-- Video 3 -->
+        <article class="panel" data-kind="video3" aria-labelledby="v3label">
+          <h2 id="v3label" class="sr-only">Video 3</h2>
+          <div class="media shadow">
+            <video id="video3" playsinline muted preload="auto" class="media-el"
+              data-src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4">
+              <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1755670394/Order_Quote_Process_SUBMIT_US_English_o5nz86.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </article>
+      </section>
+
+      <!-- RIGHT: intake card (sticky) -->
+      <aside id="rightRail" class="right">
+        <div class="card shadow">
+          <header class="card-h">
+            <h1>Broker Price Opinion (BPO) Intake</h1>
+            <p class="eyebrow">Please insert details below to submit.</p>
+          </header>
+
+          <form id="intakeForm" class="form" autocomplete="on" novalidate>
+            <div class="row three">
+              <label class="sr-only" for="street">Street Address</label>
+              <input id="street" name="street" placeholder="Street Address" inputmode="text" />
+              <label class="sr-only" for="city">City/Town</label>
+              <input id="city" name="city" placeholder="City/Town" inputmode="text" />
+              <label class="sr-only" for="zip">NM Zip</label>
+              <input id="zip" name="zip" placeholder="NM Zip" inputmode="numeric" />
+            </div>
+
+            <label class="sr-only" for="assessor">County Assessor’s Owner Name</label>
+            <input id="assessor" name="assessor" placeholder="County Assessor’s Owner Name" />
+
+            <label class="sr-only" for="company">Company or Person Ordering Name</label>
+            <input id="company" name="company" placeholder="Company or Person Ordering Name" />
+
+            <label class="sr-only" for="email">Your Contact Email</label>
+            <input id="email" name="email" placeholder="Your Contact Email" inputmode="email" />
+
+            <label class="sr-only" for="phone">Your Contact Phone</label>
+            <input id="phone" name="phone" placeholder="Your Contact Phone" inputmode="tel" />
+
+            <label class="sr-only" for="details">Additional Details</label>
+            <textarea id="details" name="details" placeholder="Additional Details" rows="2" data-autogrow="true"></textarea>
+
+            <label class="sr-only" for="ownerid">Assessor Identifying Owner#</label>
+            <input id="ownerid" name="ownerid" placeholder="Assessor Identifying Owner#" />
+
+            <div class="files">
+              <label for="files">Attach file(s) (.jpg or .pdf)</label>
+              <input id="files" name="files" type="file" accept=".jpg,.jpeg,.pdf" multiple />
+            </div>
+
+            <button type="submit" class="cta">Submit BPO Request</button>
+
+            <p class="fine">Optional: BPOsNewMexico.com direct phone: 505‑453‑0444</p>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

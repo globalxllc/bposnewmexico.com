@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#dedede"/>
+      <stop offset="1" stop-color="#c9c9c9"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="580" height="780" rx="20" fill="url(#g)" stroke="#444" stroke-width="8"/>
+  <text x="300" y="60" font-family="Arial, Helvetica, sans-serif" font-size="36" fill="#222" text-anchor="middle">NEW MEXICO</text>
+  <g fill="none" stroke="#333" stroke-width="1.2">
+    <path d="M110 90V760M210 90V760M310 90V760M410 90V760M510 90V760"/>
+    <path d="M90 160H560M90 240H560M90 320H560M90 400H560M90 480H560M90 560H560M90 640H560" />
+  </g>
+</svg>
