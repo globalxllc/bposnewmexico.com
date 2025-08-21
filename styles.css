@@ -1,34 +1,20 @@
-/* Global (v20 behavior + global 1.5in frame everywhere) */
+/* v20-style clean reset: no decorative borders anywhere */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color: #0f172a; background:#000; overflow-x: hidden; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color:#0f172a; background:#000; overflow-x: hidden; }
 
-:root{
-  --edge: 1.5in;   /* Requested border thickness on ALL screens */
-  --gap: 22px;
-  --intake-w: 300px; /* Slightly reduced so phone block stays visible */
-}
-
-/* GLOBAL FRAME (always keeps 1.5in black edge visible) */
-.frame {
-  min-height: 100svh;
-  padding: var(--edge);
-  background: #000;
-}
-
-/* HERO (V1) fills the inner viewport area inside the frame */
+/* HERO: full viewport, zero border */
 #hero {
-  width: 100%;
-  height: calc(100svh - (var(--edge) * 2)); /* inner height = viewport minus the border */
-  background: #000;
   position: relative;
+  width: 100vw;
+  height: 100svh;            /* full screen */
+  background: #000;
   overflow: hidden;
-  border-radius: 12px;
 }
 #hero > video#v1 {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* immersive, no inner black bars */
+  object-fit: cover;         /* immersive, no letterboxing */
   display: block;
   background: #000;
 }
@@ -41,26 +27,30 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial
   box-shadow: 0 8px 28px rgba(0,0,0,.35);
 }
 
-/* TWO-COLUMN stage inside the same frame (V2/Map/V3 + Intake) */
+/* Two-column content (no global frame) */
 #content {
   display: grid;
-  grid-template-columns: 1fr var(--intake-w);
-  gap: var(--gap);
-  width: min(1200px, 92vw);
-  margin: 20px auto 0;
+  grid-template-columns: 1fr 440px;  /* moderate intake width similar to early versions */
+  gap: 22px;
+  width: min(1200px, 96vw);
+  margin: 0 auto;
+  padding: 40px 0 72px;
+  background: #fff;
   color: #0f172a;
 }
+.left video, .left img { width: 100%; height: auto; display:block; }
 
-/* Left media: fill container; no inner letterboxing */
+/* Keep videos comfy without letterboxing in left pane */
 .left video {
   width: 100%;
   aspect-ratio: 16/9;
-  object-fit: cover; /* 0 black all around inside left pane */
+  object-fit: cover;     /* zero black inside the left column video boxes */
   border-radius: 10px;
   box-shadow: 0 8px 28px rgba(0,0,0,.18);
   margin-bottom: 14px;
 }
-.left img#nmMap {
+
+#nmMap {
   width: 100%;
   height: auto;
   border-radius: 10px;
@@ -68,22 +58,22 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial
   margin: 12px 0 6px;
 }
 
-/* Intake: slimmer and sticky so phone remains visible at the bottom */
+/* Intake sticky on the right */
 aside.intake {
   position: sticky;
   top: 14px;
   align-self: start;
-  max-height: calc(100svh - (var(--edge) * 2) - 28px); /* fits within the framed viewport */
+  max-height: calc(100svh - 28px);
   overflow: auto;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
   background: #ffffff;
-  font-size: 0.92rem;
+  font-size: 0.94rem;
 }
-aside.intake h2 { font-size: 1rem; margin: 0 0 8px; }
-aside.intake label { display: block; margin: 6px 0 6px; }
+aside.intake h2 { font-size: 1.02rem; margin: 0 0 8px; }
+aside.intake label { display: block; margin: 7px 0 6px; }
 aside.intake input[type="text"],
 aside.intake input[type="email"],
 aside.intake input[type="tel"],
@@ -92,10 +82,11 @@ aside.intake input[type="file"] {
   width: 100%;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
-  padding: 7px 9px;
-  font-size: 0.92rem;
+  padding: 8px 10px;
+  font-size: 0.94rem;
   background: #fff;
 }
+
 #contactBlock {
   position: sticky;
   bottom: 0;
@@ -103,14 +94,14 @@ aside.intake input[type="file"] {
   padding-top: 6px;
   margin-top: 8px;
 }
-#contactBlock .contact { font-size: 0.9rem; color: #334155; margin-bottom: 6px; }
-#submitBtn { width: 100%; padding: 9px 12px; font-size: 0.95rem; border: 0; border-radius: 10px; background: #1d4ed8; color: #fff; cursor: pointer; }
+#contactBlock .contact { font-size: 0.92rem; color: #334155; margin-bottom: 6px; }
+#submitBtn { width: 100%; padding: 10px 14px; font-size: 1rem; border: 0; border-radius: 10px; background: #1d4ed8; color: #fff; cursor: pointer; }
 
 /* Scroll anchoring */
-#v2, #nmMap, #v3 { scroll-margin-top: 20px; }
+#v2, #nmMap, #v3 { scroll-margin-top: 18px; }
 
-/* Mobile: keep global frame but collapse stage to single column */
+/* Mobile: collapse to single column */
 @media (max-width: 960px) {
-  #content { grid-template-columns: 1fr; width: 100%; }
+  #content { grid-template-columns: 1fr; padding: 24px 12px 48px; }
   aside.intake { position: static; max-height: none; }
 }

@@ -1,4 +1,4 @@
-// v20-like sequence; global 1.5in border via .frame applies to all screens.
+// v20-like sequence with no decorative borders; keep things simple and reliable.
 function pauseOthers(except){
   ['v1','v2','v3'].forEach(id => {
     const el = document.getElementById(id);
@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 350);
   });
 
-  // After V2 end: show map ~6s then move to V3
+  // After V2 end: map ~6s, then V3
   v2.addEventListener('ended', () => {
     if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
