@@ -6,6 +6,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const content=document.getElementById('content');
   const mapEl=document.getElementById('nmMap');
   const unmuteBtn=document.getElementById('unmuteBtn');
+  const scrollCue=document.getElementById('scrollCue');
   const form=document.getElementById('bpoForm');
   const statusEl=document.getElementById('formStatus');
 
@@ -18,6 +19,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   v1.addEventListener('click', handleUnmute);
 
   [v1,v2,v3].forEach(v=>v&&v.addEventListener('play',()=>pauseOthers(v)));
+
+  // Manual scroll cue (click to jump)
+  scrollCue.addEventListener('click', ()=>{
+    content.scrollIntoView({behavior:'smooth', block:'start'});
+  });
 
   v1.addEventListener('ended',()=>{
     content.scrollIntoView({behavior:'smooth', block:'start'});

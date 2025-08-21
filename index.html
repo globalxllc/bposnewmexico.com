@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- HERO (bigger, thin border, letterbox, scroll cue) -->
   <section id="hero" aria-label="Intro">
     <div class="hero-frame">
       <video id="v1" playsinline muted autoplay preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate">
-        <!-- Order: HLS (if enabled) then low→med→high MP4 then original -->
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/video1_fixed_kjltks.m3u8" type="application/x-mpegURL" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_450k,w_960/video1_fixed_kjltks.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_500k,w_1280/video1_fixed_kjltks.mp4" type="video/mp4" />
@@ -18,9 +18,14 @@
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
       </video>
       <button id="unmuteBtn" aria-label="Unmute and restart">Unmute</button>
+      <div class="scroll-cue" id="scrollCue" title="Scroll">
+        <span>Scroll</span>
+        <div class="chevron">⌄</div>
+      </div>
     </div>
   </section>
 
+  <!-- TWO-COLUMN (Video 2 → Map → Video 3) -->
   <section id="content" aria-label="Main content">
     <div class="left">
       <video id="v2" playsinline muted preload="metadata" controls disablepictureinpicture controlslist="nodownload noplaybackrate">
@@ -45,15 +50,41 @@
     <aside class="intake" aria-label="BPO Intake Form">
       <form id="bpoForm" action="api/submit.php" method="POST" enctype="multipart/form-data" novalidate>
         <h2>Request a BPO / PMI Review</h2>
-        <label>Full Name<input name="name" type="text" required /></label>
-        <label>Email<input name="email" type="email" required /></label>
-        <label>Phone<input name="phone" type="tel" /></label>
-        <label>Property Address<input name="address" type="text" /></label>
-        <label>Assessor Identifying Owner #<input name="assessor_owner_id" type="text" /></label>
-        <label>Notes<textarea name="notes" rows="4"></textarea></label>
-        <label>Upload Files (.jpg/.pdf)<input name="uploads[]" type="file" accept=".jpg,.jpeg,.pdf" multiple /></label>
+
+        <label>Full Name
+          <input name="name" type="text" required />
+        </label>
+
+        <label>Email
+          <input name="email" type="email" required />
+        </label>
+
+        <label>Phone
+          <input name="phone" type="tel" />
+        </label>
+
+        <label>Property Address
+          <input name="address" type="text" />
+        </label>
+
+        <label>Assessor Identifying Owner #
+          <input name="assessor_owner_id" type="text" />
+        </label>
+
+        <label>Notes
+          <textarea name="notes" rows="4"></textarea>
+        </label>
+
+        <label>Upload Files (.jpg/.pdf)
+          <input name="uploads[]" type="file" accept=".jpg,.jpeg,.pdf" multiple />
+        </label>
+
         <div id="contactBlock">
-          <div class="contact"><strong>Globalx LLC</strong><br/>505-453-0444<br/>globalxllc@gmail.com</div>
+          <div class="contact">
+            <strong>Globalx LLC</strong><br/>
+            505-453-0444<br/>
+            globalxllc@gmail.com
+          </div>
           <button type="submit" id="submitBtn">Submit</button>
         </div>
       </form>
