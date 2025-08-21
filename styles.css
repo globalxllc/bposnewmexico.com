@@ -1,107 +1,78 @@
-/* v20-style clean reset: no decorative borders anywhere */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color:#0f172a; background:#000; overflow-x: hidden; }
+/* ZERO-BORDER RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; border: 0; box-shadow: none; border-radius: 0; }
+html, body { width:100%; height:100%; }
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.35; color:#e5e7eb; background:#000; overflow-x: hidden; }
 
-/* HERO: full viewport, zero border */
+/* HERO: full viewport, edge-to-edge, no border */
 #hero {
   position: relative;
   width: 100vw;
-  height: 100svh;            /* full screen */
+  height: 100svh;
   background: #000;
   overflow: hidden;
 }
 #hero > video#v1 {
   width: 100%;
   height: 100%;
-  object-fit: cover;         /* immersive, no letterboxing */
+  object-fit: cover;     /* no black bars; fills screen */
   display: block;
   background: #000;
 }
 #unmuteBtn {
-  position: absolute; right: 18px; bottom: 18px;
+  position: absolute; right: 16px; bottom: 16px;
   z-index: 5;
-  font-size: 1rem; padding: .65rem .9rem;
-  border: 0; border-radius: 12px;
+  font-size: 1rem; padding: .6rem .9rem;
   background: #2563eb; color:#fff; cursor: pointer;
-  box-shadow: 0 8px 28px rgba(0,0,0,.35);
 }
 
-/* Two-column content (no global frame) */
+/* CONTENT: edge-to-edge grid, no container margins, no frames */
 #content {
   display: grid;
-  grid-template-columns: 1fr 440px;  /* moderate intake width similar to early versions */
-  gap: 22px;
-  width: min(1200px, 96vw);
-  margin: 0 auto;
-  padding: 40px 0 72px;
-  background: #fff;
-  color: #0f172a;
+  grid-template-columns: 1fr 380px; /* slim intake */
+  width: 100vw;
+  min-height: 100svh;
+  background: #000;     /* same as body to avoid any “frame” look */
+  color: #e5e7eb;
+  column-gap: 0;        /* no visible gap “border” */
 }
-.left video, .left img { width: 100%; height: auto; display:block; }
 
-/* Keep videos comfy without letterboxing in left pane */
+/* Left column media: fill width, no border/rounding/shadows */
+.left { width: 100%; }
+.left video, .left img { width: 100%; display:block; }
 .left video {
-  width: 100%;
   aspect-ratio: 16/9;
-  object-fit: cover;     /* zero black inside the left column video boxes */
-  border-radius: 10px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.18);
-  margin-bottom: 14px;
+  object-fit: cover;    /* eliminates letterboxing */
 }
+#nmMap { height: auto; }
 
-#nmMap {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.12);
-  margin: 12px 0 6px;
-}
-
-/* Intake sticky on the right */
+/* Intake: plain, no border, no shadow; sticky so phone is visible */
 aside.intake {
-  position: sticky;
-  top: 14px;
+  position: sticky; top: 12px;
   align-self: start;
-  max-height: calc(100svh - 28px);
+  height: calc(100svh - 24px);
   overflow: auto;
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
-  background: #ffffff;
-  font-size: 0.94rem;
+  padding: 10px;
+  background: #000;  /* match background to eliminate any framed look */
+  color: #e5e7eb;
+  font-size: 0.96rem;
 }
-aside.intake h2 { font-size: 1.02rem; margin: 0 0 8px; }
-aside.intake label { display: block; margin: 7px 0 6px; }
+aside.intake h2 { font-size: 1rem; margin-bottom: 8px; }
+aside.intake label { display: block; margin: 10px 0 6px; }
 aside.intake input[type="text"],
 aside.intake input[type="email"],
 aside.intake input[type="tel"],
 aside.intake textarea,
 aside.intake input[type="file"] {
   width: 100%;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 0.94rem;
-  background: #fff;
+  background: #0b0b0b; color:#e5e7eb;
+  padding: 10px;
 }
+#contactBlock { position: sticky; bottom: 0; padding-top: 8px; background: #000; }
+#contactBlock .contact { font-size: .95rem; color: #cbd5e1; margin-bottom: 6px; }
+#submitBtn { width: 100%; padding: 10px 12px; font-size: 1rem; background:#1d4ed8; color:#fff; cursor:pointer; }
 
-#contactBlock {
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0), #fff 35%);
-  padding-top: 6px;
-  margin-top: 8px;
-}
-#contactBlock .contact { font-size: 0.92rem; color: #334155; margin-bottom: 6px; }
-#submitBtn { width: 100%; padding: 10px 14px; font-size: 1rem; border: 0; border-radius: 10px; background: #1d4ed8; color: #fff; cursor: pointer; }
-
-/* Scroll anchoring */
-#v2, #nmMap, #v3 { scroll-margin-top: 18px; }
-
-/* Mobile: collapse to single column */
+/* Mobile: single column; still no borders anywhere */
 @media (max-width: 960px) {
-  #content { grid-template-columns: 1fr; padding: 24px 12px 48px; }
-  aside.intake { position: static; max-height: none; }
+  #content { grid-template-columns: 1fr; }
+  aside.intake { position: static; height: auto; }
 }

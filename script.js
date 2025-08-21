@@ -1,4 +1,4 @@
-// v20-like sequence with no decorative borders; keep things simple and reliable.
+// v20-like sequence; absolutely no decorative borders anywhere.
 function pauseOthers(except){
   ['v1','v2','v3'].forEach(id => {
     const el = document.getElementById(id);
@@ -28,7 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
     userUnmuted = true;
     try { v1.currentTime = 0; } catch(e){}
     tryUnmute(v1);
-    setTimeout(() => { tryUnmute(v2); tryUnmute(v3); }, 1200);
+    setTimeout(() => { tryUnmute(v2); tryUnmute(v3); }, 1000);
     unmuteBtn.style.display = 'none';
   }
 
@@ -41,19 +41,19 @@ window.addEventListener('DOMContentLoaded', () => {
     content.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v2.play().catch(()=>{});
-      if (userUnmuted) setTimeout(() => tryUnmute(v2), 600);
-    }, 350);
+      if (userUnmuted) setTimeout(() => tryUnmute(v2), 500);
+    }, 300);
   });
 
-  // After V2 end: map ~6s, then V3
+  // After V2 end: show map ~6s then move to V3
   v2.addEventListener('ended', () => {
     if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v3.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
         v3.play().catch(()=>{});
-        if (userUnmuted) setTimeout(() => tryUnmute(v3), 600);
-      }, 250);
+        if (userUnmuted) setTimeout(() => tryUnmute(v3), 500);
+      }, 200);
     }, 6000);
   });
 
