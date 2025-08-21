@@ -1,44 +1,49 @@
-// Normalize unmute overlay behavior for v1
-const v1 = document.getElementById('v1');
-const unmuteBtn = document.getElementById('unmuteBtn');
 
-if (v1) {
-  v1.play().catch(() => {/* autoplay may be blocked */});
-  unmuteBtn?.addEventListener('click', () => {
-    try {
-      v1.muted = false;
-      v1.currentTime = 0;
-      v1.play().catch(()=>{});
-    } catch {}
-    unmuteBtn.style.display = 'none';
-  });
-  v1.addEventListener('volumechange', () => {
-    if (!v1.muted) unmuteBtn.style.display = 'none';
-  });
-}
+(function(){
+  const cfg = (window.APP_CONFIG || {});
+  const $ = s=>document.querySelector(s);
+  $("#v1").src = cfg.VIDEO_1; $("#v2").src = cfg.VIDEO_2; $("#v3").src = cfg.VIDEO_3;
 
-// Form submit with feedback
-const form = document.getElementById('bpo-form');
-const status = document.getElementById('form-status');
+  // Hero unmute behavior
+  const heroVid = $("#v1"), unmute = $("#unmuteBtn");
+  heroVid.muted = true; heroVid.playsInline = true; heroVid.autoplay = true;
+  heroVid.addEventListener("canplay", ()=>heroVid.play().catch(()=>{}));
+  unmute.addEventListener("click", ()=>{ try{heroVid.currentTime=0;}catch(e){} heroVid.muted=false; heroVid.play().catch(()=>{}); unmute.classList.add("hidden"); });
 
-if (form) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    status.textContent = 'Sending…';
-    const data = new FormData(form);
-    try {
-      const res = await fetch(form.action, { method: 'POST', body: data });
-      const json = await res.json();
-      if (json.ok) {
-        status.textContent = 'Thanks — your request has been sent.';
-        form.reset();
-      } else {
-        status.textContent = 'Sorry, something went wrong.';
-        console.error(json);
+  // In-view autoplay + delayed unmute for V2/V3
+  function hook(vid, delay=2500){
+    vid.muted = true; vid.playsInline = true;
+    const io = new IntersectionObserver(es=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){ vid.play().catch(()=>{}); setTimeout(()=>{ try{vid.muted=false;}catch(_){}} , delay); }
+        else { vid.pause(); }
+      });
+    }, {threshold:.6});
+    io.observe(vid);
+  }
+  hook($("#v2"), 2500); hook($("#v3"), 2500);
+
+  // Form submit with endpoint or mailto fallback
+  const form = $("#bpoForm"), note=$("#formNotice");
+  form.addEventListener("submit", async ev=>{
+    ev.preventDefault(); if(note) note.textContent="Submitting...";
+    const fd = new FormData(form);
+    if(cfg.FORM_ENDPOINT){
+      try{
+        const r = await fetch(cfg.FORM_ENDPOINT,{method:"POST", body:fd, headers:{'Accept':'application/json'}});
+        if(!r.ok) throw 0; if(note) note.textContent="Submitted!"; form.reset();
+      }catch(e){
+        if(note) note.textContent="Failed. Opening email..."; email(fd);
       }
-    } catch (err) {
-      status.textContent = 'Network error. Please try again.';
-      console.error(err);
-    }
+    }else email(fd);
   });
-}
+  function email(fd){
+    const to = encodeURIComponent(cfg.FALLBACK_EMAIL||"orders@example.com");
+    const subject = encodeURIComponent("New BPO Intake Request");
+    const lines=[]; for(const [k,v] of fd.entries()){ if(k==="attachments") continue; lines.push(`${k}: ${v}`); }
+    lines.push("", "(Attachments not included via mailto.)");
+    const body = encodeURIComponent(lines.join("\n"));
+    location.href=`mailto:${to}?subject=${subject}&body=${body}`;
+    if(document.getElementById("formNotice")) document.getElementById("formNotice").textContent="Opened your email app with the details.";
+  }
+})();
