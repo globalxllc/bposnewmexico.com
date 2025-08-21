@@ -1,4 +1,4 @@
-// v19-style sequencing with 1.5in edge on V1 and same-size frames for V2/V3.
+// v20-style sequence with global 1.5in border after V1
 function pauseOthers(except){
   ['v1','v2','v3'].forEach(id => {
     const el = document.getElementById(id);
@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const v2 = document.getElementById('v2');
   const v3 = document.getElementById('v3');
   const unmuteBtn = document.getElementById('unmuteBtn');
-  const content = document.getElementById('content');
+  const stage = document.getElementById('stage');
   const mapEl = document.getElementById('nmMap');
   const form = document.getElementById('bpoForm');
   const statusEl = document.getElementById('formStatus');
@@ -34,19 +34,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   unmuteBtn.addEventListener('click', handleUnmute);
   v1.addEventListener('click', handleUnmute);
-
   [v1, v2, v3].forEach(v => v && v.addEventListener('play', () => pauseOthers(v)));
 
-  // On V1 end: scroll to two-column and start V2
+  // On V1 end: scroll to the bordered stage and start V2
   v1.addEventListener('ended', () => {
-    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v2.play().catch(()=>{});
       if (userUnmuted) setTimeout(() => tryUnmute(v2), 600);
-    }, 350);
+    }, 400);
   });
 
-  // After V2 end: map 5s hold then V3
+  // After V2 end: show map for ~6s, then move to V3
   v2.addEventListener('ended', () => {
     if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
@@ -55,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
         v3.play().catch(()=>{});
         if (userUnmuted) setTimeout(() => tryUnmute(v3), 600);
       }, 250);
-    }, 5000);
+    }, 6000);
   });
 
   // Form submit via fetch -> on-screen confirmation

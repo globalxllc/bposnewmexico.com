@@ -1,40 +1,31 @@
-/* Base (v19-style + requested edges/sizing) */
+/* Base (v20 behavior + requested framing) */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.4; color: #0f172a; background:#000; overflow-x: hidden; }
 
 :root{
-  --edge: 1.5in;         /* HERO edge thickness */
-  --intake-w: 320px;     /* narrower intake to keep left side large */
+  --edge: 1.5in;     /* Requested 1.5-inch border for the stage */
+  --intake-w: 300px; /* Slightly reduced intake width so its bottom phone block is visible */
   --gap: 22px;
 }
 
-/* HERO: full view height with 1.5in black edge */
+/* HERO: full screen video with no border, v20 feel */
 #hero {
   position: relative;
   width: 100dvw;
-  height: 100svh;            /* true full screen */
+  height: 100svh;
   background: #000;
   overflow: hidden;
 }
-.hero-inner {
-  position: absolute;
-  inset: var(--edge);         /* 1.5-inch border on all sides */
-  background: #000;
-  display: grid;
-  place-items: center;
-}
-.hero-inner video#v1 {
+#hero > video#v1 {
   width: 100%;
   height: 100%;
-  object-fit: cover;          /* no additional black inside the frame */
+  object-fit: cover;   /* immersive, no letterboxing */
   display: block;
   background: #000;
 }
-
-/* Unmute button */
 #unmuteBtn {
-  position: absolute; right: calc(var(--edge) + 16px); bottom: calc(var(--edge) + 16px);
+  position: absolute; right: 18px; bottom: 18px;
   z-index: 5;
   font-size: 1rem; padding: .65rem .9rem;
   border: 0; border-radius: 12px;
@@ -42,45 +33,57 @@ body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial
   box-shadow: 0 8px 28px rgba(0,0,0,.35);
 }
 
-/* TWO-COLUMN stage */
+/* STAGE: everything after V1 sits inside a 1.5-inch black border */
+#stage {
+  background: #000;           /* actual border color */
+  padding: var(--edge);       /* <-- 1.5-inch border on all sides */
+}
+#stage .sheet {
+  background: #fff;           /* interior surface */
+  border-radius: 12px;
+  min-height: 80svh;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  padding: 24px 0 48px;
+}
+
+/* TWO-COLUMN content inside the sheet */
 #content {
   display: grid;
-  grid-template-columns: 1fr var(--intake-w);  /* left column + skinny intake */
+  grid-template-columns: 1fr var(--intake-w);
   gap: var(--gap);
-  width: min(1120px, 96vw);
+  width: min(1200px, 92vw);
   margin: 0 auto;
-  padding: 40px 0 64px;
-  background: #fff;
   color: #0f172a;
 }
 
-/* Left media: V2/V3 frames same as V1 inner height; 0 black edge; cover fill */
-.media-same {
-  height: calc(100svh - (var(--edge) * 2));  /* same inner height as V1 */
+.left video, .left img { width: 100%; height: auto; display:block; }
+
+/* Ensure videos fill their containers without black bars in left column */
+.left video {
   width: 100%;
-  max-width: 100%;
-  background: #000;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.25);
-  margin-bottom: 12px;
-}
-.media-same > video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;          /* 0 black all around */
-  display: block;
+  aspect-ratio: 16/9;
+  object-fit: cover;      /* 0 black all around inside the left pane */
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  margin-bottom: 14px;
 }
 
-/* Map kept tidy (optional; not forced to same height) */
-#nmMap { max-width: 780px; margin: 14px auto; display:block; width:100%; height:auto; }
+/* Map framed within the same sheet; no extra border (global border already applied) */
+#nmMap {
+  width: 100%;
+  height: auto;
+  display:block;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+  margin: 12px 0 6px;
+}
 
-/* Intake sticky on the right, slimmer */
+/* Intake: slimmer and sticky so the phone block stays visible */
 aside.intake {
   position: sticky;
-  top: 12px;
+  top: 14px;
   align-self: start;
-  max-height: calc(100svh - 24px);
+  max-height: calc(100svh - (var(--edge) * 2) - 28px); /* fits within framed area */
   overflow: auto;
   padding: 10px;
   border: 1px solid #e5e7eb;
@@ -105,6 +108,7 @@ aside.intake input[type="file"] {
   background: #fff;
 }
 
+/* Sticky bottom contact block with phone visible */
 #contactBlock {
   position: sticky;
   bottom: 0;
@@ -116,11 +120,10 @@ aside.intake input[type="file"] {
 #submitBtn { width: 100%; padding: 9px 12px; font-size: 0.95rem; border: 0; border-radius: 10px; background: #1d4ed8; color: #fff; cursor: pointer; }
 
 /* Scroll anchoring for media below */
-#v2, #nmMap, #v3 { scroll-margin-top: 14px; }
+#v2, #nmMap, #v3 { scroll-margin-top: 20px; }
 
-/* Mobile: collapse to single column */
+/* Mobile: collapse to single column while keeping global border */
 @media (max-width: 960px) {
-  #content { grid-template-columns: 1fr; padding: 24px 12px 48px; width: 100vw; }
+  #content { grid-template-columns: 1fr; width: 100%; padding: 0 12px; }
   aside.intake { position: static; max-height: none; }
-  .media-same { height: auto; } /* let media size naturally on mobile */
 }
