@@ -1,4 +1,4 @@
-// v20-style sequence with global 1.5in border after V1
+// v20-like sequence; global 1.5in border via .frame applies to all screens.
 function pauseOthers(except){
   ['v1','v2','v3'].forEach(id => {
     const el = document.getElementById(id);
@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const v2 = document.getElementById('v2');
   const v3 = document.getElementById('v3');
   const unmuteBtn = document.getElementById('unmuteBtn');
-  const stage = document.getElementById('stage');
+  const content = document.getElementById('content');
   const mapEl = document.getElementById('nmMap');
   const form = document.getElementById('bpoForm');
   const statusEl = document.getElementById('formStatus');
@@ -36,16 +36,16 @@ window.addEventListener('DOMContentLoaded', () => {
   v1.addEventListener('click', handleUnmute);
   [v1, v2, v3].forEach(v => v && v.addEventListener('play', () => pauseOthers(v)));
 
-  // On V1 end: scroll to the bordered stage and start V2
+  // On V1 end: scroll to content and start V2
   v1.addEventListener('ended', () => {
-    stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
       v2.play().catch(()=>{});
       if (userUnmuted) setTimeout(() => tryUnmute(v2), 600);
-    }, 400);
+    }, 350);
   });
 
-  // After V2 end: show map for ~6s, then move to V3
+  // After V2 end: show map ~6s then move to V3
   v2.addEventListener('ended', () => {
     if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(() => {
@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 6000);
   });
 
-  // Form submit via fetch -> on-screen confirmation
+  // Form submit -> on-screen confirmation
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     statusEl.textContent = 'Submitting…';
