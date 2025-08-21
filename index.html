@@ -7,27 +7,28 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HERO (Video 1 full-screen) -->
+  <!-- HERO (Video 1: full screen but slightly inset to avoid oversize/scrollbars) -->
   <section id="hero" aria-label="Intro">
-    <video id="v1" playsinline muted autoplay preload="auto">
+    <video id="v1" playsinline muted autoplay preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate">
+      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_1m,w_1920/video1_fixed_kjltks.mp4" type="video/mp4" />
       <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-
     <button id="unmuteBtn" aria-label="Unmute and restart">Unmute</button>
   </section>
 
-  <!-- TWO-COLUMN LAYOUT (Video 2 → Map → Video 3) -->
+  <!-- TWO-COLUMN (Video 2 → Map → Video 3) -->
   <section id="content" aria-label="Main content">
     <div class="left">
-      <video id="v2" playsinline muted preload="auto" controls>
+      <video id="v2" playsinline muted preload="metadata" controls disablepictureinpicture controlslist="nodownload noplaybackrate">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_1m,w_1920/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
       </video>
 
-      <!-- Map image: place the actual file next to index.html OR update src to your URL -->
       <img id="nmMap" src="Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map" />
 
-      <video id="v3" playsinline muted preload="auto" controls>
+      <video id="v3" playsinline muted preload="metadata" controls disablepictureinpicture controlslist="nodownload noplaybackrate">
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_1m,w_1920/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
       </video>
     </div>
@@ -36,45 +37,38 @@
       <form id="bpoForm" action="api/submit.php" method="POST" enctype="multipart/form-data" novalidate>
         <h2>Request a BPO / PMI Review</h2>
 
-        <label>
-          Full Name
+        <label>Full Name
           <input name="name" type="text" placeholder="Your name" required />
         </label>
 
-        <label>
-          Email
+        <label>Email
           <input name="email" type="email" placeholder="you@example.com" required />
         </label>
 
-        <label>
-          Phone
-          <input name="phone" type="tel" placeholder="(555) 555‑5555" />
+        <label>Phone
+          <input name="phone" type="tel" placeholder="(505) 453-0444" />
         </label>
 
-        <label>
-          Property Address
+        <label>Property Address
           <input name="address" type="text" placeholder="Street, City, State" />
         </label>
 
-        <label>
-          Assessor Identifying Owner #
+        <label>Assessor Identifying Owner #
           <input name="assessor_owner_id" type="text" placeholder="Owner #" />
         </label>
 
-        <label>
-          Notes
+        <label>Notes
           <textarea name="notes" rows="4" placeholder="Brief details, timing, access notes…"></textarea>
         </label>
 
-        <label>
-          Upload Files (.jpg/.pdf)
+        <label>Upload Files (.jpg/.pdf)
           <input name="uploads[]" type="file" accept=".jpg,.jpeg,.pdf" multiple />
         </label>
 
         <div id="contactBlock">
           <div class="contact">
             <strong>Globalx LLC</strong><br/>
-            505‑453‑0444<br/>
+            505-453-0444<br/>
             globalxllc@gmail.com
           </div>
           <button type="submit" id="submitBtn">Submit</button>

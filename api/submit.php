@@ -1,16 +1,10 @@
 <?php
-// Simple email relay for BPO intake.
-// For production, SMTP via PHPMailer is recommended.
-// Update $backOffice and $notifyEmail to your real addresses.
-
 header('Content-Type: application/json');
 
-function field($k) {
-  return isset($_POST[$k]) ? trim($_POST[$k]) : '';
-}
+function field($k) { return isset($_POST[$k]) ? trim($_POST[$k]) : ''; }
 
 $backOffice  = 'backoffice@bposnewmexico.com'; // change if needed
-$notifyEmail = 'globalxllc@gmail.com';         // Kim's copy
+$notifyEmail = 'globalxllc@gmail.com';
 
 try {
   $name  = field('name');
@@ -27,14 +21,9 @@ try {
   $boundary = md5(uniqid(time()));
 
   $bodyText  = "New BPO Intake Submission\n\n";
-  $bodyText .= "Name: $name\n";
-  $bodyText .= "Email: $email\n";
-  $bodyText .= "Phone: $phone\n";
-  $bodyText .= "Address: $addr\n";
-  $bodyText .= "Assessor Owner#: $owner\n";
-  $bodyText .= "Notes:\n$notes\n";
+  $bodyText .= "Name: $name\nEmail: $email\nPhone: $phone\n";
+  $bodyText .= "Address: $addr\nAssessor Owner#: $owner\n\nNotes:\n$notes\n";
 
-  // Build multipart message with attachments (if any)
   $headers  = "From: BPO Intake <no-reply@bposnewmexico.com>\r\n";
   $headers .= "MIME-Version: 1.0\r\n";
   $headers .= "Content-Type: multipart/mixed; boundary=\"".$boundary."\"\r\n";
@@ -44,7 +33,6 @@ try {
   $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
   $message .= $bodyText . "\r\n";
 
-  // Attach uploaded files
   if (!empty($_FILES['uploads']) && is_array($_FILES['uploads']['tmp_name'])) {
     for ($i = 0; $i < count($_FILES['uploads']['tmp_name']); $i++) {
       if (is_uploaded_file($_FILES['uploads']['tmp_name'][$i])) {
@@ -64,18 +52,13 @@ try {
 
   $message .= "--$boundary--\r\n";
 
-  // Send to back office
   $ok1 = @mail($backOffice, $subject, $message, $headers);
-
-  // BCC/second send to Kim (some hosts ignore BCC with mail())
   $ok2 = @mail($notifyEmail, $subject, $message, $headers);
 
-  if (!$ok1 && !$ok2) {
-    throw new Exception('Mail transfer failed on server. Configure SMTP if problem persists.');
-  }
+  if (!$ok1 && !$ok2) throw new Exception('Mail transfer failed on server. Configure SMTP if problem persists.');
 
-  echo json_encode([ 'ok' => true, 'message' => 'Submitted. We’ll be in touch shortly.' ]);
+  echo json_encode(['ok'=>true,'message'=>'Submitted. We’ll be in touch shortly.']);
 } catch (Exception $e) {
   http_response_code(400);
-  echo json_encode([ 'ok' => false, 'error' => $e->getMessage() ]);
+  echo json_encode(['ok'=>false,'error'=>$e->getMessage()]);
 }
