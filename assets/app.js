@@ -31,7 +31,6 @@
   async function handleUnmute(){
     try{ v1.pause(); }catch{}
     try{ v1.currentTime = 0; }catch{}
-    v1.currentTime = 0;
     v1.muted = false;
     try{ await v1.play().catch(()=>{});}catch{}
     unmute.classList.add('hidden');
@@ -78,29 +77,4 @@
     ta.addEventListener('input', resize);
     resize();
   }
-})();
-// v21: simple form submission with optional Formspree endpoint (set data-formspree on <form>)
-(function(){
-  const form = document.querySelector('#intakeForm');
-  if(!form) return;
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
-    const endpoint = form.getAttribute('data-formspree');
-    try{
-      if(endpoint){
-        const res = await fetch(endpoint, {method:'POST', headers:{'Accept':'application/json'}, body: new FormData(form)});
-        if(res.ok){
-          alert('Thanks! Your request was sent.');
-          form.reset();
-          return;
-        }
-      }
-      // mailto fallback (opens email client)
-      const body = encodeURIComponent(Object.entries(data).map(([k,v])=> k+': '+v).join('\n'));
-      window.location.href = 'mailto:replace-this@example.com?subject=BPO Intake&body='+body;
-    }catch(err){
-      alert('Could not send. Please email us directly.');
-    }
-  });
 })();
