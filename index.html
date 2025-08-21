@@ -17,7 +17,7 @@
         </video>
         <button id="unmute" class="unmute" type="button" aria-label="Unmute and restart">Unmute</button>
       </div>
-      <button id="toStage" class="scroll-cue" type="button" aria-label="Continue">▼ Continue</button>
+      <button id="toStage" class="scroll-cue" hidden type="button" aria-label="Continue">▼ Continue</button>
     </section>
 
     <section id="stage" class="stage" aria-live="polite">
@@ -49,7 +49,7 @@
         </div>
 
         <aside class="right-rail">
-          <form class="intake" id="intake" autocomplete="on">
+          <form id="intakeForm" data-formspree="" class="intake" id="intake" autocomplete="on">
             <header class="intake-header">Broker Price Opinion (BPO) Intake</header>
             <fieldset class="grid3" aria-label="Subject Property Address">
               <input required placeholder="Street Address" name="street" />
