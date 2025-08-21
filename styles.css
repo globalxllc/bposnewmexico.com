@@ -1,172 +1,85 @@
-/* ---------- Reset & base ---------- */
-* { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
   margin: 0;
-  background: #0c0c0c;
-  color: #f5f5f5;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #0f0f0f;
+  color: #eaeaea;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
-
-/* ---------- Layout ---------- */
+.hero { padding: clamp(16px, 3vh, 28px) 0 0; }
+.hero .video-block { max-width: min(1280px, 92vw); }
+.hero video { width: 100%; height: auto; display: block; border-radius: 12px; }
 .page {
   display: grid;
-  grid-template-columns: 1fr min(560px, 44vw);
-  gap: clamp(12px, 2vw, 24px);
+  grid-template-columns: 1fr min(520px, 35%);
+  gap: clamp(16px, 2.2vw, 28px);
   align-items: start;
-  width: min(1600px, 96vw);
+  max-width: 1600px;
   margin: 0 auto;
-  padding: clamp(12px, 2.5vw, 28px);
+  padding: clamp(8px, 2.2vh, 16px) clamp(8px, 2vw, 24px) clamp(24px, 6vh, 56px);
 }
-
-.left-rail {
-  display: grid;
-  row-gap: clamp(16px, 2.2vw, 28px);
-}
-
-/* Media sizing (videos & map) */
-.media-card {
-  width: min(860px, 48vw);
-  margin-inline: auto;
-  aspect-ratio: 16 / 9;
-  background: #111;
-  border-radius: 14px;
-  box-shadow: 0 0 0 1px #222, 0 6px 18px rgba(0,0,0,.45);
-  overflow: clip;
-}
-
-/* Map card: smaller cap so it never feels “long” */
-#map-card {
-  width: min(720px, 42vw);
-  max-height: 62vh;
-  display: grid;
-  place-items: center;
-  padding: clamp(8px, 1vw, 12px);
-}
-
-/* Ensure media fits */
-.media-card video,
-.map-svg {
+.left-rail { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.left-rail > section { scroll-snap-align: start; padding-block: clamp(12px, 2vh, 20px); }
+.video-block { max-width: 960px; margin-inline: auto; }
+.video-block video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  background: #111;
+  box-shadow: 0 0 0 1px #222 inset, 0 10px 30px rgba(0,0,0,.35);
 }
-
-#map-card .map-svg {
+.map-wrap { display: flex; justify-content: center; align-items: center; padding-block: clamp(8px, 2vh, 16px); }
+.map-wrap img {
+  width: clamp(360px, 48vh, 540px);
+  max-height: 72vh;
   object-fit: contain;
+  display: block;
+  margin-inline: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px #333 inset, 0 8px 26px rgba(0,0,0,.28);
+  background: #222;
 }
-
-/* ---------- Intake (sticky, always visible) ---------- */
-.intake {
+.map-section { margin-bottom: clamp(60px, 8vh, 100px); }
+.intake-panel {
   position: sticky;
   top: 16px;
-  max-height: calc(100svh - 24px);
+  max-height: calc(100vh - 32px);
   overflow: auto;
-}
-
-.intake .panel {
-  width: min(560px, 44vw);
-  background: #151515;
+  background: #161616;
+  border: 1px solid #2a2a2a;
   border-radius: 14px;
-  border: 1px solid #272727;
-  box-shadow: 0 6px 18px rgba(0,0,0,.45);
-  padding: clamp(14px, 2vw, 20px);
+  padding: clamp(12px, 1.6vh, 16px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
 }
-
-.intake h2 {
-  margin: 0 0 10px;
-  font-size: clamp(18px, 2.2vw, 22px);
-  font-weight: 700;
-}
-
-/* Upscale inputs */
-.intake input,
-.intake textarea,
-.intake select {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  background: #e9ecef;
-  color: #111;
-  border: 1px solid #cfd4da;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font: inherit;
-}
-
-.row-3 {
+.intake-panel h2 { margin: 8px 6px 12px; font-size: clamp(1.1rem, 1.9vw, 1.6rem); }
+.intake-form, .intake-panel * { font-size: clamp(0.9rem, 0.95rem, 0.95rem); }
+.intake-form .row { margin: 8px 6px; }
+.intake-form .row.three {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 1fr minmax(100px, 0.8fr);
+  gap: 8px;
+  margin: 10px 6px;
 }
-
-#details {
-  min-height: 2.4em;      /* ~2 lines */
-  resize: vertical;       /* allow expand */
-}
-
-.file-label {
-  display: inline-block;
-  margin-top: 6px;
-  margin-bottom: 4px;
-  color: #bbb;
-  font-size: 13px;
-}
-
-.submit-btn {
-  margin-top: 10px;
-  display: inline-block;
+.intake-form input, .intake-form textarea, .intake-form button {
   width: 100%;
-  background: #1e7f38;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px;
-  font-weight: 700;
-  cursor: pointer;
+  border: 1px solid #3a3a3a;
+  background: #d6d6d6;
+  color: #111;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
 }
-.submit-btn:hover { background: #1a6f31; }
-
-.fineprint {
-  color: #aaa;
-  font-size: 12px;
-  margin-top: 8px;
-}
-
-.status { margin-top: 8px; color: #9ad4ff; min-height: 1.2em; }
-
-/* ---------- Unmute button (consistent across browsers) ---------- */
-.unmute-btn {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  transform: translateX(-50%);
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: none;
-  font-weight: 700;
-  color: #fff;
-  background: #1f5ae0;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,.35);
-}
-#section-v1 { position: relative; }
-
-/* ---------- Responsive tweaks ---------- */
-@media (max-width: 1080px) {
-  .page {
-    grid-template-columns: 1fr 44vw;
-  }
-  .media-card { width: min(760px, 54vw); }
-  #map-card   { width: min(660px, 50vw); }
-}
-
-@media (max-width: 900px) {
-  .page {
-    grid-template-columns: 1fr;
-  }
-  .intake { position: static; max-height: none; }
-  .intake .panel { width: 100%; }
-  .media-card  { width: 100%; }
-  #map-card    { width: 100%; max-height: none; }
+.intake-form input { height: 42px; }
+.intake-form textarea { min-height: 56px; max-height: 96px; resize: vertical; overflow: auto; }
+.intake-form .file-row input[type="file"] { background: #111; color: #eaeaea; border-color: #333; }
+.submit-row { margin: 14px 6px 6px; }
+.btn { display: inline-block; width: 100%; height: 44px; border: 0; border-radius: 10px; background: #168a3a; color: #fff; font-weight: 700; letter-spacing: .2px; cursor: pointer; }
+.btn:hover { filter: brightness(1.05); }
+.support-line { margin-top: 8px; font-size: 0.9em; opacity: .9; text-align: left; }
+@media (max-width: 980px) {
+  .page { grid-template-columns: 1fr; }
+  .intake-panel { position: static; max-height: none; }
 }
