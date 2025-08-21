@@ -7,23 +7,29 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HERO (smaller full-screen feel) -->
+  <!-- HERO (letterboxed: black bars allowed) -->
   <section id="hero" aria-label="Intro">
-    <video id="v1" playsinline muted autoplay preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate">
-      <!-- Lower bitrate first so browsers prefer it -->
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_600k,w_1280/video1_fixed_kjltks.mp4" type="video/mp4" />
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/video1_fixed_kjltks.mp4" type="video/mp4" />
-      <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
-    <button id="unmuteBtn" aria-label="Unmute and restart">Unmute</button>
+    <div class="hero-frame">
+      <video id="v1" playsinline muted autoplay preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate">
+        <!-- HLS first for adaptive bitrate (if available) -->
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/video1_fixed_kjltks.m3u8" type="application/x-mpegURL" />
+        <!-- Three MP4 tiers (low → med → high), then original -->
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_450k,w_960/video1_fixed_kjltks.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_500k,w_1280/video1_fixed_kjltks.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/video1_fixed_kjltks.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/video1_fixed_kjltks.mp4" type="video/mp4" />
+      </video>
+      <button id="unmuteBtn" aria-label="Unmute and restart">Unmute</button>
+    </div>
   </section>
 
-  <!-- TWO-COLUMN -->
+  <!-- TWO-COLUMN (Video 2 → Map → Video 3) -->
   <section id="content" aria-label="Main content">
     <div class="left">
       <video id="v2" playsinline muted preload="metadata" controls disablepictureinpicture controlslist="nodownload noplaybackrate">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_600k,w_1280/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1754981683/video2C_fixed_gcuiql.m3u8" type="application/x-mpegURL" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_450k,w_960/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_500k,w_1280/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754981683/video2C_fixed_gcuiql.mp4" type="video/mp4" />
       </video>
@@ -31,7 +37,9 @@
       <img id="nmMap" src="Portrait MAP New Mexico Counties.jpg" alt="New Mexico counties map" />
 
       <video id="v3" playsinline muted preload="metadata" controls disablepictureinpicture controlslist="nodownload noplaybackrate">
-        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_600k,w_1280/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/sp_auto/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.m3u8" type="application/x-mpegURL" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_450k,w_960/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_500k,w_1280/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/f_auto,vc_auto,q_auto:eco,br_800k,w_1600/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
         <source src="https://res.cloudinary.com/ds5kbupzc/video/upload/v1754951208/Order_Quote_Process_Elisabetta_US_English_Cropped_s2lz8l.mp4" type="video/mp4" />
       </video>

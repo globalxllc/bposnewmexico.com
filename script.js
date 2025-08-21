@@ -1,4 +1,4 @@
-// Prevent overlapping playback, keep sequence, and attempt unmute after interaction.
+// Prevent overlapping playback; keep sequence; allow unmute.
 function pauseOthers(except){['v1','v2','v3'].forEach(id=>{const el=document.getElementById(id);if(el&&el!==except){try{el.pause()}catch(e){}}})}
 window.addEventListener('DOMContentLoaded',()=>{
   const v1=document.getElementById('v1');
