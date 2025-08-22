@@ -1,16 +1,24 @@
 
 :root{
-  --frame-v1-side: 0.3125in;   /* 5/16 in top/left/right */
-  --frame-v1-bottom: 1.125in;  /* 1 1/8 in bottom for UnMute button */
-  --frame-stage: 0.375in;      /* 3/8 in frame for split views */
-  --stage-right-width: 38rem;  /* fixed right column so all fields fit */
+  --frame-v1-side: 0.20in;   /* sides & top */
+  --frame-v1-bottom: 0.95in; /* bottom for UnMute */
+  --frame-stage: 0.375in;    /* stage frame */
+  --stage-right-width: 36rem;/* Intake column width */
   --stage-gap: 1rem;
   --intake-font: 0.9rem;
   --intake-line: 1.2;
   --intake-pad: 6px 10px;
-  --map-max: clamp(26rem, 42vw, 48rem);
+  --map-max: clamp(24rem, 40vw, 46rem);
 }
-body.stage-locked{overflow:hidden}
+/* Robust viewport height for hero */
+.hero{height:100vh;  min-height:0 !important;
+  display:grid;
+  grid-template-rows:1fr;
+  overflow:hidden;
+}
+@supports (height: 100dvh){
+  .hero{height:100dvh;}
+}
 
 /* Base + normalization */
 *{box-sizing:border-box}
@@ -19,7 +27,7 @@ html,body{margin:0;padding:0;background:#000;color:#e9ebee;font-family:system-ui
 html{scroll-behavior:smooth;scrollbar-gutter:stable both-edges}
 
 /* HERO */
-.hero{min-height:0 !important;display:grid;grid-template-rows:1fr auto;align-items:center;justify-items:center;padding: var(--frame-v1-side) var(--frame-v1-side) var(--frame-v1-bottom);background:#000}
+.hero{min-height:100vh;min-height:100svh;display:grid;grid-template-rows:1fr auto;align-items:center;justify-items:center;padding: var(--frame-v1-side) var(--frame-v1-side) var(--frame-v1-bottom);background:#000}
 .hero-frame{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .hero-video{width:100%;height:100%;object-fit:contain;background:#111;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.65)}
 .unmute{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;padding:10px 18px;border:none;border-radius:28px;font-weight:700;font-size:16px;color:#fff;background:#155bff;box-shadow:0 4px 16px rgba(0,0,0,.35);cursor:pointer;z-index:5}
@@ -27,12 +35,15 @@ html{scroll-behavior:smooth;scrollbar-gutter:stable both-edges}
 .scroll-cue{margin:10px 0 16px;padding:8px 14px;border-radius:999px;border:1px solid #2a2a2a;background:#0b0b0d;color:#cfd6df;cursor:pointer}
 
 /* STAGE grid */
-.stage{padding: var(--frame-stage);
-  grid-template-columns:minmax(0,1fr) clamp(28rem, 36vw, 35rem);
-  gap:1.5rem;
-  align-items:start;
-  min-height:100vh;
+.stage{padding:22px 20px 44px  min-height:100vh;
   background:#000;
+}
+.stage-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--stage-right-width);
+  gap:var(--stage-gap);
+  align-items:stretch;
+  height:calc(100vh - (var(--frame-stage) * 2));
 }
 .left-col,.right-rail{min-width:0  height:100%;
   overflow:hidden;
@@ -99,14 +110,12 @@ body.edge .intake{inline-size:clamp(26.5rem,37vw,35rem)}
 
 /* Mobile */
 @media (max-width:1024px){
-  .stage-grid{grid-template-columns:minmax(0,1fr) var(--stage-right-width);
-  gap:var(--stage-gap);
-  height:calc(100vh - (var(--frame-stage) * 2));
-  align-items:stretch;
-}
+  .stage-grid{grid-template-columns:1fr}
   .right-rail{position:static}
   .intake{max-inline-size:min(92%,40rem);margin:0 auto}
 }
+
+.scroll-cue{display:none !important}
 
 .intake input[type="text"],
 .intake input[type="email"],
