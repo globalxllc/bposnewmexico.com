@@ -78,3 +78,9 @@
     resize();
   }
 })();
+function activatePane(id){
+  const panes = document.querySelectorAll('.media-pane');
+  panes.forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
