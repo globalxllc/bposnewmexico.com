@@ -1,4 +1,11 @@
-// Minimal JS: keep intake static; left rail is native scroll-snap.
+const browser = (() => {
+  const ua = navigator.userAgent;
+  if (ua.includes("Edg") && !ua.includes("Chrome")) return "edge";
+  if (ua.includes("Chrome")) return "chrome";
+  return "other";
+})();
+
+console.log("Detected browser:", browser);C:\Users\kimsw\Documents\bposnewmexico.com\js\app.js// Minimal JS: keep intake static; left rail is native scroll-snap.
 // Ensure map never peeks when moving to V3 by snapping strictly.
 (() => {
   const rail = document.querySelector('#leftRail');
