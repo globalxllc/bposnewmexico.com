@@ -1,4 +1,31 @@
-(function(){
+const mapSection = document.getElementById('sec-map');
+mapSection.style.display = 'block';
+mapSection.classList.add('fade-in');
+
+if (browser === "edge") {
+  mapSection.style.marginTop = "60px"; // Edge-specific tweak
+}const mapSection = document.getElementById('sec-map');
+mapSection.style.display = 'block';
+mapSection.classList.add('fade-in');
+
+if (browser === "edge") {
+  mapSection.style.marginTop = "60px"; // Edge-specific tweak
+}const browser = (() => {
+  const ua = navigator.userAgent;
+  if (ua.includes("Edg")) return "edge";
+  if (ua.includes("Chrome")) return "chrome";
+  return "other";
+})();
+
+console.log(`🎭 Browser detected: ${browser}`);function detectBrowser() {
+  const ua = navigator.userAgent;
+  if (ua.includes("Edg")) return "edge";
+  if (ua.includes("Chrome")) return "chrome";
+  return "other";
+}
+
+const browser = detectBrowser();
+console.log(`🎭 Welcome, ${browser.toUpperCase()} user!`);(function(){
   const isEdge = navigator.userAgent.includes('Edg/');
   if (isEdge) document.body.classList.add('edge');
 
